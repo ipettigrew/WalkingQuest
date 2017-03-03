@@ -7,6 +7,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+/** TODO:   Figure out what the fuck is wrong with this R bullshit
+ * */
+import app.apphub.devon.walkingquest.R;
+
 /**
  * Created by Owner on 2017-03-01.
  */
@@ -40,9 +44,15 @@ public class QuestSelectorGridAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView == null) {
-            convertView = inflater.inflate(R.layout.cell, null);
+            convertView = inflater.inflate(R.layout.quest_selector_grid_cell, null);
         }
         TextView t = (TextView) convertView.findViewById(R.id.grid_item);
+        t.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         t.setText(quests[position]);
         return convertView;
     }
