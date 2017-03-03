@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_quest_details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="app.apphub.devon.walkingquest.QuestDetailsActivity"
+    tools:showIn="@layout/activity_quest_details">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30sp" />
+        <TextView
+            android:text="QUEST NAME"
+            android:id="@+id/quest_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_gravity="center"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30sp" />
+        <TextView
+            android:text="Lorem ipsum dolor sit amet, nec ut iisque labitur placerat, ea vim etiam soleat aliquam, sint dolores sadipscing sea no. Vocent gloriatur inciderint nec id. Sea at consul aliquip nusquam, vim ea case erant qualisque, dico tacimates pertinax eum no. Te pro populo reformidans, ut his vituperata liberavisse. Eos te enim equidem noluisse.
+
+Prompta theophrastus id mei, eu soleat sapientem sea. Ut eum velit iudicabit. Ex quando vulputate duo, duo te mundi vocent phaedrum. His lorem liber debet id, wisi soluta qui in. Posse populo eu mel. Quas oblique at eam, vocent docendi in eos. Epicuri suscipit invenire te per, eu nec atqui laudem tibique, in vim vocibus pertinacia.
+
+"
+            android:id="@+id/quest_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+            
+            <Button
+                android:text="DENY"
+                android:id="@+id/accept_quest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:text="ACCEPT"
+                android:id="@+id/accept_quest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -26,6 +26,10 @@
         <activity
             android:name=".QuestMainMenu"
             android:label="@string/title_activity_quest_main_meny"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".QuestDetailsActivity"
+            android:label="@string/title_activity_quest_details"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
