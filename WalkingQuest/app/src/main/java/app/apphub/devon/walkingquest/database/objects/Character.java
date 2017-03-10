@@ -5,6 +5,9 @@ package app.apphub.devon.walkingquest.database.objects;
  */
 
 public class Character extends DatabaseObject<Character>{
+
+    //TODO:Camelcase plz
+
     private String name;
     private short level;
     private Inventory inv;
@@ -16,12 +19,16 @@ public class Character extends DatabaseObject<Character>{
     private Item pants;
     private int shirt_id;
     private Item shirt;
+    //Assumed to be total exp from beginning of time
     private long exp;
     private int questsCompleted;
 
+    //TODO: add quest to charcater
+    private int activeQuest;
+
     public Character(int id, String name, short level, Inventory inv, int invId, long currency,
                      Item shoes, Item pants, Item shirt, long exp,
-                     int questsCompleted, int shoes_id, int pants_id, int shirt_id) {
+                     int questsCompleted, int shoes_id, int pants_id, int shirt_id, int activeQuest) {
         super(id);
         this.name = name;
         this.level = level;
@@ -34,8 +41,10 @@ public class Character extends DatabaseObject<Character>{
         this.questsCompleted = questsCompleted;
         this.invId = invId;
         this.shoes_id = shoes_id;
+
         this.pants_id = pants_id;
         this.shirt_id = shirt_id;
+        this.activeQuest = activeQuest;
     }
 
     public Character(String name) {
@@ -44,6 +53,7 @@ public class Character extends DatabaseObject<Character>{
         currency = 0;
         exp = 0;
         questsCompleted = 0;
+        activeQuest = -1;
     }
 
     //TODO: make this actually do something.
@@ -154,4 +164,8 @@ public class Character extends DatabaseObject<Character>{
     public void setShirt_id(int shirt_id) {
         this.shirt_id = shirt_id;
     }
+
+    public int getActiveQuest() { return activeQuest; }
+
+    public void setActiveQuest(int activeQuest) { this.activeQuest = activeQuest; }
 }

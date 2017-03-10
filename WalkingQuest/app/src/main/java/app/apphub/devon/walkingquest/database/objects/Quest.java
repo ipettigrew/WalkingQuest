@@ -17,6 +17,9 @@ public class Quest extends DatabaseObject<Quest> {
     private boolean completed;
     private int difficulty;
 
+    //TODO:level requirement for quest
+    private short levelRequirement;
+
     /**
      * Constructor for the Quest object. This represents
      * a quest that the user can do.
@@ -49,7 +52,7 @@ public class Quest extends DatabaseObject<Quest> {
      * @param difficulty The difficulty rating of the quest.
      *                   1 being easy and 3 being hard.
      */
-    public Quest(int id, String name, long activeSteps, long stepGoal, int userID, boolean completed, int difficulty) {
+    public Quest(int id, String name, long activeSteps, long stepGoal, int userID, boolean completed, int difficulty, short levelRequirement) {
         super(id);
         this.name = name;
         this.activeSteps = activeSteps;
@@ -57,6 +60,7 @@ public class Quest extends DatabaseObject<Quest> {
         this.completed = completed;
         this.difficulty = difficulty;
         this.userID = userID;
+        this.levelRequirement = levelRequirement;
     }
 
     /**
@@ -74,6 +78,7 @@ public class Quest extends DatabaseObject<Quest> {
             if (this.completed != quest.isCompleted()) result = false;
             if (this.difficulty != quest.getDifficulty()) result = false;
             if (this.userID != quest.getUserID()) result = false;
+            if(this.levelRequirement != quest.getLevelRequirement()) result = false;
 
         return result;
     }
@@ -219,4 +224,8 @@ public class Quest extends DatabaseObject<Quest> {
     public void setDifficulty(int difficulty) {
         this.difficulty = difficulty;
     }
+
+    public short getLevelRequirement() { return levelRequirement; }
+
+    public void setLevelRequirement(short levelRequirement) { this.levelRequirement = levelRequirement; }
 }

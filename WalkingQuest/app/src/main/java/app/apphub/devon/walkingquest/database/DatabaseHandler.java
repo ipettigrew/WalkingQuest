@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+
 /**
  * Handles the database for the app. It is used for saving and retrieving users
  * and quests.
@@ -194,5 +196,14 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         values.put(KEY_DIFFICULTY, quest.getDifficulty());
 
         db.update(QUEST_TABLE, values, KEY_ID+"=?", new String[] {String.valueOf(quest.getId())});
+    }
+
+    //TODO: Get all the quests from the DB that are that same difficulty as the argument and less than or equal to the characterLevel argument
+    public ArrayList<app.apphub.devon.walkingquest.database.objects.Quest> getQuestByRequirement(int characterLevel, int difficulty){
+
+        //Ian - "try sorting the data by difficulty and then completion status"
+
+
+        return null;
     }
 }

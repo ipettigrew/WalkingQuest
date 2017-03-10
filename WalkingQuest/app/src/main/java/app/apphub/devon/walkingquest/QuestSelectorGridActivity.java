@@ -11,10 +11,14 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import app.apphub.devon.walkingquest.GridAdapters.QuestSelectorGridAdapter;
+import app.apphub.devon.walkingquest.database.DatabaseHandler;
+import app.apphub.devon.walkingquest.database.Quest;
 
 public class QuestSelectorGridActivity extends AppCompatActivity {
     public GridView questGrid;
-    public String[] quests;
+    public Quest[] quests;
+    private QuestActualizer questActualizer;
+    private DatabaseHandler databaseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +27,14 @@ public class QuestSelectorGridActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        quests = new String[8];
+
+        /*
+        * Use quest actualizer to get the list of quests and present them to the user
+        * */
+
+
+
+        quests = new Quest[1];
         for (int i = 0; i < 8; i++) {
             quests[i] = (i + 1) + "";
         }
@@ -32,6 +43,8 @@ public class QuestSelectorGridActivity extends AppCompatActivity {
         questGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //send the quest id to the details screen
                 startActivity(new Intent(QuestSelectorGridActivity.this, QuestDetailsActivity.class));
             }
         });

@@ -194,7 +194,6 @@ public class Quest {
     public boolean isCompleted() {
         return completed;
     }
-
     /**
      * Sets whether the {@link Quest}is completed or not.
      * @param completed true for completed,

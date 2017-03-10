@@ -18,6 +18,12 @@ public class QuestDetailsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        /*
+        * Check that an id was passed from the previous activity and find it in the database
+        * Fills in the sections of the activity from the quest object that has been returned
+        * */
+
+
         accept = (Button)findViewById(R.id.accept_quest);
         deny = (Button)findViewById(R.id.deny_quest);
 
@@ -32,7 +38,9 @@ public class QuestDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 /** TODO:   populate this with a function call when we decide what the ActiveQuest view will look like
+                 * Use the questActulaizer to set the current quest
                  *  */
+
             }
         });
     }
