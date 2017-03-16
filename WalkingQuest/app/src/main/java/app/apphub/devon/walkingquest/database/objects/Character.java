@@ -13,22 +13,22 @@ public class Character extends DatabaseObject<Character>{
     private Inventory inv;
     private int invId;
     private long currency;
-    private int shoes_id;
+    private int shoesId;
     private Item shoes;
-    private int pants_id;
+    private int pantsId;
     private Item pants;
-    private int shirt_id;
+    private int shirtId;
     private Item shirt;
     //Assumed to be total exp from beginning of time
     private long exp;
     private int questsCompleted;
 
-    //TODO: add quest to charcater
+    //TODO: add quest to characater
     private int activeQuest;
 
     public Character(int id, String name, short level, Inventory inv, int invId, long currency,
                      Item shoes, Item pants, Item shirt, long exp,
-                     int questsCompleted, int shoes_id, int pants_id, int shirt_id, int activeQuest) {
+                     int questsCompleted, int shoesId, int pantsId, int shirtId, int activeQuest) {
         super(id);
         this.name = name;
         this.level = level;
@@ -40,10 +40,10 @@ public class Character extends DatabaseObject<Character>{
         this.exp = exp;
         this.questsCompleted = questsCompleted;
         this.invId = invId;
-        this.shoes_id = shoes_id;
+        this.shoesId = shoesId;
 
-        this.pants_id = pants_id;
-        this.shirt_id = shirt_id;
+        this.pantsId = pantsId;
+        this.shirtId = shirtId;
         this.activeQuest = activeQuest;
     }
 
@@ -141,28 +141,28 @@ public class Character extends DatabaseObject<Character>{
         this.invId = invId;
     }
 
-    public int getShoes_id() {
-        return shoes_id;
+    public int getshoesId() {
+        return shoesId;
     }
 
-    public void setShoes_id(int shoes_id) {
-        this.shoes_id = shoes_id;
+    public void setshoesId(int shoesId) {
+        this.shoesId = shoesId;
     }
 
-    public int getPants_id() {
-        return pants_id;
+    public int getPantsid() {
+        return pantsId;
     }
 
-    public void setPants_id(int pants_id) {
-        this.pants_id = pants_id;
+    public void setpantsId(int pantsId) {
+        this.pantsId = pantsId;
     }
 
-    public int getShirt_id() {
-        return shirt_id;
+    public int getshirtId() {
+        return shirtId;
     }
 
-    public void setShirt_id(int shirt_id) {
-        this.shirt_id = shirt_id;
+    public void setshirtId(int shirtId) {
+        this.shirtId = shirtId;
     }
 
     public int getActiveQuest() { return activeQuest; }

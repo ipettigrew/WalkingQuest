@@ -39,6 +39,16 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     private static final String KEY_QUEST_COMPLETED = "questCompleted";
     private static final String KEY_DIFFICULTY = "difficulty";
 
+
+    //character
+    private static final String CHARACTER_TABLE = "character";
+    private static final String KEY_LEVEL = "level";
+    private static final String KEY_INVENTORY_ID = "invId";
+    private static final String KEY_CURRENCY = "currency";
+    private static final String KEY_SHOES_ID = "shoesId";
+    private static final String KEY_PANTS_ID = "pantsId";
+    private static final String KEY_SHIRT_ID = "shirtId";
+
     /**
      * Constructor for the Database handler
      * @param context the application context;
@@ -47,31 +57,60 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        String CREATE_USER_DATABASE = "CREATE TABLE "+ USER_TABLE +"("
+    private void createQuestTable(SQLiteDatabase db) {
+        String CREATE_USER_DATABASE=  "CREATE TABLE "
+            + QUEST_TABLE +"("
+            + KEY_ID +" INTEGER PRIMARY KEY,"
+            + KEY_NAME +" TEXT,"
+            + KEY_ACTIVE_STEPS +" INTEGER,"
+            + KEY_STEP_GOAL +" INTEGER,"
+            + KEY_USER_ID +" INTEGER,"
+            + KEY_QUEST_COMPLETED +" INTEGER,"
+            + KEY_DIFFICULTY+ " INTEGER"
+            +")";
+
+        db.execSQL(CREATE_USER_DATABASE);
+    }
+
+
+    private void createUserTable(SQLiteDatabase db) {
+        String CREATE_USER_TABLE = "CREATE TABLE "+ USER_TABLE +"("
                 + KEY_ID +" INTEGER PRIMARY KEY,"+ KEY_NAME +" TEXT,"
                 + KEY_QUESTS_COMPLETED +" INTEGER,"
                 + KEY_STEPS +" INTEGER"+")";
-        db.execSQL(CREATE_USER_DATABASE);
-        String CREATE_QUEST_DATABASE = "CREATE TABLE "
-                + QUEST_TABLE +"("
-                + KEY_ID +" INTEGER PRIMARY KEY,"
-                + KEY_NAME +" TEXT,"
-                + KEY_ACTIVE_STEPS +" INTEGER,"
-                + KEY_STEP_GOAL +" INTEGER,"
-                + KEY_USER_ID +" INTEGER,"
-                + KEY_QUEST_COMPLETED +" INTEGER,"
-                + KEY_DIFFICULTY+ " INTEGER"
-                +")";
-        db.execSQL(CREATE_QUEST_DATABASE);
+
+        db.execSQL(CREATE_USER_TABLE);
+    }
+
+    private void createCharacterTable(SQLiteDatabase db) {
+        String CREATE_CHARACTER_TABLE = "CREATE TABLE " + CHARACTER_TABLE + "("
+            + KEY_ID + "INTEGER PRIMARY KEY"
+            + KEY_NAME + "TEXT"
+            + KEY_LEVEL + "SHORT"
+            + KEY_INVENTORY_ID + "INTEGER"
+            + KEY_CURRENCY + "LONG"
+            + KEY_SHOES_ID + "INTEGER"
+            + KEY_PANTS_ID + "INTEGER"
+            + KEY_SHIRT_ID + "INTEGER";
+        db.execSQL(CREATE_CHARACTER_TABLE);
+    }
+
+    /*
+    TO DO: Create an add, update, getById function. If feeling ambitious create a function
+    to get all objects -> return in array list.
+    */
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        createQuestTable(db);
+        createUserTable(db);
+        createCharacterTable(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+USER_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+QUEST_TABLE);
-
+        db.execSQL("DROP TABLE IF EXISTS"+CHARACTER_TABLE);
         onCreate(db);
     }
 
