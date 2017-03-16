@@ -63,7 +63,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-<<<<<<< HEAD
     private void createInventoryTable(SQLiteDatabase db){
         String CREATE_USER_DATABASE = "CREATE TABLE "+ INV_TABLE +"("
                 + KEY_ID +" INTEGER PRIMARY KEY,"
@@ -72,27 +71,27 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         db.execSQL(CREATE_USER_DATABASE);
     }
 
-    @Override
+   /* @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_USER_DATABASE = "CREATE TABLE "+ USER_TABLE +"("
-                + KEY_ID +" INTEGER PRIMARY KEY,"+ KEY_NAME +" TEXT,"
-                + KEY_QUESTS_COMPLETED +" INTEGER,"
-                + KEY_STEPS +" INTEGER"+")";
+        String CREATE_USER_DATABASE = "CREATE TABLE " + USER_TABLE + "("
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
+                + KEY_QUESTS_COMPLETED + " INTEGER,"
+                + KEY_STEPS + " INTEGER" + ")";
         db.execSQL(CREATE_USER_DATABASE);
         String CREATE_QUEST_DATABASE = "CREATE TABLE "
-                + QUEST_TABLE +"("
-                + KEY_ID +" INTEGER PRIMARY KEY,"
-                + KEY_NAME +" TEXT,"
-                + DESCRIPTION+ " TEXT,"
-                + KEY_ACTIVE_STEPS +" INTEGER,"
-                + KEY_STEP_GOAL +" INTEGER,"
-                + KEY_USER_ID +" INTEGER,"
-                + KEY_QUEST_COMPLETED +" INTEGER,"
-                + KEY_DIFFICULTY+ " INTEGER,"
-                + KEY_LEVEL_REQUIREMENT+ "INTEGER"
-                +")";
+                + QUEST_TABLE + "("
+                + KEY_ID + " INTEGER PRIMARY KEY,"
+                + KEY_NAME + " TEXT,"
+                + DESCRIPTION + " TEXT,"
+                + KEY_ACTIVE_STEPS + " INTEGER,"
+                + KEY_STEP_GOAL + " INTEGER,"
+                + KEY_USER_ID + " INTEGER,"
+                + KEY_QUEST_COMPLETED + " INTEGER,"
+                + KEY_DIFFICULTY + " INTEGER,"
+                + KEY_LEVEL_REQUIREMENT + "INTEGER"
+                + ")";
         db.execSQL(CREATE_QUEST_DATABASE);
-=======
+    }*/
     private void createQuestTable(SQLiteDatabase db) {
         String CREATE_USER_DATABASE=  "CREATE TABLE "
             + QUEST_TABLE +"("
@@ -140,7 +139,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         createQuestTable(db);
         createUserTable(db);
         createCharacterTable(db);
->>>>>>> origin/experimental
     }
 
     @Override
