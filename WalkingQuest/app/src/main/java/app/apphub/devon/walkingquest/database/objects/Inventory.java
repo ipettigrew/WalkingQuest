@@ -8,10 +8,12 @@ import java.util.ArrayList;
 
 public class Inventory extends DatabaseObject<Inventory> {
 
+    int characterId;
     ArrayList<Item> inventory;
 
-    public Inventory(int id, ArrayList<Item> inventory){
+    public Inventory(int id, int characterId, ArrayList<Item> inventory){
         super(id);
+        this.characterId = characterId;
     }
 
     //TODO: make this actually do something.

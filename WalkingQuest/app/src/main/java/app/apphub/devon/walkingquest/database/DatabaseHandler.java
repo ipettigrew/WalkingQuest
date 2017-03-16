@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import app.apphub.devon.walkingquest.database.objects.*;
 
 import java.util.ArrayList;
 
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 
 public class DatabaseHandler extends SQLiteOpenHelper{
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private static final String DATABASE_NAME = "walkingQuest";
 
@@ -31,13 +32,18 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     private static final String KEY_STEPS = "steps";
     private static final String KEY_QUESTS_COMPLETED = "questsCompleted";
 
+    //iventory
+    private static final String INV_TABLE = "inventory";
+    private static final String CHARACTER_ID = "character_id";
     //quest
+    private static final String DESCRIPTION = "description";
     private static final String QUEST_TABLE = "quests";
     private static final String KEY_ACTIVE_STEPS = "active_steps";
     private static final String KEY_STEP_GOAL = "step_goal";
     private static final String KEY_USER_ID = "user_id";
     private static final String KEY_QUEST_COMPLETED = "questCompleted";
     private static final String KEY_DIFFICULTY = "difficulty";
+    private static final String KEY_LEVEL_REQUIREMENT = "level_requirment";
 
     /**
      * Constructor for the Database handler
@@ -45,6 +51,14 @@ public class DatabaseHandler extends SQLiteOpenHelper{
      */
     public DatabaseHandler(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    private void createInventoryTable(SQLiteDatabase db){
+        String CREATE_USER_DATABASE = "CREATE TABLE "+ INV_TABLE +"("
+                + KEY_ID +" INTEGER PRIMARY KEY,"
+                + CHARACTER_ID +" INTEGER,"
+                +")";
+        db.execSQL(CREATE_USER_DATABASE);
     }
 
     @Override
@@ -58,11 +72,13 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 + QUEST_TABLE +"("
                 + KEY_ID +" INTEGER PRIMARY KEY,"
                 + KEY_NAME +" TEXT,"
+                + DESCRIPTION+ " TEXT,"
                 + KEY_ACTIVE_STEPS +" INTEGER,"
                 + KEY_STEP_GOAL +" INTEGER,"
                 + KEY_USER_ID +" INTEGER,"
                 + KEY_QUEST_COMPLETED +" INTEGER,"
-                + KEY_DIFFICULTY+ " INTEGER"
+                + KEY_DIFFICULTY+ " INTEGER,"
+                + KEY_LEVEL_REQUIREMENT+ "INTEGER"
                 +")";
         db.execSQL(CREATE_QUEST_DATABASE);
     }
@@ -144,11 +160,13 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, quest.getName());
+        values.put(DESCRIPTION, quest.getDescription());
         values.put(KEY_ACTIVE_STEPS, quest.getActiveSteps());
         values.put(KEY_STEP_GOAL, quest.getStepGoal());
         values.put(KEY_USER_ID, quest.getUserID());
         values.put(KEY_QUEST_COMPLETED, quest.getStepGoal());
         values.put(KEY_DIFFICULTY, quest.getDifficulty());
+        values.put(KEY_LEVEL_REQUIREMENT, quest.getLevelRequirement());
 
         //insert
         db.insert(QUEST_TABLE, null, values);
@@ -171,9 +189,9 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public Quest getQuestByID(int id){
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(QUEST_TABLE, new String[] {KEY_ID, KEY_NAME, KEY_ACTIVE_STEPS, KEY_STEP_GOAL, KEY_USER_ID, KEY_QUEST_COMPLETED, KEY_DIFFICULTY}, KEY_ID+"=?",new String[] {String.valueOf(id)},null,null,null);
+        Cursor cursor = db.query(QUEST_TABLE, new String[] {KEY_ID, KEY_NAME, KEY_ACTIVE_STEPS, KEY_STEP_GOAL, KEY_USER_ID, KEY_QUEST_COMPLETED, KEY_DIFFICULTY, KEY_LEVEL_REQUIREMENT, }, KEY_ID+"=?",new String[] {String.valueOf(id)},null,null,null);
         if(cursor != null) cursor.moveToFirst();
-        Quest quest = new Quest(cursor.getInt(0),cursor.getString(1),cursor.getInt(2),cursor.getInt(3),cursor.getInt(4),(cursor.getInt(5) != 0),cursor.getInt(6));
+        Quest quest = new Quest(cursor.getInt(0),cursor.getString(1), cursor.getString(8),cursor.getInt(2),cursor.getInt(3),cursor.getInt(4),(cursor.getInt(5) != 0),cursor.getInt(6), cursor.getShort(7));
         return quest;
     }
 
@@ -189,11 +207,13 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, quest.getName());
+        values.put(DESCRIPTION, quest.getDescription());
         values.put(KEY_ACTIVE_STEPS, quest.getActiveSteps());
         values.put(KEY_STEP_GOAL, quest.getStepGoal());
         values.put(KEY_USER_ID, quest.getUserID());
         values.put(KEY_QUEST_COMPLETED, quest.getStepGoal());
         values.put(KEY_DIFFICULTY, quest.getDifficulty());
+        values.put(KEY_LEVEL_REQUIREMENT, quest.getLevelRequirement());
 
         db.update(QUEST_TABLE, values, KEY_ID+"=?", new String[] {String.valueOf(quest.getId())});
     }

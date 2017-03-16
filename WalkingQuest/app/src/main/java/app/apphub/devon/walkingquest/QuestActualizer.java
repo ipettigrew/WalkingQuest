@@ -5,7 +5,7 @@ import android.content.Context;
 import java.util.ArrayList;
 
 import app.apphub.devon.walkingquest.database.DatabaseHandler;
-import app.apphub.devon.walkingquest.database.Quest;
+import app.apphub.devon.walkingquest.database.objects.Quest;
 import app.apphub.devon.walkingquest.database.objects.Character;
 
 /**
