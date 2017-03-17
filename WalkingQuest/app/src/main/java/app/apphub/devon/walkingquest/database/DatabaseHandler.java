@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 
+import app.apphub.devon.walkingquest.database.objects.Character;
+
 /**
  * Handles the database for the app. It is used for saving and retrieving users
  * and quests.
@@ -18,7 +20,7 @@ import java.util.ArrayList;
  */
 
 public class DatabaseHandler extends SQLiteOpenHelper{
-
+//TODO: fix getCharacterById class. @Cole from Adrian.
     private static final int DATABASE_VERSION = 1;
 
     private static final String DATABASE_NAME = "walkingQuest";
@@ -116,9 +118,11 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     /**
      * Used for adding a new user to the database.
-     * @param user A {@link User} object to add to the database.
+     * @param //user A {@link User} object to add to the database.
      * @return returns the {@link User} object with the id number assigned by the database.
      */
+
+
     public User addUser(User user){
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -195,6 +199,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         //gets the user id number on insertion and returns the updated object;
         db = this.getReadableDatabase();
         Cursor cursor = db.query(QUEST_TABLE, new String[] {KEY_ID}, null,null,null,null,"id DESC", "1");
+
         if(cursor != null) cursor.moveToFirst();
 
         quest.setId(cursor.getInt(0));
@@ -210,9 +215,11 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public Quest getQuestByID(int id){
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(QUEST_TABLE, new String[] {KEY_ID, KEY_NAME, KEY_ACTIVE_STEPS, KEY_STEP_GOAL, KEY_USER_ID, KEY_QUEST_COMPLETED, KEY_DIFFICULTY}, KEY_ID+"=?",new String[] {String.valueOf(id)},null,null,null);
+        Cursor cursor = db.query(QUEST_TABLE, new String[] {KEY_ID, KEY_NAME, KEY_ACTIVE_STEPS, KEY_STEP_GOAL, KEY_USER_ID, KEY_QUEST_COMPLETED, KEY_DIFFICULTY},
+                KEY_ID+"=?",new String[] {String.valueOf(id)},null,null,null);
         if(cursor != null) cursor.moveToFirst();
-        Quest quest = new Quest(cursor.getInt(0),cursor.getString(1),cursor.getInt(2),cursor.getInt(3),cursor.getInt(4),(cursor.getInt(5) != 0),cursor.getInt(6));
+        Quest quest = new Quest(cursor.getInt(0),cursor.getString(1),cursor.getInt(2),cursor.getInt(3),cursor.getInt(4),
+                (cursor.getInt(5) != 0),cursor.getInt(6));
         return quest;
     }
 
@@ -235,6 +242,65 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         values.put(KEY_DIFFICULTY, quest.getDifficulty());
 
         db.update(QUEST_TABLE, values, KEY_ID+"=?", new String[] {String.valueOf(quest.getId())});
+    }
+
+    public Character addCharacter(Character character) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put(KEY_NAME, character.getName());
+        values.put(KEY_LEVEL, character.getLevel());
+        values.put(KEY_INVENTORY_ID, character.getInvId());
+        values.put(KEY_CURRENCY, character.getCurrency());
+        values.put(KEY_SHOES_ID,character.getshoesId());
+        values.put(KEY_PANTS_ID,character.getPantsid());
+        values.put(KEY_SHIRT_ID,character.getshirtId());
+
+        //insert
+        db.insert(CHARACTER_TABLE, null, values);
+        db.close();
+
+        db = this.getReadableDatabase();
+        Cursor cursor = db.query(CHARACTER_TABLE, new String [] {KEY_ID},null,null,null,null,"id DESC","1");
+        if(cursor != null)
+            cursor.moveToFirst();
+
+        character.setId(cursor.getInt(0));
+        db.close();
+
+        return character;
+    }
+    //TODO: From Adrian to Cole. Fix the commented out method
+    public Character getCharacterByID(int id){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(CHARACTER_TABLE, new String[] {KEY_NAME,KEY_LEVEL,KEY_INVENTORY_ID,KEY_CURRENCY,KEY_SHOES_ID,KEY_PANTS_ID,KEY_SHIRT_ID},KEY_ID+"=?",new String[] {String.valueOf(id)},null,null,null);
+
+        if(cursor != null)
+            cursor.moveToFirst();
+        //remove "character = null", this is just temporary as I don't want to push a build with errors. - Adrian
+        Character character = null;/* = new Character(cursor.getInt(0),cursor.getString(1),cursor.getShort(2),cursor.getInt(3),cursor.getInt(4),
+                cursor.getInt(5),cursor.getInt(6),cursor.getInt(7),cursor.getInt(8),cursor.getInt(9),cursor.getInt(10),cursor.getInt(11),
+                cursor.getInt(12),cursor.getInt(13),cursor.getInt(14));*/
+
+        return character;
+    }
+
+    public void updateCharacter(Character character) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put(KEY_NAME, character.getName());
+        values.put(KEY_LEVEL, character.getLevel());
+        values.put(KEY_INVENTORY_ID, character.getInvId());
+        values.put(KEY_CURRENCY, character.getCurrency());
+        values.put(KEY_SHOES_ID,character.getshoesId());
+        values.put(KEY_PANTS_ID,character.getPantsid());
+        values.put(KEY_SHIRT_ID,character.getshirtId());
+
+        db.update(CHARACTER_TABLE, values, KEY_ID+"=?", new String[] {String.valueOf(character.getId())});
     }
 
     //TODO: Get all the quests from the DB that are that same difficulty as the argument and less than or equal to the characterLevel argument
