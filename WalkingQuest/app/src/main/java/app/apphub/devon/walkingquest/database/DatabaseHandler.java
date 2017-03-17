@@ -9,6 +9,8 @@ import app.apphub.devon.walkingquest.database.objects.*;
 
 import java.util.ArrayList;
 
+import app.apphub.devon.walkingquest.database.objects.Character;
+
 /**
  * Handles the database for the app. It is used for saving and retrieving users
  * and quests.
@@ -63,6 +65,16 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    /*TO DO: Create an add, update, getById function. If feeling ambitious create a function
+    to get all objects -> return in array list.
+    */
+    /*@Override
+    public void onCreate(SQLiteDatabase db) {
+        createQuestTable(db);
+        createUserTable(db);
+        createCharacterTable(db);
+
+    }*/
     private void createInventoryTable(SQLiteDatabase db){
         String CREATE_USER_DATABASE = "CREATE TABLE "+ INV_TABLE +"("
                 + KEY_ID +" INTEGER PRIMARY KEY,"
@@ -92,19 +104,21 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 + ")";
         db.execSQL(CREATE_QUEST_DATABASE);
     }*/
-    private void createQuestTable(SQLiteDatabase db) {
-        String CREATE_USER_DATABASE=  "CREATE TABLE "
-            + QUEST_TABLE +"("
-            + KEY_ID +" INTEGER PRIMARY KEY,"
-            + KEY_NAME +" TEXT,"
-            + KEY_ACTIVE_STEPS +" INTEGER,"
-            + KEY_STEP_GOAL +" INTEGER,"
-            + KEY_USER_ID +" INTEGER,"
-            + KEY_QUEST_COMPLETED +" INTEGER,"
-            + KEY_DIFFICULTY+ " INTEGER"
-            +")";
 
-        db.execSQL(CREATE_USER_DATABASE);
+    private void createQuestTable(SQLiteDatabase db) {
+        String CREATE_QUEST_DATABASE = "CREATE TABLE "
+                + QUEST_TABLE + "("
+                + KEY_ID + " INTEGER PRIMARY KEY,"
+                + KEY_NAME + " TEXT,"
+                + DESCRIPTION + " TEXT,"
+                + KEY_ACTIVE_STEPS + " INTEGER,"
+                + KEY_STEP_GOAL + " INTEGER,"
+                + KEY_USER_ID + " INTEGER,"
+                + KEY_QUEST_COMPLETED + " INTEGER,"
+                + KEY_DIFFICULTY + " INTEGER,"
+                + KEY_LEVEL_REQUIREMENT + "INTEGER"
+                + ")";
+        db.execSQL(CREATE_QUEST_DATABASE);
     }
 
 
@@ -119,14 +133,14 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     private void createCharacterTable(SQLiteDatabase db) {
         String CREATE_CHARACTER_TABLE = "CREATE TABLE " + CHARACTER_TABLE + "("
-            + KEY_ID + "INTEGER PRIMARY KEY"
-            + KEY_NAME + "TEXT"
-            + KEY_LEVEL + "SHORT"
-            + KEY_INVENTORY_ID + "INTEGER"
-            + KEY_CURRENCY + "LONG"
-            + KEY_SHOES_ID + "INTEGER"
-            + KEY_PANTS_ID + "INTEGER"
-            + KEY_SHIRT_ID + "INTEGER";
+                + KEY_ID + "INTEGER PRIMARY KEY"
+                + KEY_NAME + "TEXT"
+                + KEY_LEVEL + "SHORT"
+                + KEY_INVENTORY_ID + "INTEGER"
+                + KEY_CURRENCY + "LONG"
+                + KEY_SHOES_ID + "INTEGER"
+                + KEY_PANTS_ID + "INTEGER"
+                + KEY_SHIRT_ID + "INTEGER";
         db.execSQL(CREATE_CHARACTER_TABLE);
     }
 
@@ -141,6 +155,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         createCharacterTable(db);
     }
 
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+USER_TABLE);
@@ -151,9 +166,11 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     /**
      * Used for adding a new user to the database.
-     * @param user A {@link User} object to add to the database.
+     * @param //user A {@link User} object to add to the database.
      * @return returns the {@link User} object with the id number assigned by the database.
      */
+
+
     public User addUser(User user){
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -232,6 +249,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         //gets the user id number on insertion and returns the updated object;
         db = this.getReadableDatabase();
         Cursor cursor = db.query(QUEST_TABLE, new String[] {KEY_ID}, null,null,null,null,"id DESC", "1");
+
         if(cursor != null) cursor.moveToFirst();
 
         quest.setId(cursor.getInt(0));
@@ -247,9 +265,11 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public Quest getQuestByID(int id){
         SQLiteDatabase db = this.getReadableDatabase();
 
+
         Cursor cursor = db.query(QUEST_TABLE, new String[] {KEY_ID, KEY_NAME, KEY_ACTIVE_STEPS, KEY_STEP_GOAL, KEY_USER_ID, KEY_QUEST_COMPLETED, KEY_DIFFICULTY, KEY_LEVEL_REQUIREMENT, }, KEY_ID+"=?",new String[] {String.valueOf(id)},null,null,null);
         if(cursor != null) cursor.moveToFirst();
         Quest quest = new Quest(cursor.getInt(0),cursor.getString(1), cursor.getString(8),cursor.getInt(2),cursor.getInt(3),cursor.getInt(4),(cursor.getInt(5) != 0),cursor.getInt(6), cursor.getShort(7));
+
         return quest;
     }
 
@@ -276,6 +296,65 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         db.update(QUEST_TABLE, values, KEY_ID+"=?", new String[] {String.valueOf(quest.getId())});
     }
 
+    public Character addCharacter(Character character) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put(KEY_NAME, character.getName());
+        values.put(KEY_LEVEL, character.getLevel());
+        values.put(KEY_INVENTORY_ID, character.getInvId());
+        values.put(KEY_CURRENCY, character.getCurrency());
+        values.put(KEY_SHOES_ID,character.getshoesId());
+        values.put(KEY_PANTS_ID,character.getPantsid());
+        values.put(KEY_SHIRT_ID,character.getshirtId());
+
+        //insert
+        db.insert(CHARACTER_TABLE, null, values);
+        db.close();
+
+        db = this.getReadableDatabase();
+        Cursor cursor = db.query(CHARACTER_TABLE, new String [] {KEY_ID},null,null,null,null,"id DESC","1");
+        if(cursor != null)
+            cursor.moveToFirst();
+
+        character.setId(cursor.getInt(0));
+        db.close();
+
+        return character;
+    }
+    //TODO: From Adrian to Cole. Fix the commented out method
+    public Character getCharacterByID(int id){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(CHARACTER_TABLE, new String[] {KEY_NAME,KEY_LEVEL,KEY_INVENTORY_ID,KEY_CURRENCY,KEY_SHOES_ID,KEY_PANTS_ID,KEY_SHIRT_ID},KEY_ID+"=?",new String[] {String.valueOf(id)},null,null,null);
+
+        if(cursor != null)
+            cursor.moveToFirst();
+        //remove "character = null", this is just temporary as I don't want to push a build with errors. - Adrian
+        Character character = null;/* = new Character(cursor.getInt(0),cursor.getString(1),cursor.getShort(2),cursor.getInt(3),cursor.getInt(4),
+                cursor.getInt(5),cursor.getInt(6),cursor.getInt(7),cursor.getInt(8),cursor.getInt(9),cursor.getInt(10),cursor.getInt(11),
+                cursor.getInt(12),cursor.getInt(13),cursor.getInt(14));*/
+
+        return character;
+    }
+
+    public void updateCharacter(Character character) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put(KEY_NAME, character.getName());
+        values.put(KEY_LEVEL, character.getLevel());
+        values.put(KEY_INVENTORY_ID, character.getInvId());
+        values.put(KEY_CURRENCY, character.getCurrency());
+        values.put(KEY_SHOES_ID,character.getshoesId());
+        values.put(KEY_PANTS_ID,character.getPantsid());
+        values.put(KEY_SHIRT_ID,character.getshirtId());
+
+        db.update(CHARACTER_TABLE, values, KEY_ID+"=?", new String[] {String.valueOf(character.getId())});
+    }
+
     //TODO: Get all the quests from the DB that are that same difficulty as the argument and less than or equal to the characterLevel argument
     public ArrayList<app.apphub.devon.walkingquest.database.objects.Quest> getQuestByRequirement(int characterLevel, int difficulty){
 
@@ -285,3 +364,4 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         return null;
     }
 }
+
