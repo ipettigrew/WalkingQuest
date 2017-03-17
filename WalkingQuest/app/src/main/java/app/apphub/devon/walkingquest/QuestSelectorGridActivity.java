@@ -12,7 +12,6 @@ import android.widget.GridView;
 
 import app.apphub.devon.walkingquest.GridAdapters.QuestSelectorGridAdapter;
 import app.apphub.devon.walkingquest.database.DatabaseHandler;
-import app.apphub.devon.walkingquest.database.Quest;
 
 public class QuestSelectorGridActivity extends AppCompatActivity {
     public GridView questGrid;
