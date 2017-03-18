@@ -57,24 +57,34 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     private static final String KEY_PANTS_ID = "pantsId";
     private static final String KEY_SHIRT_ID = "shirtId";
 
+    private static DatabaseHandler sInstance;
+
     /**
      * Constructor for the Database handler
      * @param context the application context;
      */
-    public DatabaseHandler(Context context){
+    private DatabaseHandler(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    /*TO DO: Create an add, update, getById function. If feeling ambitious create a function
-    to get all objects -> return in array list.
-    */
-    /*@Override
-    public void onCreate(SQLiteDatabase db) {
-        createQuestTable(db);
-        createUserTable(db);
-        createCharacterTable(db);
+    public static synchronized DatabaseHandler getInstance(Context context) {
 
-    }*/
+        // Use the application context, which will ensure that you
+        // don't accidentally leak an Activity's context.
+        // See this article for more information: http://bit.ly/6LRzfx
+        if (sInstance == null) {
+            sInstance = new DatabaseHandler(context.getApplicationContext());
+        }
+        return sInstance;
+    }
+
+    // http://stackoverflow.com/questions/13641250/sqlite-delete-cascade-not-working
+    @Override
+    public void onConfigure(SQLiteDatabase database) {
+        database.setForeignKeyConstraintsEnabled(true);
+
+    }
+
     private void createInventoryTable(SQLiteDatabase db){
         String CREATE_USER_DATABASE = "CREATE TABLE "+ INV_TABLE +"("
                 + KEY_ID +" INTEGER PRIMARY KEY,"
