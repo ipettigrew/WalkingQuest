@@ -13,19 +13,22 @@ import org.json.JSONObject;
 
 public class Item extends DatabaseObject<Item>{
     int value;
+    int invID;
     String name;
     //enum
     JSONObject attributes;
 
-    public Item(int id, String name, int value, String json){
+    public Item(int id, String name, int invID, int value, String json){
         super(id);
         this.name = name;
         this.value = value;
+        this.invID = invID;
         try {
             attributes = new JSONObject(json);
         } catch (JSONException e) {
             e.printStackTrace();
             attributes = new JSONObject();
+
         }
     }
 
@@ -58,6 +61,22 @@ public class Item extends DatabaseObject<Item>{
             this.attributes = new JSONObject();
             return false;
         }
+    }
+
+    public int getInvID() {
+        return invID;
+    }
+
+    public void setInvID(int invID) {
+        this.invID = invID;
+    }
+
+    public JSONObject getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(JSONObject attributes) {
+        this.attributes = attributes;
     }
 
     @Override

@@ -26,9 +26,9 @@ public class Character extends DatabaseObject<Character>{
     //TODO: add quest to characater
     private int activeQuest;
 
-    public Character(int id, String name, short level, Inventory inv, int invId, long currency,
-                     Item shoes, Item pants, Item shirt, long exp,
-                     int questsCompleted, int shoesId, int pantsId, int shirtId, int activeQuest) {
+    public Character(int id, String name, short level, Inventory inv, int invId, long currency, int shoesId,
+                     Item shoes, int pantsId, Item pants, int shirtId, Item shirt, long exp,
+                     int questsCompleted, int activeQuest) {
         super(id);
         this.name = name;
         this.level = level;
