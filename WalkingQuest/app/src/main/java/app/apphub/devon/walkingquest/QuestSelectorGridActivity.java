@@ -2,13 +2,13 @@ package app.apphub.devon.walkingquest;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+
+import java.util.List;
 
 import app.apphub.devon.walkingquest.GridAdapters.QuestSelectorGridAdapter;
 import app.apphub.devon.walkingquest.database.DatabaseHandler;
@@ -16,7 +16,7 @@ import app.apphub.devon.walkingquest.database.objects.Quest;
 
 public class QuestSelectorGridActivity extends AppCompatActivity {
     public GridView questGrid;
-    public Quest[] quests;
+    public List<Quest> quests;
     private QuestActualizer questActualizer;
     private DatabaseHandler databaseHandler;
 
@@ -33,9 +33,9 @@ public class QuestSelectorGridActivity extends AppCompatActivity {
          *  */
 
 
-        quests = new Quest[1];
+        quests = questActualizer.getQuests();
         for (int i = 0; i < 8; i++) {
-            quests[i].setId((i + 1));
+            quests.get(i).setId((i + 1));
         }
 
         questGrid = (GridView) this.findViewById(R.id.quest_selector_grid_view);
@@ -47,7 +47,7 @@ public class QuestSelectorGridActivity extends AppCompatActivity {
                 startActivity(new Intent(QuestSelectorGridActivity.this, QuestDetailsActivity.class));
             }
         });
-        QuestSelectorGridAdapter questAdapter = new QuestSelectorGridAdapter(QuestSelectorGridActivity.this, quests);
+        QuestSelectorGridAdapter questAdapter = new QuestSelectorGridAdapter(QuestSelectorGridActivity.this, (Quest[])quests.toArray());
         questGrid.setAdapter(questAdapter);
     }
 

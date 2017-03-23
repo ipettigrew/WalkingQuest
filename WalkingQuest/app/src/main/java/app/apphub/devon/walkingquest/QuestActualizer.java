@@ -30,7 +30,7 @@ public class QuestActualizer {
 
         this.character = character;
 
-        databaseHandler = new DatabaseHandler(context);
+        databaseHandler = DatabaseHandler.getInstance(context);
         quests = databaseHandler.getQuestByRequirement(character.getLevel(), difficulty);
 
         if (character.getCurrentQuestId() != -1) {
