@@ -28,6 +28,7 @@ public class QuestActualizer {
 
     public QuestActualizer(Character character, int difficulty, Context context) {
 
+        /*
         this.character = character;
 
         databaseHandler = DatabaseHandler.getInstance(context);
@@ -38,6 +39,7 @@ public class QuestActualizer {
         } else {
             currentQuest = null;
         }
+        */
     }
 
     /**

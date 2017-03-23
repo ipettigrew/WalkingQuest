@@ -128,7 +128,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 + KEY_USER_ID + " INTEGER,"
                 + KEY_QUEST_COMPLETED + " INTEGER,"
                 + KEY_DIFFICULTY + " INTEGER,"
-                + KEY_LEVEL_REQUIREMENT + "INTEGER"
+                + KEY_LEVEL_REQUIREMENT + " INTEGER"
                 + ")";
         db.execSQL(CREATE_QUEST_DATABASE);
     }
@@ -154,7 +154,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 + KEY_SHIRT_ID + "INTEGER,"
                 + KEY_ACTIVEQUEST+ "INTEGER,"
                 + KEY_QUESTS_COMPLETED + "INTEGER,"
-                + CHARACTER_EXP + "INTERGER";
+                + CHARACTER_EXP + "INTERGER"+")";
         db.execSQL(CREATE_CHARACTER_TABLE);
     }
 
@@ -279,7 +279,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         values.put(KEY_LEVEL_REQUIREMENT, quest.getLevelRequirement());
 
         //insert
-        db.insert(QUEST_TABLE, null, values);
+        long id = db.insert(QUEST_TABLE, null, values);
         db.close();
         //gets the user id number on insertion and returns the updated object;
         db = this.getReadableDatabase();
@@ -287,7 +287,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         if(cursor != null) cursor.moveToFirst();
 
-        quest.setId(cursor.getInt(0));
+        quest.setId((int)id);
         db.close();
         return quest;
     }
@@ -301,7 +301,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getReadableDatabase();
 
 
-        Cursor cursor = db.query(QUEST_TABLE, new String[] {KEY_ID, KEY_NAME, KEY_ACTIVE_STEPS, KEY_STEP_GOAL, KEY_USER_ID, KEY_QUEST_COMPLETED, KEY_DIFFICULTY, KEY_LEVEL_REQUIREMENT }, KEY_ID+"=?",new String[] {String.valueOf(id)},null,null,null);
+        Cursor cursor = db.query(QUEST_TABLE, new String[] {KEY_ID, KEY_NAME, KEY_ACTIVE_STEPS, KEY_STEP_GOAL, KEY_USER_ID, KEY_QUEST_COMPLETED, KEY_DIFFICULTY, KEY_LEVEL_REQUIREMENT, DESCRIPTION }, KEY_ID+"=?",new String[] {String.valueOf(id)},null,null,null);
         if(cursor != null) cursor.moveToFirst();
         Quest quest = new Quest(cursor.getInt(0),cursor.getString(1), cursor.getString(8),cursor.getInt(2),cursor.getInt(3),cursor.getInt(4),(cursor.getInt(5) != 0),cursor.getInt(6), cursor.getShort(7));
 

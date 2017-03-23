@@ -57,7 +57,8 @@ public class Quest extends DatabaseObject<Quest> {
      * @param difficulty The difficulty rating of the quest.
      *                   1 being easy and 3 being hard.
      */
-    public Quest(int id, String name, String description, long activeSteps, long stepGoal, int userID, boolean completed, int difficulty, short levelRequirement) {
+    public Quest(int id, String name, String description, long activeSteps, long stepGoal, int userID, boolean completed, int difficulty,
+                 short levelRequirement) {
         super(id);
         this.name = name;
         this.description = description;
