@@ -7,7 +7,6 @@ import app.apphub.devon.walkingquest.database.objects.Character;
  */
 
 public class QuestManager {
-
     Character character;
 
     public QuestManager(Character character){
@@ -40,6 +39,4 @@ public class QuestManager {
     public void removeCompletedQuest(){
 
     }
-
-
 }

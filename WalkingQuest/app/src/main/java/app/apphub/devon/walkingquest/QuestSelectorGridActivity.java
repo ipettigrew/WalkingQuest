@@ -12,6 +12,7 @@ import android.widget.GridView;
 
 import app.apphub.devon.walkingquest.GridAdapters.QuestSelectorGridAdapter;
 import app.apphub.devon.walkingquest.database.DatabaseHandler;
+import app.apphub.devon.walkingquest.database.objects.Quest;
 
 public class QuestSelectorGridActivity extends AppCompatActivity {
     public GridView questGrid;
@@ -27,15 +28,14 @@ public class QuestSelectorGridActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-        /*
-        * Use quest actualizer to get the list of quests and present them to the user
-        * */
-
+        /**
+         *  Use quest actualizer to get the list of quests and present them to the user
+         *  */
 
 
         quests = new Quest[1];
         for (int i = 0; i < 8; i++) {
-            quests[i] = (i + 1) + "";
+            quests[i].setId((i + 1));
         }
 
         questGrid = (GridView) this.findViewById(R.id.quest_selector_grid_view);

@@ -24,18 +24,18 @@ public class QuestActualizer {
      * that a character of that level can accept (level minimum for quests). The difficulty determines the difficulty.
      * Gets the list of possible quests from the database and stores them in an arraylist.
      * Checks to see if a quest has been completed before or not.
-     * */
+     */
 
-    public QuestActualizer(Character character, int difficulty, Context context){
+    public QuestActualizer(Character character, int difficulty, Context context) {
 
         this.character = character;
 
         databaseHandler = new DatabaseHandler(context);
         quests = databaseHandler.getQuestByRequirement(character.getLevel(), difficulty);
 
-        if(character.getActiveQuest() != -1){
-            currentQuest = databaseHandler.getQuestByID(character.getActiveQuest());
-        }else{
+        if (character.getCurrentQuestId() != -1) {
+            currentQuest = databaseHandler.getQuestByID(character.getCurrentQuestId());
+        } else {
             currentQuest = null;
         }
     }
@@ -43,31 +43,33 @@ public class QuestActualizer {
     /**
      * Sets the quest at index i in the arraylist as the currently active quest in the character table.
      * Sets the quest id in the quest table as the active quest in the character table
-     * */
+     */
 
-    public void setCurrentQuest(int i){
-        if(currentQuest != null){
+    public void setCurrentQuest(int i) {
+        if (currentQuest != null) {
             killQuest();
         }
-        if(i != -1) {
+        if (i != -1) {
             currentQuest = databaseHandler.getQuestByID(i);
-            character.setActiveQuest(i);
+            character.setCurrentQuest(currentQuest);
         }
     }
 
     /**
      * Removes the active quest id from character
-     * */
+     */
 
     public void killQuest() {
         currentQuest = null;
         setCurrentQuest(-1);
     }
 
-    public Quest getQuestById(int i){
+    public Quest getQuestById(int i) {
         return databaseHandler.getQuestByID(i);
     }
 
-    public ArrayList<Quest> getQuests(){ return quests; }
+    public ArrayList<Quest> getQuests() {
+        return quests;
+    }
 
 }

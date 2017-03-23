@@ -17,6 +17,7 @@ public class Quest extends DatabaseObject<Quest> {
     private String description;
     private boolean completed;
     private int difficulty;
+    private Reward questReward;
 
     //TODO:level requirement for quest
     private short levelRequirement;
@@ -36,6 +37,9 @@ public class Quest extends DatabaseObject<Quest> {
         this.stepGoal = stepGoal;
         completed = false;
         this.difficulty = difficulty;
+
+        /** For now I'm setting it to a blank reward. In the future, we should auto-generate this*/
+        questReward = new Reward();
     }
 
     /**
@@ -238,4 +242,17 @@ public class Quest extends DatabaseObject<Quest> {
     public short getLevelRequirement() { return levelRequirement; }
 
     public void setLevelRequirement(short levelRequirement) { this.levelRequirement = levelRequirement; }
+
+    /**
+     *  This function will delimit information based on quest information that is important for
+     *  at-a-glance decisions, i.e. the bare minimum for what a user should know about the quest to
+     *  make their decision
+     *
+     *  @return String*/
+    public String getQuestHeader() {
+        String msg = "";
+        msg += name + "\t";
+        msg += questReward;
+        return msg;
+    }
 }

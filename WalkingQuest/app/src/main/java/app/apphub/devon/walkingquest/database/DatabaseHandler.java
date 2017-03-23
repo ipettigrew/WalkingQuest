@@ -433,7 +433,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         Inventory inventory = new Inventory(cursor.getInt(0), cursor.getInt(1));
 
         ArrayList<Item> items = getItemsByInventoryId(cursor.getInt(0));
-        inventory.setInventory(items);
+        inventory.addItems(items);
 
         return inventory;
     }
@@ -464,12 +464,12 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         values.put(KEY_LEVEL, character.getLevel());
         values.put(KEY_INVENTORY_ID, character.getInvId());
         values.put(KEY_CURRENCY, character.getCurrency());
-        values.put(KEY_SHOES_ID,character.getshoesId());
-        values.put(KEY_PANTS_ID,character.getPantsid());
-        values.put(KEY_SHIRT_ID,character.getshirtId());
+        values.put(KEY_SHOES_ID,character.getShoesId());
+        values.put(KEY_PANTS_ID,character.getPantsId());
+        values.put(KEY_SHIRT_ID,character.getShirtId());
         values.put(CHARACTER_EXP,character.getExp());
         values.put(KEY_QUESTS_COMPLETED,character.getQuestsCompleted());
-        values.put(KEY_ACTIVEQUEST,character.getActiveQuest());
+        values.put(KEY_ACTIVEQUEST,character.getCurrentQuestId());
 
         //insert
         db.insert(CHARACTER_TABLE, null, values);
@@ -495,9 +495,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         if(cursor != null)
             cursor.moveToFirst();
         //remove "character = null", this is just temporary as I don't want to push a build with errors. - Adrian
-        Character character = new Character(cursor.getInt(0),cursor.getString(1), cursor.getShort(2), getInventoryByID(cursor.getInt(3)),
-                                            cursor.getInt(3), cursor.getLong(4), cursor.getInt(5), getItemByID(cursor.getInt(5)), cursor.getInt(6),
-                                            getItemByID(cursor.getInt(6)), cursor.getInt(7), getItemByID(cursor.getInt(7)), cursor.getLong(8), cursor.getInt(10), cursor.getInt(10));
+        /** Jonathan:   Modified to use the new Character constructor, removing some unnecessary fields */
+        Character character = new Character(cursor.getString(1), cursor.getInt(5), cursor.getInt(6), cursor.getInt(7));
 
         return character;
     }
@@ -511,12 +510,12 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         values.put(KEY_LEVEL, character.getLevel());
         values.put(KEY_INVENTORY_ID, character.getInvId());
         values.put(KEY_CURRENCY, character.getCurrency());
-        values.put(KEY_SHOES_ID,character.getshoesId());
-        values.put(KEY_PANTS_ID,character.getPantsid());
-        values.put(KEY_SHIRT_ID,character.getshirtId());
+        values.put(KEY_SHOES_ID,character.getShoesId());
+        values.put(KEY_PANTS_ID,character.getPantsId());
+        values.put(KEY_SHIRT_ID,character.getShirtId());
         values.put(CHARACTER_EXP,character.getExp());
         values.put(KEY_QUESTS_COMPLETED,character.getQuestsCompleted());
-        values.put(KEY_ACTIVEQUEST,character.getActiveQuest());
+        values.put(KEY_ACTIVEQUEST,character.getCurrentQuestId());
 
         db.update(CHARACTER_TABLE, values, KEY_ID+"=?", new String[] {String.valueOf(character.getId())});
     }
