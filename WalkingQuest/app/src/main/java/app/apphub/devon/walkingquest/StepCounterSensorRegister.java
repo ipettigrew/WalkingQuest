@@ -16,6 +16,9 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import app.apphub.devon.walkingquest.database.DatabaseHandler;
+import app.apphub.devon.walkingquest.database.objects.Quest;
+
 /**
  * Created by adria on 2017-02-23.
  */
@@ -99,12 +102,15 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
     boolean flag = false;
     boolean isRunning;
 
+    private DatabaseHandler databaseHandler;
+    private Quest quest;
+
     @Override
     public void onCreate(){
         super.onCreate();
         isRunning = false;
-        //globalSteps = 0;
-        Log.i("CREATE", "STEP_COUNTER_CREATED");
+        databaseHandler = DatabaseHandler.getInstance(getBaseContext());
+        //Log.i("CREATE", "STEP_COUNTER_CREATED");
     }
 
     @Override
