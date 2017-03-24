@@ -11,14 +11,11 @@ package app.apphub.devon.walkingquest.database.objects;
 public class Quest extends DatabaseObject<Quest> {
 
     private String name;
+    private String description;
     private long activeSteps;
     private long stepGoal;
-    private String description;
     private boolean completed;
     private int difficulty;
-    private Reward questReward;
-
-    //TODO:level requirement for quest
     private short levelRequirement;
 
     /**
@@ -37,9 +34,7 @@ public class Quest extends DatabaseObject<Quest> {
         this.stepGoal = stepGoal;
         completed = false;
         this.difficulty = difficulty;
-
-        /** For now I'm setting it to a blank reward. In the future, we should auto-generate this*/
-        questReward = new Reward();
+        this.levelRequirement = 0;
     }
 
     /**
@@ -52,13 +47,14 @@ public class Quest extends DatabaseObject<Quest> {
      *                    has completed
      * @param stepGoal    Total number of steps needed to
      *                    complete the quest.
-     * @param userID      The id number of the user doing the quest.
      * @param completed   A boolean to keep track of if the quest
      *                    has been completed.
      * @param difficulty  The difficulty rating of the quest.
      *                    1 being easy and 3 being hard.
      */
-    public Quest(int id, String name, String description, long activeSteps, long stepGoal, int userID, boolean completed, int difficulty, short levelRequirement) {
+    public Quest(   int id, String name, String description, long activeSteps,
+                    long stepGoal, boolean completed, int difficulty, short levelRequirement
+    ) {
         super(id);
         this.name = name;
         this.description = description;
@@ -77,16 +73,13 @@ public class Quest extends DatabaseObject<Quest> {
      * @return true if the objects are equal false otherwise.
      */
     public boolean equals(Quest quest) {
-        boolean result = true;
-        if (this.id != quest.getId()) result = false;
-        if (!this.name.equals(name)) result = false;
-        if (this.activeSteps != quest.getActiveSteps()) result = false;
-        if (this.stepGoal != quest.getStepGoal()) result = false;
-        if (this.completed != quest.isCompleted()) result = false;
-        if (this.difficulty != quest.getDifficulty()) result = false;
-        if (this.levelRequirement != quest.getLevelRequirement()) result = false;
-
-        return result;
+        return  this.id != quest.getId() &&
+                !this.name.equals(name) &&
+                this.activeSteps != quest.getActiveSteps() &&
+                this.stepGoal != quest.getStepGoal() &&
+                this.completed != quest.isCompleted() &&
+                this.difficulty != quest.getDifficulty() &&
+                this.levelRequirement != quest.getLevelRequirement();
     }
 
     /**
@@ -255,7 +248,6 @@ public class Quest extends DatabaseObject<Quest> {
     public String getQuestHeader() {
         String msg = "";
         msg += name + "\t";
-        msg += questReward;
         return msg;
     }
 }

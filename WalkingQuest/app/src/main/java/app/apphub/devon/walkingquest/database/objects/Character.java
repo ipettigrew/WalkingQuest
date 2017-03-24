@@ -50,8 +50,8 @@ public class Character extends DatabaseObject<Character>{
 
     public Character(int id, String name, short level, int invId, Inventory inv, long currency,
                      int shoesId, short baseSpeed, short baseLuck, long exp,
-                     long requiredExpForNextLevel, int currentQuestId, int questsCompleted)
-    {
+                     long requiredExpForNextLevel, int currentQuestId, int questsCompleted
+    ) {
         super(id);
 
         this.name = name;
