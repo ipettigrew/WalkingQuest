@@ -10,6 +10,7 @@ import android.widget.TextView;
 /** TODO:   Figure out what the fuck is wrong with this R bullshit
  * */
 import app.apphub.devon.walkingquest.R;
+import app.apphub.devon.walkingquest.database.objects.Quest;
 
 /**
  * Created by Owner on 2017-03-01.
@@ -17,10 +18,10 @@ import app.apphub.devon.walkingquest.R;
 
 public class QuestSelectorGridAdapter extends BaseAdapter {
     private Context context;
-    private String[] quests;    /*  TODO:   change this into an array of Quest objects (or some other acceptable object)*/
+    private Quest[] quests;    /*  TODO:   change this into an array of Quest objects (or some other acceptable object)*/
     LayoutInflater inflater;
 
-    public QuestSelectorGridAdapter(Context context, String[] quests) {
+    public QuestSelectorGridAdapter(Context context, Quest[] quests) {
         this.context = context;
         this.quests = quests;
         inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -32,7 +33,7 @@ public class QuestSelectorGridAdapter extends BaseAdapter {
     }
 
     @Override
-    public String getItem(int position) {
+    public Quest getItem(int position) {
         return quests[position];
     }
 
@@ -53,7 +54,7 @@ public class QuestSelectorGridAdapter extends BaseAdapter {
 
             }
         });
-        t.setText(quests[position]);
+        t.setText(quests[position].getQuestHeader());
         return convertView;
     }
 }
