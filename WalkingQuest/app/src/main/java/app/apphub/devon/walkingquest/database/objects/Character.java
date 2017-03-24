@@ -10,10 +10,12 @@ public class Character extends DatabaseObject<Character>{
 
     private String name;
     private short level;
-    private Inventory inv;
+    private short baseSpeed;
+    private short baseLuck;
     private int invId;
-    private long currency;
+    private Inventory inv;
     private int shoesId;
+    private long currency;
     //Assumed to be total exp from beginning of time
 
     private long exp;
@@ -23,50 +25,22 @@ public class Character extends DatabaseObject<Character>{
     private int currentQuestId;
     private int questsCompleted;
 
-    public Character(String name) {
-        /** Something we should consider is enforcing unique IDs, for obvious reasons. We can easily
-         *  do this if, whenever we create a DatabaseObject, we assign the ID with a call to the
-         *  DatabaseHandler, which generates a unique ID for us to use.*/
+    public Character(String name, int invId, int shoesId) {
         super();
-
-        /** Randomize ID*/
-        int id = (int)(Math.random()*99999);
-
-        /** while(database.getCharacterById() != null) {
-         *      id = (int)(Math.random());
-         *  }*/
-        this.id = id;
-
-        /**
-         *  Refactor
-         *
-         *  We don't need a constructor to take in all these values, that's really gross. Instead,
-         *  we should only have the user enter a name for the character. We can generate a random
-         *  identification number for database purposes.
-         *  */
 
         this.name = name;
         this.level = 0;
 
-        /** Frankly we shouldn't need this. We should just use an ID number to access.  */
-        this.inv = new Inventory((int)(Math.random()*99999), this.id);  /** Five-digit random is
-                                                                            sufficient*/
+        this.invId = invId;
         this.currency = 0;
 
         this.exp = 0;
         this.questsCompleted = 0;
 
-        /**
-         *  Do we really need these? We should be able to access the ID from the Item/Inventory
-         *  class itself with a get method or something similar, we shouldn't require extra space in
-         *  the Character class to use them
-         *  */
-        this.invId = this.inv.id;
+        this.shoesId = shoesId;
 
-
-        /**
-         *  this.shoesId = getEmptyShoesId();
-         *  */
+        this.baseLuck = 0;
+        this.baseSpeed = 10;
 
         /**
          *  Set the current quest ID to be nothing
@@ -74,17 +48,25 @@ public class Character extends DatabaseObject<Character>{
         this.currentQuestId = -1;
     }
 
-    public Character(int id, String name, short level, int invId, long currency, int shoesId,
-                     long exp, long requiredExpForNextLevel, int currentQuestId, int questsCompleted)
+    public Character(int id, String name, short level, int invId, Inventory inv, long currency,
+                     int shoesId, short baseSpeed, short baseLuck, long exp,
+                     long requiredExpForNextLevel, int currentQuestId, int questsCompleted)
     {
         super(id);
+
         this.name = name;
         this.level = level;
+        this.exp = exp;
+
         this.invId = invId;
+        this.inv = inv;
         this.currency = currency;
         this.shoesId = shoesId;
-        this.exp = exp;
+
+        this.baseSpeed = baseSpeed;
+        this.baseLuck = baseLuck;
         this.requiredExpForNextLevel = requiredExpForNextLevel;
+
         this.currentQuestId = currentQuestId;
         this.questsCompleted = questsCompleted;
     }
@@ -126,8 +108,20 @@ public class Character extends DatabaseObject<Character>{
         return shoesId;
     }
 
+    public short getSpeed() {
+        return baseSpeed;
+    }
+
+    public short getLuck() {
+        return baseLuck;
+    }
+
     public void setCurrentQuestId(int currentQuestId) {
         this.currentQuestId = currentQuestId;
+    }
+
+    public long getRequiredExp() {
+        return requiredExpForNextLevel;
     }
 
     public int getCurrentQuestId() {
