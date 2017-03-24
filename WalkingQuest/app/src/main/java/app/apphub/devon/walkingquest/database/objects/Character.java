@@ -14,25 +14,28 @@ public class Character extends DatabaseObject<Character>{
     private int invId;
     private long currency;
     private int shoesId;
-    private Item shoes;
-    private int pantsId;
-    private Item pants;
-    private int shirtId;
-    private Item shirt;
     //Assumed to be total exp from beginning of time
 
     private long exp;
     private long requiredExpForNextLevel;
 
     //TODO: add quest to character
-    private Quest currentQuest;
+    private int currentQuestId;
     private int questsCompleted;
 
-    public Character(String name, int shoesId, int pantsId, int shirtId) {
+    public Character(String name) {
         /** Something we should consider is enforcing unique IDs, for obvious reasons. We can easily
          *  do this if, whenever we create a DatabaseObject, we assign the ID with a call to the
          *  DatabaseHandler, which generates a unique ID for us to use.*/
-        super((int)(Math.random()*99999));
+        super();
+
+        /** Randomize ID*/
+        int id = (int)(Math.random()*99999);
+
+        /** while(database.getCharacterById() != null) {
+         *      id = (int)(Math.random());
+         *  }*/
+        this.id = id;
 
         /**
          *  Refactor
@@ -50,17 +53,6 @@ public class Character extends DatabaseObject<Character>{
                                                                             sufficient*/
         this.currency = 0;
 
-        /**
-         *  Something we should explore is the idea of an "Empty" item - i.e. a placeholder object
-         *  rather than setting it to null as I have.
-         *
-         *  Also same comment as above re: the inventory - we should only be using IDs to access,
-         *  not have fields for each item.
-         *  */
-        this.shoes = null;
-        this.pants = null;
-        this.shirt = null;
-
         this.exp = 0;
         this.questsCompleted = 0;
 
@@ -70,49 +62,31 @@ public class Character extends DatabaseObject<Character>{
          *  the Character class to use them
          *  */
         this.invId = this.inv.id;
-        this.shoesId = shoesId;
 
-        this.pantsId = pantsId;
-        this.shirtId = shirtId;
 
         /**
-         *  How do we get the current quest from the database? We can use the 'activeQuest' int as
-         *  an identifier to pull it from the DB. The problem is that the database is not static -
-         *  in order to access getQuestById, we need to create an instance of the database. How do
-         *  we access these functions?
+         *  this.shoesId = getEmptyShoesId();
          *  */
-//        this.currentQuest = DatabaseHandler.getQuestById(activeQuest);
+
+        /**
+         *  Set the current quest ID to be nothing
+         *  */
+        this.currentQuestId = -1;
     }
 
-    public Character(int id, String name, short level, Inventory inv, int invId, long currency,
-                     int shoesId, Item shoes, int pantsId, Item pants, int shirtId, Item shirt,
-                     long exp, long requiredExpForNextLevel, Quest currentQuest, int questsCompleted)
+    public Character(int id, String name, short level, int invId, long currency, int shoesId,
+                     long exp, long requiredExpForNextLevel, int currentQuestId, int questsCompleted)
     {
         super(id);
         this.name = name;
         this.level = level;
-        this.inv = inv;
         this.invId = invId;
         this.currency = currency;
         this.shoesId = shoesId;
-        this.shoes = shoes;
-        this.pantsId = pantsId;
-        this.pants = pants;
-        this.shirtId = shirtId;
-        this.shirt = shirt;
         this.exp = exp;
         this.requiredExpForNextLevel = requiredExpForNextLevel;
-        this.currentQuest = currentQuest;
+        this.currentQuestId = currentQuestId;
         this.questsCompleted = questsCompleted;
-    }
-
-    public Character(String name) {
-        this.name = name;
-        level = 0;
-        currency = 0;
-        exp = 0;
-        questsCompleted = 0;
-        currentQuest = null;
     }
 
     //TODO: make this actually do something.
@@ -132,24 +106,8 @@ public class Character extends DatabaseObject<Character>{
         return level;
     }
 
-    public Inventory getInv() {
-        return inv;
-    }
-
     public long getCurrency() {
         return currency;
-    }
-
-    public Item getShoes() {
-        return shoes;
-    }
-
-    public Item getPants() {
-        return pants;
-    }
-
-    public Item getShirt() {
-        return shirt;
     }
 
     public long getExp() {
@@ -168,24 +126,12 @@ public class Character extends DatabaseObject<Character>{
         return shoesId;
     }
 
-    public int getPantsId() {
-        return pantsId;
-    }
-
-    public int getShirtId() {
-        return shirtId;
-    }
-
-    public void setCurrentQuest(Quest currentQuest) {
-        this.currentQuest = currentQuest;
-    }
-
-    public Quest getCurrentQuest() {
-        return currentQuest;
+    public void setCurrentQuestId(int currentQuestId) {
+        this.currentQuestId = currentQuestId;
     }
 
     public int getCurrentQuestId() {
-        return currentQuest.getId();
+        return currentQuestId;
     }
 
     public void addExperience(long exp) {

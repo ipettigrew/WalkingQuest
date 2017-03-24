@@ -14,6 +14,9 @@ import app.apphub.devon.walkingquest.database.objects.Character;
 
 public class QuestActualizer {
 
+    /** Jonathan Questions:
+     *
+     *  1)  Do we need explicit references to the character, quests, currentQuest, and dbHandler?*/
     Character character;
     ArrayList<Quest> quests;
     Quest currentQuest;
@@ -51,7 +54,7 @@ public class QuestActualizer {
         }
         if (i != -1) {
             currentQuest = databaseHandler.getQuestByID(i);
-            character.setCurrentQuest(currentQuest);
+            character.setCurrentQuestId(currentQuest.getId());
         }
     }
 

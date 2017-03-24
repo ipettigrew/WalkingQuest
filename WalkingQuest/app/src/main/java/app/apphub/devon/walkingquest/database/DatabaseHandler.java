@@ -62,10 +62,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     private static final String KEY_INVENTORY_ID = "invId";
     private static final String KEY_CURRENCY = "currency";
     private static final String KEY_SHOES_ID = "shoesId";
-    private static final String KEY_PANTS_ID = "pantsId";
     private static final String KEY_ACTIVEQUEST = "active_quest";
     private static final String CHARACTER_EXP = "xp";
-    private static final String KEY_SHIRT_ID = "shirtId";
 
     private static DatabaseHandler sInstance;
 
@@ -125,7 +123,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 + DESCRIPTION + " TEXT,"
                 + KEY_ACTIVE_STEPS + " INTEGER,"
                 + KEY_STEP_GOAL + " INTEGER,"
-                + KEY_USER_ID + " INTEGER,"
                 + KEY_QUEST_COMPLETED + " INTEGER,"
                 + KEY_DIFFICULTY + " INTEGER,"
                 + KEY_LEVEL_REQUIREMENT + "INTEGER"
@@ -150,11 +147,9 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 + KEY_INVENTORY_ID + "INTEGER,"
                 + KEY_CURRENCY + "LONG,"
                 + KEY_SHOES_ID + "INTEGER,"
-                + KEY_PANTS_ID + "INTEGER,"
-                + KEY_SHIRT_ID + "INTEGER,"
                 + KEY_ACTIVEQUEST+ "INTEGER,"
                 + KEY_QUESTS_COMPLETED + "INTEGER,"
-                + CHARACTER_EXP + "INTERGER";
+                + CHARACTER_EXP + "INTEGER";
         db.execSQL(CREATE_CHARACTER_TABLE);
     }
 
@@ -273,7 +268,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         values.put(DESCRIPTION, quest.getDescription());
         values.put(KEY_ACTIVE_STEPS, quest.getActiveSteps());
         values.put(KEY_STEP_GOAL, quest.getStepGoal());
-        values.put(KEY_USER_ID, quest.getUserID());
         values.put(KEY_QUEST_COMPLETED, quest.getStepGoal());
         values.put(KEY_DIFFICULTY, quest.getDifficulty());
         values.put(KEY_LEVEL_REQUIREMENT, quest.getLevelRequirement());
@@ -323,7 +317,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         values.put(DESCRIPTION, quest.getDescription());
         values.put(KEY_ACTIVE_STEPS, quest.getActiveSteps());
         values.put(KEY_STEP_GOAL, quest.getStepGoal());
-        values.put(KEY_USER_ID, quest.getUserID());
         values.put(KEY_QUEST_COMPLETED, quest.getStepGoal());
         values.put(KEY_DIFFICULTY, quest.getDifficulty());
         values.put(KEY_LEVEL_REQUIREMENT, quest.getLevelRequirement());
@@ -465,8 +458,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         values.put(KEY_INVENTORY_ID, character.getInvId());
         values.put(KEY_CURRENCY, character.getCurrency());
         values.put(KEY_SHOES_ID,character.getShoesId());
-        values.put(KEY_PANTS_ID,character.getPantsId());
-        values.put(KEY_SHIRT_ID,character.getShirtId());
         values.put(CHARACTER_EXP,character.getExp());
         values.put(KEY_QUESTS_COMPLETED,character.getQuestsCompleted());
         values.put(KEY_ACTIVEQUEST,character.getCurrentQuestId());
@@ -489,14 +480,33 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public Character getCharacterByID(int id){
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(CHARACTER_TABLE, new String[] {KEY_ID, KEY_NAME, KEY_LEVEL, KEY_INVENTORY_ID, KEY_CURRENCY, KEY_SHOES_ID,
-                                                                KEY_PANTS_ID, KEY_SHIRT_ID, CHARACTER_EXP, KEY_QUESTS_COMPLETED, KEY_ACTIVEQUEST},KEY_ID+"=?",new String[] {String.valueOf(id)},null,null,null);
+        Cursor cursor = db.query(
+                CHARACTER_TABLE,
+                new String[] {
+                        KEY_ID, KEY_NAME, KEY_LEVEL, KEY_INVENTORY_ID, KEY_CURRENCY, KEY_SHOES_ID,
+                        CHARACTER_EXP, KEY_QUESTS_COMPLETED, KEY_ACTIVEQUEST
+                },
+                KEY_ID+"=?",
+                new String[] {
+                        String.valueOf(id)
+                },
+                null,null,null
+        );
 
         if(cursor != null)
             cursor.moveToFirst();
         //remove "character = null", this is just temporary as I don't want to push a build with errors. - Adrian
-        /** Jonathan:   Modified to use the new Character constructor, removing some unnecessary fields */
-        Character character = new Character(cursor.getString(1), cursor.getInt(5), cursor.getInt(6), cursor.getInt(7));
+        /** Jonathan:   Modified to use the new Character constructor, removing some unnecessary fields
+         *
+         *              int id, String name, short level, int invId,
+         *              long currency, int shoesId, long exp, long requiredExpForNextLevel,
+         *              int currentQuestId, int questsCompleted
+         *  */
+        Character character = new Character(
+                cursor.getInt(0), cursor.getString(1), cursor.getShort(2), cursor.getInt(3),
+                cursor.getLong(4), cursor.getInt(5), cursor.getLong(6), cursor.getLong(7),
+                cursor.getInt(9), cursor.getInt(8)
+        );
 
         return character;
     }
@@ -511,8 +521,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         values.put(KEY_INVENTORY_ID, character.getInvId());
         values.put(KEY_CURRENCY, character.getCurrency());
         values.put(KEY_SHOES_ID,character.getShoesId());
-        values.put(KEY_PANTS_ID,character.getPantsId());
-        values.put(KEY_SHIRT_ID,character.getShirtId());
         values.put(CHARACTER_EXP,character.getExp());
         values.put(KEY_QUESTS_COMPLETED,character.getQuestsCompleted());
         values.put(KEY_ACTIVEQUEST,character.getCurrentQuestId());
