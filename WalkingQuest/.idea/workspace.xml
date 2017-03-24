@@ -8,7 +8,6 @@
   <component name="ChangeListManager">
     <list default="true" id="232b474c-4451-4da6-9b1b-0c0c867c9db0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/app/apphub/devon/walkingquest/database/DatabaseHandler.java" afterPath="$PROJECT_DIR$/app/src/main/java/app/apphub/devon/walkingquest/database/DatabaseHandler.java" />
     </list>
     <ignored path="WalkingQuest.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -37,8 +36,8 @@
       <file leaf-file-name="DatabaseHandler.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/app/apphub/devon/walkingquest/database/DatabaseHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="95">
-              <caret line="525" column="29" selection-start-line="525" selection-start-column="29" selection-end-line="525" selection-end-column="29" />
+            <state relative-caret-position="4074">
+              <caret line="542" column="14" selection-start-line="542" selection-start-column="14" selection-end-line="542" selection-end-column="14" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -2266,7 +2265,14 @@
       <option name="project" value="LOCAL" />
       <updated>1490373027733</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Continued refactoring of the Character to incorporate the attributes that we&#10;discussed during the meeting (see google drive for picture)">
+      <created>1490373290576</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1490373290576</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2768,8 +2774,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/app/apphub/devon/walkingquest/database/DatabaseHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="525" column="29" selection-start-line="525" selection-start-column="29" selection-end-line="525" selection-end-column="29" />
+        <state relative-caret-position="4074">
+          <caret line="542" column="14" selection-start-line="542" selection-start-column="14" selection-end-line="542" selection-end-column="14" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
