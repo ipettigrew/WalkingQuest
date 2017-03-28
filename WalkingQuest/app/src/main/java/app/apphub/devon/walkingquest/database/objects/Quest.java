@@ -3,58 +3,69 @@ package app.apphub.devon.walkingquest.database.objects;
 /**
  * This class keeps track of data and logic for quests.
  *
- * @author Cole DeMan cole@coledeman.com
- * @version 1.0                 (current version number of program)
- * @since 1.0          (the version of the package this class was first added to)
+ *  @author  Cole DeMan
+ *  @author  Devon Rimmington
+ *  @author  Ian Pettigrew
+ *  @author  Jonathan McDevitt
+ *  @version 1.8
+ *  @see     app.apphub.devon.walkingquest.database.DatabaseHandler
+ *  @see     app.apphub.devon.walkingquest.database.objects.DatabaseObject
+ *  @see     Character
+ *  @since   2017-03-03
  */
-
 public class Quest extends DatabaseObject<Quest> {
-
-    private String name;
-    private String description;
-    private long activeSteps;
-    private long stepGoal;
-    private boolean completed;
-    private int difficulty;
-    private short levelRequirement;
+    private String name;            // The name of the quest.
+    private String description;     // Flavour text describing the quest.
+    private long activeSteps;       // The amount of progress the User has made towards stepGoal.
+    private long stepGoal;          // The amount of steps required to complete the quest.
+    private boolean completed;      // Whether or not the quest has previously been finished.
+    private short difficulty;       // Quest difficulty value, where EASY = 1, MEDIUM = 2, HARD = 3.
+    private short levelRequirement; // Level a {@link Character} has to be for the quest to be available.
 
     /**
-     * Constructor for the Quest object. This represents
-     * a quest that the user can do.
-     *
-     * @param name       This Quest's name.
-     * @param stepGoal   Total number of steps needed to
-     *                   complete the quest.
-     * @param difficulty The difficulty rating of the quest.
-     *                   1 being easy and 3 being hard.
+     * Default constructor.
      */
-    public Quest(String name, long stepGoal, int difficulty) {
-        this.name = name;
-        activeSteps = 0;
-        this.stepGoal = stepGoal;
-        completed = false;
-        this.difficulty = difficulty;
-        this.levelRequirement = 0;
+    public Quest() {
     }
 
     /**
-     * Constructor for the Quest object. This represents
-     * a quest that the user can do.
+     * Constructor for the Quest object that species all instance variables except for
+     * activateSteps and completed. For instantiating new quests.
      *
-     * @param id          The id number of the quest.
-     * @param name        This Quest's name.
-     * @param activeSteps The number of steps the user
-     *                    has completed
-     * @param stepGoal    Total number of steps needed to
-     *                    complete the quest.
-     * @param completed   A boolean to keep track of if the quest
-     *                    has been completed.
-     * @param difficulty  The difficulty rating of the quest.
-     *                    1 being easy and 3 being hard.
+     * @param id               The ID number of the quest.
+     * @param name             This Quest's name.
+     * @param description      Flavour text that describes a quest.
+     * @param stepGoal         Total number of steps needed to complete the quest.
+     * @param difficulty       The difficulty rating of the quest. 1 being easy and 3 being hard.
+     * @param levelRequirement Level a {@link Character} has to be for the quest to be available.
      */
-    public Quest(   int id, String name, String description, long activeSteps,
-                    long stepGoal, boolean completed, int difficulty, short levelRequirement
-    ) {
+    public Quest(int id, String name, String description, long stepGoal, short difficulty,
+                 short levelRequirement) {
+        super(id);
+        this.name = name;
+        this.description = description;
+        this.activeSteps = 0;
+        this.stepGoal = stepGoal;
+        this.completed = false;
+        this.difficulty = difficulty;
+        this.levelRequirement = levelRequirement;
+    }
+
+    /**
+     * Constructor for the Quest object that specifies all instance variables. This represents a
+     * quest that the user can do.
+     *
+     * @param id               The ID number of the quest.
+     * @param name             This Quest's name.
+     * @param description      Flavour text that describes a quest.
+     * @param activeSteps      The number of steps the user has completed.
+     * @param stepGoal         Total number of steps needed to complete the quest.
+     * @param completed        A boolean to keep track of if the quest has been completed.
+     * @param difficulty       The difficulty rating of the quest. 1 being easy and 3 being hard.
+     * @param levelRequirement Level a {@link Character} has to be for the quest to be available.
+     */
+    public Quest(int id, String name, String description, long activeSteps, long stepGoal,
+                 boolean completed, short difficulty, short levelRequirement) {
         super(id);
         this.name = name;
         this.description = description;
@@ -63,85 +74,6 @@ public class Quest extends DatabaseObject<Quest> {
         this.completed = completed;
         this.difficulty = difficulty;
         this.levelRequirement = levelRequirement;
-    }
-
-    /**
-     * A simple method to check all parameters in 2
-     * quest objects match.
-     *
-     * @param quest
-     * @return true if the objects are equal false otherwise.
-     */
-    public boolean equals(Quest quest) {
-        return  this.id == quest.getId() &&
-                this.name.equals(name) &&
-                this.activeSteps == quest.getActiveSteps() &&
-                this.stepGoal == quest.getStepGoal() &&
-                this.completed == quest.isCompleted() &&
-                this.difficulty == quest.getDifficulty() &&
-                this.levelRequirement == quest.getLevelRequirement();
-    }
-
-    /**
-     * Checks if the quest is completed.
-     *
-     * @return true if completed, false if not.
-     */
-    public boolean checkIfComplete() {
-        if (activeSteps > stepGoal) {
-            completed = true;
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Addes steps toward completing {@link Quest} goal.
-     *
-     * @param steps Number of steps to be added.
-     * @return True if {@link Quest} is completed false otherwise.
-     */
-    public boolean addActiveSteps(long steps) {
-        activeSteps += steps;
-        return checkIfComplete();
-    }
-
-    /**
-     * Retrieves quest id number.
-     *
-     * @return the id number of the {@link Quest}.
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Retrieves the step goal.
-     *
-     * @return an long equal the the step goal.
-     */
-    public long getStepGoal() {
-        return stepGoal;
-    }
-
-    /**
-     * Sets a new step goal.
-     *
-     * @param stepGoal the number of steps needed
-     *                 to complete the {@link Quest}.
-     */
-    public void setStepGoal(long stepGoal) {
-        this.stepGoal = stepGoal;
-    }
-
-    /**
-     * Sets a new {@link Quest} id.
-     *
-     * @param id the number identifing the
-     *           {@link Quest} in the database.
-     */
-    public void setId(int id) {
-        this.id = id;
     }
 
     /**
@@ -160,6 +92,24 @@ public class Quest extends DatabaseObject<Quest> {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Accessor method for description.
+     *
+     * @return flavour text describing the quest.
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Mutator method for description.
+     *
+     * @param description flavour text describing the quest.
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     /**
@@ -182,6 +132,34 @@ public class Quest extends DatabaseObject<Quest> {
      */
     public void setActiveSteps(long activeSteps) {
         this.activeSteps = activeSteps;
+    }
+
+    /**
+     * Retrieves the step goal.
+     *
+     * @return an long equal the the step goal.
+     */
+    public long getStepGoal() {
+        return stepGoal;
+    }
+
+    /**
+     * Sets a new step goal.
+     *
+     * @param stepGoal the number of steps needed
+     *                 to complete the {@link Quest}.
+     */
+    public void setStepGoal(long stepGoal) {
+        this.stepGoal = stepGoal;
+    }
+
+    /**
+     * Gets a boolean to tell if the {@link Quest} is completed.
+     *
+     * @return true if completed, false if not.
+     */
+    public boolean getCompleted() {
+        return completed;
     }
 
     /**
@@ -208,7 +186,7 @@ public class Quest extends DatabaseObject<Quest> {
      *
      * @return The steps counted toward the goal so far.
      */
-    public int getDifficulty() {
+    public short getDifficulty() {
         return difficulty;
     }
 
@@ -218,24 +196,66 @@ public class Quest extends DatabaseObject<Quest> {
      *
      * @param difficulty integer 1 to 3.
      */
-    public void setDifficulty(int difficulty) {
+    public void setDifficulty(short difficulty) {
         this.difficulty = difficulty;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
+    /**
+     * Accessor method for levelRequirement.
+     *
+     * @return the level required for the quest to become available to the {@link Character}
+     */
     public short getLevelRequirement() {
         return levelRequirement;
     }
 
+    /**
+     * Mutator method for levelRequirement.
+     *
+     * @param levelRequirement level required for the quest to be available to the {@link Character}
+     */
     public void setLevelRequirement(short levelRequirement) {
         this.levelRequirement = levelRequirement;
+    }
+
+    /**
+     * A simple method to check all parameters in 2
+     * quest objects match.
+     *
+     * @param quest Quest object to be compared to this Quest object.
+     * @return true if the objects are equal false otherwise.
+     */
+    public boolean equals(Quest quest) {
+        return (this.id == quest.getId() &&
+                this.name.equals(quest.getName()) &&
+                this.description.equals(quest.getDescription()) &&
+                this.stepGoal == quest.getStepGoal() &&
+                this.completed == quest.isCompleted() &&
+                this.difficulty == quest.getDifficulty() &&
+                this.levelRequirement == quest.getLevelRequirement());
+    }
+
+    /**
+     * Checks if the quest is completed.
+     *
+     * @return true if completed, false if not.
+     */
+    public boolean checkIfComplete() {
+        if (activeSteps >= stepGoal) {
+            completed = true;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Adds steps toward completing {@link Quest} goal.
+     *
+     * @param steps Number of steps to be added.
+     */
+    public void addActiveSteps(long steps) {
+        activeSteps += steps;
     }
 
     /**
