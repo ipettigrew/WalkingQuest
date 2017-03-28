@@ -73,13 +73,13 @@ public class Quest extends DatabaseObject<Quest> {
      * @return true if the objects are equal false otherwise.
      */
     public boolean equals(Quest quest) {
-        return  this.id != quest.getId() &&
-                !this.name.equals(name) &&
-                this.activeSteps != quest.getActiveSteps() &&
-                this.stepGoal != quest.getStepGoal() &&
-                this.completed != quest.isCompleted() &&
-                this.difficulty != quest.getDifficulty() &&
-                this.levelRequirement != quest.getLevelRequirement();
+        return  this.id == quest.getId() &&
+                this.name.equals(name) &&
+                this.activeSteps == quest.getActiveSteps() &&
+                this.stepGoal == quest.getStepGoal() &&
+                this.completed == quest.isCompleted() &&
+                this.difficulty == quest.getDifficulty() &&
+                this.levelRequirement == quest.getLevelRequirement();
     }
 
     /**
