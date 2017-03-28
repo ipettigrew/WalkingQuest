@@ -27,6 +27,10 @@ public class Inventory extends DatabaseObject<Inventory> {
         return characterId;
     }
 
+    public void setCharacterId(int id){
+        characterId = id;
+    }
+
     public ArrayList<Item> getInventory() {
         return inventory;
     }
@@ -48,6 +52,7 @@ public class Inventory extends DatabaseObject<Inventory> {
     //TODO: make this actually do something.
     @Override
     public boolean equals(Inventory object) {
+        if(characterId == object.getCharacterId() && id == object.getId()) return true;
         return false;
     }
 }

@@ -32,6 +32,13 @@ public class Item extends DatabaseObject<Item>{
         }
     }
 
+    public Item(String name, int value, int invID){
+        this.name = name;
+        this.value = value;
+        this.invID = invID;
+        attributes = new JSONObject();
+    }
+
     public void setValue(int value) {
         this.value = value;
     }
@@ -81,6 +88,11 @@ public class Item extends DatabaseObject<Item>{
 
     @Override
     public boolean equals(Item object) {
-        return false;
+
+        return (
+                this.id == object.id && this.getValue() == value
+                && this.name.equals(object.getName())
+                && toJSONString().equals(object.toJSONString())
+        );
     }
 }

@@ -48,6 +48,29 @@ public class Character extends DatabaseObject<Character>{
         this.currentQuestId = -1;
     }
 
+    public Character(String name) {
+        super();
+
+        this.name = name;
+        this.level = 0;
+
+        this.invId = -1;
+        this.currency = 0;
+
+        this.exp = 0;
+        this.questsCompleted = 0;
+
+        this.shoesId = 0;
+
+        this.baseLuck = 0;
+        this.baseSpeed = 10;
+
+        /**
+         *  Set the current quest ID to be nothing
+         *  */
+        this.currentQuestId = -1;
+    }
+
     public Character(int id, String name, short level, int invId, Inventory inv, long currency,
                      int shoesId, short baseSpeed, short baseLuck, long exp,
                      long requiredExpForNextLevel, int currentQuestId, int questsCompleted
@@ -102,6 +125,19 @@ public class Character extends DatabaseObject<Character>{
 
     public int getInvId() {
         return invId;
+    }
+
+    public void setInvId(int id){
+        invId = id;
+    }
+
+    public Inventory getInv() {
+        return inv;
+    }
+
+    public void setInv(Inventory inv) {
+        this.inv = inv;
+        setInvId(inv.getId());
     }
 
     public int getShoesId() {
