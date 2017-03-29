@@ -197,10 +197,9 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
         if(event.sensor.getType() == Sensor.TYPE_STEP_COUNTER && quest != null){
             globalSteps++;
 
-            if(globalSteps >= stepsForQuest && !quest.isCompleted()){
+            Log.i("SERVICE", "global steps: " + globalSteps + " steps for quest: " + stepsForQuest + " quest completed " + quest.isCompleted());
 
-                //set the quest information and save it to the database
-                endQuest();
+            if(globalSteps >= stepsForQuest && !quest.isCompleted()){
 
                 //build and summon the notification
                 Notification repliedNotification =
@@ -213,7 +212,10 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
                 //initalizes the notification manager and posts the notification to the user
                 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getBaseContext());
                 notificationManager.notify(0, repliedNotification);
-                Log.i("Notification", "");
+                Log.i("Notification", "Yo");
+
+                //set the quest information and save it to the database
+                endQuest();
 
             }
 

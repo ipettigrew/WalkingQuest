@@ -369,7 +369,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(DESCRIPTION, quest.getDescription());
         values.put(KEY_ACTIVE_STEPS, quest.getActiveSteps());
         values.put(KEY_STEP_GOAL, quest.getStepGoal());
-        values.put(KEY_QUEST_COMPLETED, quest.getStepGoal());
+        values.put(KEY_QUEST_COMPLETED, quest.isCompleted());
         values.put(KEY_DIFFICULTY, quest.getDifficulty());
         values.put(KEY_LEVEL_REQUIREMENT, quest.getLevelRequirement());
 
@@ -383,26 +383,27 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * Quests are sorted by completed, then difficulty, then name.
      *
      * @param level the max level of quests returned.
+     * @param diff the level difficulty of the quest (or lower)
      * @return an Arraylist\<Quest\> of specified Quests.
      */
-    public ArrayList<Quest> getQuestByRequirement(int level, int req) {
+    public ArrayList<Quest> getQuestByRequirement(int level, int diff) {
         SQLiteDatabase db = this.getReadableDatabase();
-        ArrayList<Quest> quest = new ArrayList<Quest>();
+        ArrayList<Quest> quests = new ArrayList<Quest>();
         Cursor cursor = null;
-        if (req < 0) req = Integer.MAX_VALUE;
+        if (diff < 0) diff = Integer.MAX_VALUE;
         if (level < 0) level = Integer.MAX_VALUE;
         cursor = db.query(QUEST_TABLE,
                 new String[]{
                         KEY_ID, KEY_NAME, DESCRIPTION, KEY_ACTIVE_STEPS, KEY_STEP_GOAL,
                         KEY_QUEST_COMPLETED, KEY_DIFFICULTY, KEY_LEVEL_REQUIREMENT
                 }, KEY_LEVEL_REQUIREMENT + "<=? AND " + KEY_DIFFICULTY + "<=?",
-                new String[]{String.valueOf(level), String.valueOf(req)},
+                new String[]{String.valueOf(level), String.valueOf(diff)},
                 null, null, KEY_QUEST_COMPLETED + " ASC, " + KEY_DIFFICULTY + " ASC, " + KEY_NAME + " DESC");
 
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            quest.add(new Quest(
+            quests.add(new Quest(
                     cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getLong(3),
                     cursor.getLong(4), cursor.getInt(5) != 0, cursor.getInt(6), cursor.getShort(7)
             ));
@@ -411,7 +412,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         cursor.close();
         db.close();
 
-        return quest;
+        return quests;
     }
 
     public Item addItem(Item item) {

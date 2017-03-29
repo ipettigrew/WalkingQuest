@@ -22,6 +22,8 @@ public class QuestActualizer {
     Quest currentQuest;
     DatabaseHandler databaseHandler;
 
+    private int difficulty;
+
     /**
      * Takes in character object and the difficulty selected and gets a list of possible quests
      * that a character of that level can accept (level minimum for quests). The difficulty determines the difficulty.
@@ -30,8 +32,7 @@ public class QuestActualizer {
      */
 
     public QuestActualizer(Character character, int difficulty, Context context) {
-
-        /*
+        
         this.character = character;
 
         databaseHandler = DatabaseHandler.getInstance(context);
@@ -42,7 +43,9 @@ public class QuestActualizer {
         } else {
             currentQuest = null;
         }
-        */
+
+        this.difficulty = difficulty;
+
     }
 
     /**
@@ -74,6 +77,7 @@ public class QuestActualizer {
     }
 
     public ArrayList<Quest> getQuests() {
+        quests = databaseHandler.getQuestByRequirement(character.getLevel(), difficulty);
         return quests;
     }
 

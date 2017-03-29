@@ -22,7 +22,7 @@ public class WalkingQuestSplashScreen extends AppCompatActivity {
         /*TODO:remove this*/
         DatabaseHandler databaseHandler = DatabaseHandler.getInstance(getApplicationContext());
 
-        Quest quest = new Quest("Quest", 1000, 0);
+        Quest quest = new Quest("Quest", 2500, 0);
         databaseHandler.addQuest(quest);
 
 

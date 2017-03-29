@@ -12,6 +12,7 @@ import java.util.List;
 
 import app.apphub.devon.walkingquest.GridAdapters.QuestSelectorGridAdapter;
 import app.apphub.devon.walkingquest.database.DatabaseHandler;
+import app.apphub.devon.walkingquest.database.objects.Character;
 import app.apphub.devon.walkingquest.database.objects.Quest;
 
 public class QuestSelectorGridActivity extends AppCompatActivity {
@@ -19,6 +20,9 @@ public class QuestSelectorGridActivity extends AppCompatActivity {
     public List<Quest> quests;
     private QuestActualizer questActualizer;
     private DatabaseHandler databaseHandler;
+
+    private Character character;
+    private int difficulty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +36,7 @@ public class QuestSelectorGridActivity extends AppCompatActivity {
          *  Use quest actualizer to get the list of quests and present them to the user
          *  */
 
-
-        quests = questActualizer.getQuests();
-        for (int i = 0; i < 8; i++) {
-            quests.get(i).setId((i + 1));
-        }
+        init();
 
         questGrid = (GridView) this.findViewById(R.id.quest_selector_grid_view);
         questGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -47,8 +47,26 @@ public class QuestSelectorGridActivity extends AppCompatActivity {
                 startActivity(new Intent(QuestSelectorGridActivity.this, QuestDetailsActivity.class));
             }
         });
+
+        //convert the quests arraylist into a string arraylist
+
+
         QuestSelectorGridAdapter questAdapter = new QuestSelectorGridAdapter(QuestSelectorGridActivity.this, (Quest[])quests.toArray());
         questGrid.setAdapter(questAdapter);
+    }
+
+
+    /*
+    * Initalizes the quest actualizer and the quest list
+    **/
+    private void init(){
+
+        databaseHandler = DatabaseHandler.getInstance(getApplicationContext());
+        character = databaseHandler.getCharacterByID(1);
+        difficulty = 1;
+
+        questActualizer = new QuestActualizer(character, difficulty, getApplicationContext());
+        quests = questActualizer.getQuests();
     }
 
 }
