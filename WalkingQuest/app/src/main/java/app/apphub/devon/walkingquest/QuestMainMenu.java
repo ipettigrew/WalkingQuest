@@ -8,8 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
-public class QuestMainMenu extends AppCompatActivity {
+import app.apphub.devon.walkingquest.database.DatabaseHandler;
+import app.apphub.devon.walkingquest.database.objects.Quest;
+
+public class QuestMainMenu extends CustomActivity {
     private Button easy, medium, hard;
     private Button tutorialQuest, randomQuest, dailyQuest;
 
@@ -19,6 +23,9 @@ public class QuestMainMenu extends AppCompatActivity {
         setContentView(R.layout.activity_quest_main_menu);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //TODO:remove this
+        tv = (TextView) findViewById(R.id.step_count);
 
         easy = (Button)findViewById(R.id.beginner_quests_button);
         medium = (Button)findViewById(R.id.intermediate_quests_button);
