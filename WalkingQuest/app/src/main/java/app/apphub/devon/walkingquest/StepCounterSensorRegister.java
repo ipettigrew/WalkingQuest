@@ -49,9 +49,15 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
     static final int MSG_GET_SESSION_STEPS = 3;
 
     /*
-    * Command for power off message
+    * Adds a new quest to the character object
     **/
-    static final int MSG_POWER_OFF = 4;
+    static final int MSG_ADD_NEW_QUEST = 4;
+
+    /*
+    * Get the character object again from the database
+    * To be used if significant changes are made to the character
+    **/
+    static final int MSG_UPDATE_CHARACTER = 5;
 
 
     /**

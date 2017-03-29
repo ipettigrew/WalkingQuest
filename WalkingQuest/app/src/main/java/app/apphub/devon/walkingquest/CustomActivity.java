@@ -12,6 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
+import app.apphub.devon.walkingquest.database.DatabaseHandler;
+import app.apphub.devon.walkingquest.database.objects.Quest;
+
 /**
  * Created by Devon on 3/4/2017.
  *
@@ -56,7 +59,7 @@ public class CustomActivity extends AppCompatActivity {
                     Log.i("STEPS FROM SERVICE", ""+msg.arg1);
                     globalSteps = msg.arg1;
                     if(tv != null)
-                        tv.setText(msg.arg1+"");
+                        tv.setText(msg.arg1+"/"+quest.getStepGoal());
                     break;
                 default:
                     super.handleMessage(msg);
@@ -142,6 +145,10 @@ public class CustomActivity extends AppCompatActivity {
     Intent intent;
     TextView tv;
 
+    //TODO:remove this
+    DatabaseHandler databaseHandler = DatabaseHandler.getInstance(getBaseContext());
+    Quest quest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,6 +156,8 @@ public class CustomActivity extends AppCompatActivity {
         //Prepare to start the service
         context = getBaseContext();
         intent = new Intent(context, StepCounterSensorRegister.class);
+
+        quest = databaseHandler.getQuestByID(1);
 
         /*Check if the service is running
         * on first boot of the app the service doesn't automatically start
