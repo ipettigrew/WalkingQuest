@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import app.apphub.devon.walkingquest.database.objects.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import app.apphub.devon.walkingquest.database.objects.Character;
@@ -24,7 +23,7 @@ import app.apphub.devon.walkingquest.database.objects.Character;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 2;
 
     private static final String DATABASE_NAME = "walkingQuest";
 
@@ -54,7 +53,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_STEP_GOAL = "step_goal";
     private static final String KEY_QUEST_COMPLETED = "questCompleted";
     private static final String KEY_DIFFICULTY = "difficulty";
-    private static final String KEY_LEVEL_REQUIREMENT = "level_requirment";
+    private static final String KEY_LEVEL_REQUIREMENT = "level_requirement";
 
 
     //character
@@ -91,21 +90,34 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return sInstance;
     }
 
-    @Override
-    public void onOpen(SQLiteDatabase db) {
-        super.onOpen(db);
-        if (!db.isReadOnly()) {
-            // Enable foreign key constraints
-            db.execSQL("PRAGMA foreign_keys=ON;");
-        }
-    }
-
     // http://stackoverflow.com/questions/13641250/sqlite-delete-cascade-not-working
     @Override
     public void onConfigure(SQLiteDatabase database) {
         database.setForeignKeyConstraintsEnabled(true);
 
     }
+
+   /* @Override
+    public void onCreate(SQLiteDatabase db) {
+        String CREATE_USER_DATABASE = "CREATE TABLE " + USER_TABLE + "("
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
+                + KEY_QUESTS_COMPLETED + " INTEGER,"
+                + KEY_STEPS + " INTEGER" + ")";
+        db.execSQL(CREATE_USER_DATABASE);
+        String CREATE_QUEST_DATABASE = "CREATE TABLE "
+                + QUEST_TABLE + "("
+                + KEY_ID + " INTEGER PRIMARY KEY,"
+                + KEY_NAME + " TEXT,"
+                + DESCRIPTION + " TEXT,"
+                + KEY_ACTIVE_STEPS + " INTEGER,"
+                + KEY_STEP_GOAL + " INTEGER,"
+                + KEY_USER_ID + " INTEGER,"
+                + KEY_QUEST_COMPLETED + " INTEGER,"
+                + KEY_DIFFICULTY + " INTEGER,"
+                + KEY_LEVEL_REQUIREMENT + "INTEGER"
+                + ")";
+        db.execSQL(CREATE_QUEST_DATABASE);
+    }*/
 
     private void createQuestTable(SQLiteDatabase db) {
         String CREATE_QUEST_DATABASE = "CREATE TABLE "
@@ -122,6 +134,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_QUEST_DATABASE);
     }
 
+
     private void createUserTable(SQLiteDatabase db) {
         String CREATE_USER_TABLE = "CREATE TABLE " + USER_TABLE + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
@@ -132,25 +145,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private void createCharacterTable(SQLiteDatabase db) {
         String CREATE_CHARACTER_TABLE = "CREATE TABLE " + CHARACTER_TABLE + "("
-                + KEY_ID + " INTEGER PRIMARY KEY,"
-                + KEY_NAME + " TEXT,"
-                + KEY_LEVEL + " INTEGER,"
-                + KEY_INVENTORY_ID + " INTEGER,"
-                + KEY_CURRENCY + " INTEGER,"
-                + KEY_SHOES_ID + " INTEGER,"
-                + KEY_SPEED_ID + " INTEGER,"
-                + KEY_LUCK_ID + " INTEGER,"
-                + KEY_ACTIVEQUEST + " INTEGER,"
-                + KEY_QUESTS_COMPLETED + " INTEGER,"
-                + KEY_CHARACTER_EXP + " INTEGER,"
-                + KEY_REQUIRED_EXP + " INTEGER)";
+                + KEY_ID + "INTEGER PRIMARY KEY,"
+                + KEY_NAME + "TEXT,"
+                + KEY_LEVEL + "SHORT,"
+                + KEY_INVENTORY_ID + "INTEGER,"
+                + KEY_CURRENCY + "LONG,"
+                + KEY_SHOES_ID + "INTEGER,"
+                + KEY_SPEED_ID + "SHORT"
+                + KEY_LUCK_ID + "SHORT"
+                + KEY_ACTIVEQUEST + "INTEGER,"
+                + KEY_QUESTS_COMPLETED + "INTEGER,"
+                + KEY_CHARACTER_EXP + "LONG"
+                + KEY_REQUIRED_EXP + "LONG";
         db.execSQL(CREATE_CHARACTER_TABLE);
     }
 
     private void createInventoryTable(SQLiteDatabase db) {
         String CREATE_USER_DATABASE = "CREATE TABLE " + INV_TABLE + "("
                 + KEY_ID + " INTEGER PRIMARY KEY,"
-                + CHARACTER_ID + " INTEGER REFERENCES " + CHARACTER_TABLE + "(" + KEY_ID + ") ON DELETE CASCADE"
+                + CHARACTER_ID + " INTEGER REFERENCES " + CHARACTER_TABLE + "(" + KEY_ID + ") ON UPDATE CASCADE"
                 + ")";
         db.execSQL(CREATE_USER_DATABASE);
     }
@@ -158,10 +171,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private void createItemTable(SQLiteDatabase db) {
         String CREATE_ITEM_DATABASE = "CREATE TABLE " + ITEM_TABLE + "("
                 + KEY_ID + " INTEGER PRIMARY KEY,"
-                + INV_ID + " INTEGER REFERENCES " + INV_TABLE + "(" + KEY_ID + ") ON DELETE CASCADE,"
-                + ITEM_NAME + " TEXT,"
-                + ITEM_VALUE + " INTEGER,"
-                + ITEM_ATTRIBUTES + " TEXT"
+                + INV_ID + " INTEGER REFERENCES " + INV_TABLE + "(" + KEY_ID + ") ON UPDATE CASCADE,"
+                + ITEM_NAME + "TEXT,"
+                + ITEM_VALUE + "INTEGER,"
+                + ITEM_ATTRIBUTES + "TEXT"
                 + ")";
         db.execSQL(CREATE_ITEM_DATABASE);
     }
@@ -184,7 +197,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + USER_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + QUEST_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + CHARACTER_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS" + CHARACTER_TABLE);
         onCreate(db);
     }
 
@@ -195,8 +208,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * @return  returns the {@link User} object with the id number assigned by the database.
      */
 
-
-    public User addUser(User user) {
+    //TODO: Clean up User-related entries from the database handler.
+    /*public User addUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -215,7 +228,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         user.setId(cursor.getInt(0));
         db.close();
         return user;
-    }
+    }*/
 
     /**
      * Get a user with a specified id number
@@ -223,7 +236,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * @param id The id number referencing a {@link User} object.
      * @return The {@link User} with the id number specified if it exists.
      */
-    public User getUserByID(int id) {
+    //TODO: Clean up User-related entries from the database handler.
+    /*public User getUserByID(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(
@@ -239,14 +253,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if(cursor == null) {
             return null;
         }
-        if(cursor.moveToFirst()) {
-            return new User(
-                    cursor.getInt(0), cursor.getString(1), cursor.getInt(2), cursor.getInt(3)
-            );
-        }
-        return null;
-    }
+        cursor.moveToFirst();
+        return new User(
+                cursor.getInt(0), cursor.getString(1), cursor.getInt(2), cursor.getInt(3)
+        );
+    }*/
 
+    //TODO: Figure out what this semi-colon does
     ;
 
     /**
@@ -255,7 +268,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      *
      * @param user A {@link User} that you want to update in the database.
      */
-    public void updateUser(User user) {
+    //TODO: Clean up User-related entries from the database handler.
+    /*public void updateUser(User user) {
         //TODO: check for the existance of a user and add it if it doesn't exist. or return a boolean if it fails.
         //TODO: return updated version of user. (encase it is added).
         SQLiteDatabase db = this.getWritableDatabase();
@@ -267,7 +281,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         db.update(USER_TABLE, values, KEY_ID + "=?", new String[]{String.valueOf(user.getId())});
         db.close();
-    }
+    }*/
 
     /**
      * Used to add a quest to the database.
@@ -309,13 +323,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return quest;
     }
 
-    public int deleteQuest(Quest quest){
-        SQLiteDatabase db = this.getWritableDatabase();
-        int rowsDeleted;
-        rowsDeleted = db.delete(QUEST_TABLE, KEY_ID+"=?", new String[] { String.valueOf(quest.getId())});
-        return rowsDeleted;
-    }
-
     /**
      * Get a {@link Quest} by it's id number.
      *
@@ -329,7 +336,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Cursor cursor = db.query(
                 QUEST_TABLE,
                 new String[]{
-                        KEY_ID, KEY_NAME, DESCRIPTION, KEY_ACTIVE_STEPS, KEY_STEP_GOAL,
+                        KEY_ID, KEY_NAME, KEY_ACTIVE_STEPS, KEY_STEP_GOAL,
                         KEY_QUEST_COMPLETED, KEY_DIFFICULTY, KEY_LEVEL_REQUIREMENT
                 },
                 KEY_ID + "=?",
@@ -342,13 +349,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             return null;
         }
 
-        if(cursor.moveToFirst()) {
-            return new Quest(
-                    cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getLong(3),
-                    cursor.getLong(4), cursor.getInt(5) != 0, cursor.getInt(6), cursor.getShort(7)
-            );
-        }
-        return null;
+        cursor.moveToFirst();
+
+        /**
+         *  int id, String name, String description, long activeSteps,
+         *  long stepGoal, boolean completed, int difficulty, short levelRequirement
+         *
+         *  KEY_ID + " INTEGER PRIMARY KEY,"    0
+         *  KEY_NAME + " TEXT,"                 1
+         *  DESCRIPTION + " TEXT,"              2
+         *  KEY_ACTIVE_STEPS + " LONG,"         3
+         *  KEY_STEP_GOAL + " LONG,"            4
+         *  KEY_QUEST_COMPLETED + " INTEGER,"   5
+         *  KEY_DIFFICULTY + " INTEGER,"        6
+         *  KEY_LEVEL_REQUIREMENT + " SHORT"    7
+         *  */
+        return new Quest(
+                cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getLong(3),
+                cursor.getLong(4), cursor.getInt(5) != 0, cursor.getShort(6), cursor.getShort(7)
+        );
     }
 
     /**
@@ -374,6 +393,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.update(QUEST_TABLE, values, KEY_ID + "=?", new String[]{String.valueOf(quest.getId())});
     }
 
+    //// TODO: 3/18/2017 finish this
     public Item addItem(Item item) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -402,13 +422,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return item;
     }
 
-    public int deleteItem(Item item){
-        SQLiteDatabase db = this.getWritableDatabase();
-        int rowsDeleted;
-        rowsDeleted = db.delete(ITEM_TABLE, KEY_ID+"=?", new String[] { String.valueOf(item.getId())});
-        return rowsDeleted;
-    }
-
     public Item getItemByID(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -427,16 +440,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             return null;
         }
 
-        Item item;
-        if (cursor.moveToFirst()){
-            item = new Item(cursor.getInt(0), cursor.getString(1), cursor.getInt(2), cursor.getInt(4), cursor.getString(3));
-            cursor.close();
-            db.close();
-            return item;
-        }
-        cursor.close();
-        db.close();
-        return null;
+        cursor.moveToFirst();
+        return new Item(cursor.getInt(0), cursor.getString(1), cursor.getInt(2), cursor.getInt(4), cursor.getString(3));
     }
 
     public void updateItem(Item item) {
@@ -482,21 +487,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(CHARACTER_ID, inventory.getCharacterId());
 
         //insert
-        long id = db.insert(INV_TABLE, null, values);
+        db.insert(CHARACTER_TABLE, null, values);
         db.close();
 
-        inventory.setId((int)id);
-        //cursor.close();
+        db = this.getReadableDatabase();
+        Cursor cursor = db.query(CHARACTER_TABLE, new String[]{KEY_ID}, null, null, null, null, "id DESC", "1");
+
+        if (cursor == null) {
+            return null;
+        }
+
+        cursor.moveToFirst();
+
+        inventory.setId(cursor.getInt(0));
+        cursor.close();
         db.close();
 
         return inventory;
-    }
-
-    public int deleteInventory(Inventory inv){
-        SQLiteDatabase db = this.getWritableDatabase();
-        int rowsDeleted;
-        rowsDeleted = db.delete(INV_TABLE, KEY_ID+"=?", new String[] { String.valueOf(inv.getId())});
-        return rowsDeleted;
     }
 
     /**
@@ -513,17 +520,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             return null;
         }
 
-        if(cursor.moveToFirst()) {
-            Inventory inventory = new Inventory(cursor.getInt(0), cursor.getInt(1));
+        cursor.moveToFirst();
+        Inventory inventory = new Inventory(cursor.getInt(0), cursor.getInt(1));
 
-            ArrayList<Item> items = getItemsByInventoryId(cursor.getInt(0));
-            inventory.addItems(items);
-            cursor.close();
-            db.close();
+        ArrayList<Item> items = getItemsByInventoryId(cursor.getInt(0));
+        inventory.addItems(items);
+        cursor.close();
 
-            return inventory;
-        }
-        return null;
+        return inventory;
     }
 
     /**
@@ -540,11 +544,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(CHARACTER_ID, inv.getCharacterId());
 
         //insert
-        db.update(INV_TABLE, values, KEY_ID + "=?", new String[]{String.valueOf(inv.getId())});
+        db.update(ITEM_TABLE, values, KEY_ID + "=?", new String[]{String.valueOf(inv.getId())});
         db.close();
     }
-    
-    //// TODO: 3/28/2017 create a method that updates all items in inventory? 
 
     public Character addCharacter(Character character) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -571,22 +573,24 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_ACTIVEQUEST, character.getCurrentQuestId());
 
         //insert
-        long id = db.insert(CHARACTER_TABLE, null, values);
+        db.insert(CHARACTER_TABLE, null, values);
         db.close();
 
-        character.setId((int)id);
+        db = this.getReadableDatabase();
+        Cursor cursor = db.query(CHARACTER_TABLE, new String[]{KEY_ID}, null, null, null, null, "id DESC", "1");
+        if (cursor == null) {
+            return null;
+        }
+
+        cursor.moveToFirst();
+        character.setId(cursor.getInt(0));
+        cursor.close();
         db.close();
 
         return character;
     }
 
-    public int deleteCharacter(Character char1){
-        SQLiteDatabase db = this.getWritableDatabase();
-        int rowsDeleted;
-        rowsDeleted = db.delete(CHARACTER_TABLE, KEY_ID+"=?", new String[] { String.valueOf(char1.getId())});
-        return rowsDeleted;
-    }
-
+    //TODO: From Adrian to Cole. Fix the commented out method
     public Character getCharacterByID(int id) {
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -621,32 +625,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
          *  short baseLuck, long exp, long requiredExpForNextLevel, int currentQuestId,
          *  int questsCompleted
          *  */
-
-        Character character;
-        if(cursor.moveToFirst()) {
-            //if character doesn't have an inventory it creates a new one and adds it to the db
-            if (cursor.getInt(3) < 0) {
-                Inventory inv = addInventory(new Inventory(cursor.getInt(0)));
-                character =  new Character(
-                        cursor.getInt(0), cursor.getString(1), cursor.getShort(2), cursor.getInt(3),
-                        inv, cursor.getInt(4), cursor.getInt(5), cursor.getShort(6),
-                        cursor.getShort(7), cursor.getLong(8), cursor.getLong(9), cursor.getInt(10),
-                        cursor.getInt(11)
-                );
-                cursor.close();
-                return character;
-            } else {
-                character = new Character(
-                        cursor.getInt(0), cursor.getString(1), cursor.getShort(2), cursor.getInt(3),
-                        getInventoryByID(cursor.getInt(3)), cursor.getInt(4), cursor.getInt(5), cursor.getShort(6),
-                        cursor.getShort(7), cursor.getLong(8), cursor.getLong(9), cursor.getInt(10),
-                        cursor.getInt(11)
-                );
-                cursor.close();
-                return character;
-            }
-        }
-        return null;
+        return new Character(
+                cursor.getInt(0), cursor.getString(1), cursor.getShort(2), cursor.getInt(3),
+                getInventoryByID(cursor.getInt(3)), cursor.getInt(4), cursor.getInt(5), cursor.getShort(6),
+                cursor.getShort(7), cursor.getLong(8), cursor.getLong(9), cursor.getInt(11),
+                cursor.getInt(10)
+        );
     }
 
     public void updateCharacter(Character character) {
@@ -677,65 +661,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         String.valueOf(character.getId())
                 }
         );
-    }
-
-    public IDandNameRow[] getAllCharacterIDAndNameRow(){
-        SQLiteDatabase db = this.getReadableDatabase();
-        IDandNameRow[] characters;
-        Cursor cursor = db.query(CHARACTER_TABLE,
-                new String[]{
-                        KEY_ID, KEY_NAME
-                }, null, null, null, null, KEY_NAME);
-
-        cursor.moveToFirst();
-        characters = new IDandNameRow[cursor.getCount()];
-
-        int i = 0;
-        while (!cursor.isAfterLast()) {
-            characters[i] = new IDandNameRow(cursor.getInt(0), cursor.getString(1));
-            i++;
-            cursor.moveToNext();
-        }
-
-        cursor.close();
-
-        return characters;
-    }
-
-    public ArrayList<Character> getAllCharacters(){
-        SQLiteDatabase db = this.getReadableDatabase();
-        ArrayList<Character> characters = new ArrayList<Character>();
-        Cursor cursor = db.query(CHARACTER_TABLE,
-                new String[]{
-                KEY_ID, KEY_NAME, KEY_LEVEL, KEY_INVENTORY_ID,
-                KEY_CURRENCY, KEY_SHOES_ID, KEY_SPEED_ID, KEY_LUCK_ID,
-                KEY_CHARACTER_EXP, KEY_REQUIRED_EXP, KEY_QUESTS_COMPLETED, KEY_ACTIVEQUEST
-                }, null, null, null, null, KEY_NAME);
-
-        cursor.moveToFirst();
-
-        while (!cursor.isAfterLast()) {
-            if (cursor.getInt(3) < 0) {
-                Inventory inv = addInventory(new Inventory(cursor.getInt(0)));
-                characters.add(new Character(
-                        cursor.getInt(0), cursor.getString(1), cursor.getShort(2), cursor.getInt(3),
-                        inv, cursor.getInt(4), cursor.getInt(5), cursor.getShort(6),
-                        cursor.getShort(7), cursor.getLong(8), cursor.getLong(9), cursor.getInt(10),
-                        cursor.getInt(11)
-                ));
-            } else {
-                characters.add(new Character(
-                        cursor.getInt(0), cursor.getString(1), cursor.getShort(2), cursor.getInt(3),
-                        getInventoryByID(cursor.getInt(3)), cursor.getInt(4), cursor.getInt(5), cursor.getShort(6),
-                        cursor.getShort(7), cursor.getLong(8), cursor.getLong(9), cursor.getInt(10),
-                        cursor.getInt(11)
-                ));
-            }
-            cursor.moveToNext();
-        }
-        cursor.close();
-
-        return characters;
     }
 
     //TODO: Get all the quests from the DB that are that same difficulty as the argument and less than or equal to the characterLevel argument
