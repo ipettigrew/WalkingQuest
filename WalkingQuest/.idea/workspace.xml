@@ -12,8 +12,6 @@
   <component name="ChangeListManager">
     <list default="true" id="232b474c-4451-4da6-9b1b-0c0c867c9db0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/app/apphub/devon/walkingquest/CustomActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/app/apphub/devon/walkingquest/CustomActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/app/apphub/devon/walkingquest/QuestMainMenu.java" afterPath="$PROJECT_DIR$/app/src/main/java/app/apphub/devon/walkingquest/QuestMainMenu.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/app/apphub/devon/walkingquest/StepCounterSensorRegister.java" afterPath="$PROJECT_DIR$/app/src/main/java/app/apphub/devon/walkingquest/StepCounterSensorRegister.java" />
     </list>
     <ignored path="WalkingQuest.iws" />
@@ -85,20 +83,20 @@
       <file leaf-file-name="StepCounterSensorRegister.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/app/apphub/devon/walkingquest/StepCounterSensorRegister.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="164">
-              <caret line="51" column="46" selection-start-line="51" selection-start-column="46" selection-end-line="51" selection-end-column="46" />
+            <state relative-caret-position="-601">
+              <caret line="308" column="26" selection-start-line="308" selection-start-column="26" selection-end-line="308" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#5726#5727#0" expanded="true" />
-                <element signature="e#5771#5772#0" expanded="true" />
-                <element signature="e#8751#8752#0" expanded="true" />
-                <element signature="e#8785#8786#0" expanded="true" />
-                <element signature="e#8821#8822#0" expanded="true" />
-                <element signature="e#8858#8859#0" expanded="true" />
-                <element signature="e#8891#8892#0" expanded="true" />
-                <element signature="e#8920#8921#0" expanded="true" />
-                <element signature="e#9087#9088#0" expanded="true" />
-                <element signature="e#9141#9142#0" expanded="true" />
+                <element signature="e#5695#5696#0" expanded="true" />
+                <element signature="e#5740#5741#0" expanded="true" />
+                <element signature="e#8640#8641#0" expanded="true" />
+                <element signature="e#8674#8675#0" expanded="true" />
+                <element signature="e#8710#8711#0" expanded="true" />
+                <element signature="e#8747#8748#0" expanded="true" />
+                <element signature="e#8780#8781#0" expanded="true" />
+                <element signature="e#8809#8810#0" expanded="true" />
+                <element signature="e#8976#8977#0" expanded="true" />
+                <element signature="e#9030#9031#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -2441,7 +2439,14 @@
       <option name="project" value="LOCAL" />
       <updated>1490752961197</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Some teaks from previous commits">
+      <created>1490792381424</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1490792381425</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -2551,7 +2556,8 @@
     <MESSAGE value="Continued refactoring of the Character to incorporate the attributes that we&#10;discussed during the meeting (see google drive for picture)" />
     <MESSAGE value="Modified service to record and save steps, added a user norification when a quest is completed, added a broadcast receiver for shutting down a device to enable saving." />
     <MESSAGE value="Modified service to record and save steps, added a user norification when a quest is completed, added a broadcast receiver for shutting down a device to enable saving. Made small fixes to the database handler (wrong KEYs and incorrect cursor indicies in getCharacter)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Modified service to record and save steps, added a user norification when a quest is completed, added a broadcast receiver for shutting down a device to enable saving. Made small fixes to the database handler (wrong KEYs and incorrect cursor indicies in getCharacter)" />
+    <MESSAGE value="Some teaks from previous commits" />
+    <option name="LAST_COMMIT_MESSAGE" value="Some teaks from previous commits" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2981,20 +2987,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/app/apphub/devon/walkingquest/StepCounterSensorRegister.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="164">
-          <caret line="51" column="46" selection-start-line="51" selection-start-column="46" selection-end-line="51" selection-end-column="46" />
+        <state relative-caret-position="-601">
+          <caret line="308" column="26" selection-start-line="308" selection-start-column="26" selection-end-line="308" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#5726#5727#0" expanded="true" />
-            <element signature="e#5771#5772#0" expanded="true" />
-            <element signature="e#8751#8752#0" expanded="true" />
-            <element signature="e#8785#8786#0" expanded="true" />
-            <element signature="e#8821#8822#0" expanded="true" />
-            <element signature="e#8858#8859#0" expanded="true" />
-            <element signature="e#8891#8892#0" expanded="true" />
-            <element signature="e#8920#8921#0" expanded="true" />
-            <element signature="e#9087#9088#0" expanded="true" />
-            <element signature="e#9141#9142#0" expanded="true" />
+            <element signature="e#5695#5696#0" expanded="true" />
+            <element signature="e#5740#5741#0" expanded="true" />
+            <element signature="e#8640#8641#0" expanded="true" />
+            <element signature="e#8674#8675#0" expanded="true" />
+            <element signature="e#8710#8711#0" expanded="true" />
+            <element signature="e#8747#8748#0" expanded="true" />
+            <element signature="e#8780#8781#0" expanded="true" />
+            <element signature="e#8809#8810#0" expanded="true" />
+            <element signature="e#8976#8977#0" expanded="true" />
+            <element signature="e#9030#9031#0" expanded="true" />
           </folding>
         </state>
       </provider>

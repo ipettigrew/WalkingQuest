@@ -147,7 +147,7 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
                 initCharacter();
 
 
-            Log.i("START", "STEP_COUNTER_STARTED");
+            Log.i("SERVICE", "STEP_COUNTER_STARTED");
             //Get the sensor with a good delay (not too log not too high)
             //Returns whether or not the sesor has been registered by the service
             isRunning = registerSensor(sensorManager.SENSOR_DELAY_NORMAL);
@@ -160,21 +160,27 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        saveSteps();
+
         unregister();
-        Log.i("CREATE", "STEP_COUNTER_DESTROYED");
+        Log.i("SERVICE", "service destroyed steps save");
     }
 
     @Override
     public void onTaskRemoved(Intent rootIntent){
         super.onTaskRemoved(rootIntent);
 
-        //Save Steps to the database here once merged and database database is clearly defined to us
-        if(quest != null){
-            quest.setActiveSteps(globalSteps);
-            databaseHandler.updateQuest(quest);
-        }
+        saveSteps();
 
-        Log.i("PLZ GOD", "ILL DO ANYTHING... ANYTHING");
+        Log.i("SERVICE", "task removed steps save");
+    }
+
+    @Override
+    public void onLowMemory(){
+        super.onLowMemory();
+        saveSteps();
+        Log.i("SERVICE", "low memory steps save");
     }
 
     @Nullable
@@ -189,8 +195,6 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
 
         //If the event registered is a step event increase the globalSteps
         if(event.sensor.getType() == Sensor.TYPE_STEP_COUNTER && quest != null){
-            Log.i("STEPS DETECTED",""+globalSteps + " " + quest.isCompleted());
-
             globalSteps++;
 
             if(globalSteps >= stepsForQuest && !quest.isCompleted()){
@@ -221,7 +225,7 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
                     //The 0 is a possible second argument
                     mMessenger.send(Message.obtain(null, StepCounterSensorRegister.MSG_GET_SESSION_STEPS, (int) globalSteps, 0));
             }catch (RemoteException e){
-                Log.i("EXCEPTION","Message on sensor event failed");
+                Log.i("SERVICE","Message on sensor event failed");
             }
         }
     }
@@ -246,15 +250,15 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
         try {
             sensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         }catch (Exception e){
-            Log.i("ERROR", e.getMessage());
+            Log.i("SERVICE", e.getMessage());
         }
 
         if(sensor == null) {
-            Log.i("FAILED", "Failed to set the step sensor");
+            Log.i("SERVICE", "Failed to set the step sensor");
             return false;
         }
         else {
-            Log.i("SUCCESS", "Successfully registered sensor");
+            Log.i("SERVICE", "Successfully registered sensor");
             sensorManager.registerListener(this, sensor, accuracy);
             return true;
         }
@@ -298,13 +302,11 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
         int questID = character.getCurrentQuestId();
         quest = databaseHandler.getQuestByID(questID);
         if(quest != null){
-            Log.i("sensor", quest+" "+questID);
             globalSteps = quest.getActiveSteps();
             stepsForQuest = quest.getStepGoal();
-            Log.i("QUEST", "We have character and quest!! " + character.getName() + " " + quest.getName());
         }else{
             quest = null;
-            Log.i("FAILED", "Failed to get quest information " + questID);
+            Log.i("SERVICE", "Failed to get quest information " + questID);
         }
     }
 
@@ -316,7 +318,7 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
     * Author: Devon Rimmington
     **/
     public static void forceSaveSteps(){
-        if(quest != null){
+        if(character != null){
             //Save Steps to the database here once merged and database database is clearly defined to us
             if(quest != null){
                 quest.setActiveSteps(globalSteps);
@@ -338,6 +340,20 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
             databaseHandler.updateQuest(quest);
             databaseHandler.updateCharacter(character);
             quest = null;
+        }
+    }
+
+    /*
+    * Saves the quest's number of steps
+    *
+    * Author: Devon Rimmington
+    **/
+
+    private void saveSteps(){
+        //Save Steps to the database here once merged and database database is clearly defined to us
+        if(quest != null){
+            quest.setActiveSteps(globalSteps);
+            databaseHandler.updateQuest(quest);
         }
     }
 }
