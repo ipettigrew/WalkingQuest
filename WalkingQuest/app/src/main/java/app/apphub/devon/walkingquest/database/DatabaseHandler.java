@@ -396,7 +396,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 new String[]{
                         KEY_ID, KEY_NAME, DESCRIPTION, KEY_ACTIVE_STEPS, KEY_STEP_GOAL,
                         KEY_QUEST_COMPLETED, KEY_DIFFICULTY, KEY_LEVEL_REQUIREMENT
-                }, KEY_LEVEL_REQUIREMENT + "<=? AND " + KEY_DIFFICULTY + "<=?",
+                }, KEY_LEVEL_REQUIREMENT + "<=? AND " + KEY_DIFFICULTY + "=?",
                 new String[]{String.valueOf(level), String.valueOf(diff)},
                 null, null, KEY_QUEST_COMPLETED + " ASC, " + KEY_DIFFICULTY + " ASC, " + KEY_NAME + " DESC");
 

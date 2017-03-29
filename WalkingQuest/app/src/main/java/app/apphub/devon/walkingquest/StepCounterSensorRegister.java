@@ -118,7 +118,7 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
     boolean flag = false;
     boolean isRunning;
 
-    private static DatabaseHandler databaseHandler;
+    private static DatabaseHandler databaseHandler = null;
     private static Character character = null;
     private static Quest quest = null;
 
@@ -320,11 +320,13 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
     * Author: Devon Rimmington
     **/
     public static void forceSaveSteps(){
-        if(character != null){
-            //Save Steps to the database here once merged and database database is clearly defined to us
-            if(quest != null){
-                quest.setActiveSteps(globalSteps);
-                databaseHandler.updateQuest(quest);
+        if(databaseHandler != null) {
+            if (character != null) {
+                //Save Steps to the database here once merged and database database is clearly defined to us
+                if (quest != null) {
+                    quest.setActiveSteps(globalSteps);
+                    databaseHandler.updateQuest(quest);
+                }
             }
         }
     }
@@ -342,6 +344,7 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
             databaseHandler.updateQuest(quest);
             databaseHandler.updateCharacter(character);
             quest = null;
+            globalSteps = 0;
         }
     }
 
@@ -357,6 +360,30 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
             quest.setActiveSteps(globalSteps);
             databaseHandler.updateQuest(quest);
         }
+    }
+
+    /*
+    * Forces the service to reload the character and the quest
+    * To be used when the quest has been changed or added
+    *
+    * Author: Devon Rimmington
+    **/
+
+    public static void characterAultered(){
+
+        if(databaseHandler != null) {
+            character = databaseHandler.getCharacterByID(1);
+
+            quest = databaseHandler.getQuestByID(character.getCurrentQuestId());
+
+            if(quest != null){
+                globalSteps = 0;
+                stepsForQuest = quest.getStepGoal();
+                Log.i("SERVICE", "quest chnaged and selected " + quest.getId());
+            }
+
+        }
+
     }
 }
 

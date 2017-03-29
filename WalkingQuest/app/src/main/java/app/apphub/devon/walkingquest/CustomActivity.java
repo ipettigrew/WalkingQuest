@@ -59,7 +59,7 @@ public class CustomActivity extends AppCompatActivity {
                     Log.i("STEPS FROM SERVICE", ""+msg.arg1);
                     globalSteps = msg.arg1;
                     if(tv != null)
-                        tv.setText(msg.arg1+"/"+quest.getStepGoal());
+                        tv.setText(msg.arg1);
                     break;
                 default:
                     super.handleMessage(msg);

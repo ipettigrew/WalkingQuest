@@ -54,7 +54,7 @@ public class Character extends DatabaseObject<Character>{
         super();
 
         this.name = name;
-        this.level = 0;
+        this.level = 1;
 
         this.invId = -1;
         this.currency = 0;

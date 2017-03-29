@@ -32,7 +32,7 @@ public class QuestActualizer {
      */
 
     public QuestActualizer(Character character, int difficulty, Context context) {
-        
+
         this.character = character;
 
         databaseHandler = DatabaseHandler.getInstance(context);
@@ -60,6 +60,8 @@ public class QuestActualizer {
         if (i != -1) {
             currentQuest = databaseHandler.getQuestByID(i);
             character.setCurrentQuestId(currentQuest.getId());
+            databaseHandler.updateCharacter(character);
+            StepCounterSensorRegister.characterAultered();
         }
     }
 
@@ -78,6 +80,14 @@ public class QuestActualizer {
 
     public ArrayList<Quest> getQuests() {
         quests = databaseHandler.getQuestByRequirement(character.getLevel(), difficulty);
+        //return only quests that are not finished
+        for(int i = 0; i < quests.size(); i++){
+            if(quests.get(i).isCompleted()){
+                quests.remove(i);
+                //because the list gets shorter the indices change, i needs to be adjusted for every quest removed
+                i--;
+            }
+        }
         return quests;
     }
 

@@ -31,6 +31,16 @@
             android:layout_gravity="center"/>
         <Space
             android:layout_width="match_parent"
+            android:layout_height="10sp" />
+        <TextView
+            android:text="STEPS REQUIRED"
+            android:id="@+id/quest_step_requirement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_gravity="center"/>
+        <Space
+            android:layout_width="match_parent"
             android:layout_height="30sp" />
         <TextView
             android:text="Lorem ipsum dolor sit amet, nec ut iisque labitur placerat, ea vim etiam soleat aliquam, sint dolores sadipscing sea no. Vocent gloriatur inciderint nec id. Sea at consul aliquip nusquam, vim ea case erant qualisque, dico tacimates pertinax eum no. Te pro populo reformidans, ut his vituperata liberavisse. Eos te enim equidem noluisse.
