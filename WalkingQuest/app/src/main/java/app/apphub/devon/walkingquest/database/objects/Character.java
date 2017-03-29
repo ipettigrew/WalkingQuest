@@ -13,7 +13,7 @@ package app.apphub.devon.walkingquest.database.objects;
  *  @see     app.apphub.devon.walkingquest.database.objects.DatabaseObject
  *  @since   2017-03-03
  */
-public class Character extends DatabaseObject<Character> {
+public class Character extends DatabaseObject<Character>{
     private String name;                  // The name of the character.
     private short level;                  // The current level of the character.
     private short baseSpeed;              // The character's Speed, without any modifiers.
@@ -40,6 +40,29 @@ public class Character extends DatabaseObject<Character> {
         this.questsCompleted = 0;
 
         this.shoesId = shoesId;
+
+        this.baseLuck = 0;
+        this.baseSpeed = 10;
+
+        /**
+         *  Set the current quest ID to be nothing
+         *  */
+        this.currentQuestId = -1;
+    }
+
+    public Character(String name) {
+        super();
+
+        this.name = name;
+        this.level = 0;
+
+        this.invId = -1;
+        this.currency = 0;
+
+        this.exp = 0;
+        this.questsCompleted = 0;
+
+        this.shoesId = 0;
 
         this.baseLuck = 0;
         this.baseSpeed = 10;
@@ -104,6 +127,19 @@ public class Character extends DatabaseObject<Character> {
 
     public int getInvId() {
         return invId;
+    }
+
+    public void setInvId(int id){
+        invId = id;
+    }
+
+    public Inventory getInv() {
+        return inv;
+    }
+
+    public void setInv(Inventory inv) {
+        this.inv = inv;
+        setInvId(inv.getId());
     }
 
     public int getShoesId() {
