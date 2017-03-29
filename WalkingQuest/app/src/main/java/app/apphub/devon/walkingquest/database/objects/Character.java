@@ -1,35 +1,37 @@
 package app.apphub.devon.walkingquest.database.objects;
 
 /**
- * Created by Cole DeMan on 3/3/2017.
+ *  Class for the Character database object.
+ *
+ *  @author  Cole DeMan
+ *  @author  Devon Rimmington
+ *  @author  Ian Pettigrew
+ *  @author  Adrian Metzler
+ *  @author  Jonathan McDevitt
+ *  @version 1.9
+ *  @see     app.apphub.devon.walkingquest.database.DatabaseHandler
+ *  @see     app.apphub.devon.walkingquest.database.objects.DatabaseObject
+ *  @since   2017-03-03
  */
-
 public class Character extends DatabaseObject<Character>{
-
-    //TODO:Camelcase plz
-
-    private String name;
-    private short level;
-    private short baseSpeed;
-    private short baseLuck;
-    private int invId;
-    private Inventory inv;
-    private int shoesId;
-    private long currency;
-    //Assumed to be total exp from beginning of time
-
-    private long exp;
-    private long requiredExpForNextLevel;
-
-    //TODO: add quest to character
-    private int currentQuestId;
-    private int questsCompleted;
+    private String name;                  // The name of the character.
+    private short level;                  // The current level of the character.
+    private short baseSpeed;              // The character's Speed, without any modifiers.
+    private short baseLuck;               // The character's Luck, without any modifiers.
+    private int invId;                    // TODO: Merge Inventory with Character.
+    private Inventory inv;                // TODO: Merge Inventory with Character.
+    private int shoesId;                  // The ID denoting the shoes currently equipped.
+    private long currency;                // The amount of currency the character has available.
+    private long exp;                     // Total EXP the character has accumulated.
+    private long requiredExpForNextLevel; // Remaining EXP the character needs to level up.
+    private int currentQuestId;           // The ID denoting the quest the current quest.
+    private int questsCompleted;          // The number of quests the character has completed.
 
     public Character(String name, int invId, int shoesId) {
         super();
 
         this.name = name;
-        this.level = 0;
+        this.level = 1;
 
         this.invId = invId;
         this.currency = 0;

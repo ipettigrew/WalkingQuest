@@ -195,8 +195,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * @return returns the {@link User} object with the id number assigned by the database.
      */
 
-
-    public User addUser(User user) {
+    //TODO: Clean up User-related entries from the database handler.
+    /*public User addUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -215,15 +215,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         user.setId(cursor.getInt(0));
         db.close();
         return user;
-    }
+    }*/
 
+    //TODO: Clean up User-related entries from the database handler.
     /**
      * Get a user with a specified id number
      *
      * @param id The id number referencing a {@link User} object.
      * @return The {@link User} with the id number specified if it exists.
      */
-    public User getUserByID(int id) {
+    /*public User getUserByID(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(
@@ -245,17 +246,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             );
         }
         return null;
-    }
+    }*/
 
-    ;
-
+    //TODO: Clean up User-related entries from the database handler.
     /**
      * Used to update the record for a {@link User}, simply change the name, steps,
      * or number of quests completed by a user then pass it into this function to save it.
      *
      * @param user A {@link User} that you want to update in the database.
      */
-    public void updateUser(User user) {
+    /*public void updateUser(User user) {
         //TODO: check for the existance of a user and add it if it doesn't exist. or return a boolean if it fails.
         //TODO: return updated version of user. (encase it is added).
         SQLiteDatabase db = this.getWritableDatabase();
@@ -267,7 +267,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         db.update(USER_TABLE, values, KEY_ID + "=?", new String[]{String.valueOf(user.getId())});
         db.close();
-    }
+    }*/
 
     /**
      * Used to add a quest to the database.
