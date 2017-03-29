@@ -7,9 +7,10 @@ import android.util.Log;
 import android.widget.TextView;
 
 import app.apphub.devon.walkingquest.database.DatabaseHandler;
+import app.apphub.devon.walkingquest.database.objects.Character;
 import app.apphub.devon.walkingquest.database.objects.Quest;
 
-public class WalkingQuestSplashScreen extends CustomActivity {
+public class WalkingQuestSplashScreen extends AppCompatActivity {
 
 
     @Override
@@ -20,10 +21,23 @@ public class WalkingQuestSplashScreen extends CustomActivity {
 
         /*TODO:remove this*/
         DatabaseHandler databaseHandler = DatabaseHandler.getInstance(getApplicationContext());
-        Quest quest = new Quest(1, "NumberOne", "example quest", 0, 100, 1, false, 1, (short)1);
+
+        Quest quest = new Quest("Quest", 1000, 0);
         databaseHandler.addQuest(quest);
 
-        Log.i("DBTEST", databaseHandler.getQuestByID(1).getDescription());
+
+        Log.i("Splash1", ""+quest.getId());
+
+        Character character = new Character("Devon");
+        character.setCurrentQuestId(quest.getId());
+        databaseHandler.addCharacter(character);
+
+        Log.i("Splash2", ""+character.getCurrentQuestId());
+
+        databaseHandler.updateCharacter(character);
+
+        character = databaseHandler.getCharacterByID(1);
+        Log.i("Splash3", ""+character.getCurrentQuestId() +" "+character.getName());
 
 
         /** Test code to be removed later, simply tests that the splash screen will move to the

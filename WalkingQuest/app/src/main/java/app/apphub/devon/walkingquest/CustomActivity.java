@@ -54,7 +54,9 @@ public class CustomActivity extends AppCompatActivity {
             switch (msg.what){
                 case StepCounterSensorRegister.MSG_GET_SESSION_STEPS:
                     Log.i("STEPS FROM SERVICE", ""+msg.arg1);
-                    tv.setText(""+msg.arg1);
+                    globalSteps = msg.arg1;
+                    if(tv != null)
+                        tv.setText(msg.arg1+"");
                     break;
                 default:
                     super.handleMessage(msg);
@@ -135,9 +137,10 @@ public class CustomActivity extends AppCompatActivity {
     }
 
 
-    TextView tv;
+    int globalSteps;
     Context context;
     Intent intent;
+    TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,20 +158,10 @@ public class CustomActivity extends AppCompatActivity {
             startService(intent);
         }
 
-        tv = (TextView) findViewById(R.id.steps);
 
         //Bind the step counter service
         doBindService();
 
-        //One second seems to be long enough?
-        /*
-        new Handler().postDelayed(new Runnable(){
-            @Override
-            public void run() {
-                getGlobalStepsFromService();
-            }
-        }, 1000);
-        */
     }
 
 
@@ -216,6 +209,5 @@ public class CustomActivity extends AppCompatActivity {
         }
         return false;
     }
-
 
 }

@@ -1,6 +1,7 @@
 package app.apphub.devon.walkingquest;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -14,9 +15,13 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import app.apphub.devon.walkingquest.database.DatabaseHandler;
+import app.apphub.devon.walkingquest.database.objects.Character;
 import app.apphub.devon.walkingquest.database.objects.Quest;
 
 /**
@@ -42,6 +47,11 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
     * Command for getting the number of steps recorded while the service is active
     * */
     static final int MSG_GET_SESSION_STEPS = 3;
+
+    /*
+    * Command for power off message
+    **/
+    static final int MSG_POWER_OFF = 4;
 
 
     /**
@@ -97,19 +107,28 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
     //Seneor for holding onto the sensor after finding it through the SensorManager
     Sensor sensor;
     //The number of globalSteps, increases as new step events are registered by the sensor
-    long globalSteps;
+    private static long globalSteps, stepsForQuest;
     //Do we need these?
     boolean flag = false;
     boolean isRunning;
 
-    private DatabaseHandler databaseHandler;
-    private Quest quest;
+    private static DatabaseHandler databaseHandler;
+    private static Character character = null;
+    private static Quest quest = null;
+
+    //Strings for the quest completed notification
+    private String notificationTitle = "Quest Completed",
+        notificationDescription = "Your hero has completed ";
 
     @Override
     public void onCreate(){
         super.onCreate();
         isRunning = false;
-        databaseHandler = DatabaseHandler.getInstance(getBaseContext());
+
+        //check if first time loading
+        if(quest == null)
+            initCharacter();
+
         //Log.i("CREATE", "STEP_COUNTER_CREATED");
     }
 
@@ -117,12 +136,15 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
     public int onStartCommand(Intent intent, int flags, int startId) {
         //Must run in background thread
         if(!isRunning) {
+
+            if(quest == null)
+                initCharacter();
+
+
             Log.i("START", "STEP_COUNTER_STARTED");
             //Get the sensor with a good delay (not too log not too high)
             //Returns whether or not the sesor has been registered by the service
             isRunning = registerSensor(sensorManager.SENSOR_DELAY_NORMAL);
-            //Sets the steps to 0
-            globalSteps = 0;
         }
 
         return START_STICKY;
@@ -141,6 +163,10 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
         super.onTaskRemoved(rootIntent);
 
         //Save Steps to the database here once merged and database database is clearly defined to us
+        if(quest != null){
+            quest.setActiveSteps(globalSteps);
+            databaseHandler.updateQuest(quest);
+        }
 
         Log.i("PLZ GOD", "ILL DO ANYTHING... ANYTHING");
     }
@@ -156,9 +182,31 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
     public void onSensorChanged(SensorEvent event) {
 
         //If the event registered is a step event increase the globalSteps
-        if(event.sensor.getType() == Sensor.TYPE_STEP_COUNTER){
-            Log.i("STEPS DETECTED",""+globalSteps);
+        if(event.sensor.getType() == Sensor.TYPE_STEP_COUNTER && quest != null){
+            Log.i("STEPS DETECTED",""+globalSteps + " " + quest.isCompleted());
+
             globalSteps++;
+
+            if(globalSteps >= stepsForQuest && !quest.isCompleted()){
+
+                //set the quest information and save it to the database
+                endQuest();
+
+                //build and summon the notification
+                Notification repliedNotification =
+                        new Notification.Builder(getBaseContext())
+                                .setSmallIcon(R.drawable.temp_image)
+                                .setContentTitle(notificationTitle)
+                                .setContentText(notificationDescription + quest.getName())
+                                .build();
+
+                //initalizes the notification manager and posts the notification to the user
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getBaseContext());
+                notificationManager.notify(0, repliedNotification);
+                Log.i("Notification", "");
+
+            }
+
             try {
                 /*If the activities messenger is defined then send the step counter event to the activity
                 * This will give real-time updates to an activity that can share messages between itself and the service*/
@@ -196,7 +244,7 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
         }
 
         if(sensor == null) {
-            Log.i("FAILED","Sensor returned null");
+            Log.i("FAILED", "Failed to set the step sensor");
             return false;
         }
         else {
@@ -230,5 +278,61 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
         sensorManager.unregisterListener(this);
     }
 
+    /*
+    * Initalizes the character and the quest objects within the service
+    *
+    *
+    * Author: Devon Rimmington
+    **/
+
+    private void initCharacter(){
+        databaseHandler = DatabaseHandler.getInstance(getBaseContext());
+        character = databaseHandler.getCharacterByID(1);
+
+        int questID = character.getCurrentQuestId();
+        quest = databaseHandler.getQuestByID(questID);
+        if(quest != null){
+            Log.i("sensor", quest+" "+questID);
+            globalSteps = quest.getActiveSteps();
+            stepsForQuest = quest.getStepGoal();
+            Log.i("QUEST", "We have character and quest!! " + character.getName() + " " + quest.getName());
+        }else{
+            quest = null;
+            Log.i("FAILED", "Failed to get quest information " + questID);
+        }
+    }
+
+
+    /*
+    * Enables emergency quick save of the users steps
+    * Intended to be used when the device itself is restarted or turned off
+    *
+    * Author: Devon Rimmington
+    **/
+    public static void forceSaveSteps(){
+        if(quest != null){
+            //Save Steps to the database here once merged and database database is clearly defined to us
+            if(quest != null){
+                quest.setActiveSteps(globalSteps);
+                databaseHandler.updateQuest(quest);
+            }
+        }
+    }
+
+    /*
+    * Saves and ends the quest data from within the service
+    *
+    * Author: Devon Rimmington
+    **/
+    private void endQuest(){
+        if(quest != null){
+            quest.setCompleted(true);
+            quest.setActiveSteps(globalSteps);
+            character.setCurrentQuestId(0);
+            databaseHandler.updateQuest(quest);
+            databaseHandler.updateCharacter(character);
+            quest = null;
+        }
+    }
 }
 

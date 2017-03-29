@@ -29,6 +29,15 @@
             </intent-filter>
 
         </receiver>
+
+        <receiver android:name=".PowerOffReciever" android:exported="true" android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
+                <action android:name="android.intent.action.QUICKBOOT_POWEROFF" />
+            </intent-filter>
+
+        </receiver>
+
         <service android:name=".StepCounterSensorRegister" android:enabled="true" android:exported="true"/>
 
         <activity
