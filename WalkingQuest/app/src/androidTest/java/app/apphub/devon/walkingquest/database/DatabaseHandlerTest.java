@@ -1,10 +1,8 @@
 package app.apphub.devon.walkingquest.database;
 
 import android.content.Context;
-import android.os.Handler;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,9 +14,7 @@ import app.apphub.devon.walkingquest.database.objects.IDandNameRow;
 import app.apphub.devon.walkingquest.database.objects.Inventory;
 import app.apphub.devon.walkingquest.database.objects.Item;
 import app.apphub.devon.walkingquest.database.objects.Quest;
-import app.apphub.devon.walkingquest.database.objects.User;
 
-import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -33,10 +29,8 @@ public class DatabaseHandlerTest {
     @Test
     public void createQuestDatabase() throws Exception {
         // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
 
-        DatabaseHandler handler = null;
-        handler = DatabaseHandler.getInstance(appContext);
+        DatabaseHandler handler = getHandler();
         assertTrue(handler != null);
         handler.close();
     }
@@ -44,10 +38,8 @@ public class DatabaseHandlerTest {
     @Test
     public void deleteQuest(){
         // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
-        DatabaseHandler handler = null;
-        handler = DatabaseHandler.getInstance(appContext);
-        Quest quest1, quest2;
+        DatabaseHandler handler = getHandler();
+        Quest quest1;
         quest1 = handler.addQuest(new Quest("test", 20000, 2));
         assertTrue("Quest not added.", quest1.getId()>-1);
 
@@ -61,11 +53,9 @@ public class DatabaseHandlerTest {
 
     @Test
     public void addQuestTest(){
-        Context appContext = InstrumentationRegistry.getTargetContext();
         Quest quest1, quest2 = new Quest("test", 20000, 2);
 
-        DatabaseHandler handler = null;
-        handler = DatabaseHandler.getInstance(appContext);;
+        DatabaseHandler handler = getHandler();
 
         quest1 = handler.addQuest(quest2);
         assertTrue(quest1.getName().equals(quest2.getName()));
@@ -74,31 +64,52 @@ public class DatabaseHandlerTest {
     }
 
     @Test
+    public void getAllQuestTest(){
+        Quest quest1, quest2;
+        quest1 = new Quest("test", 20000, 2);
+        quest2 = new Quest("ALso Test", 453453, 2);
+
+        DatabaseHandler handler = getHandler();
+
+        quest1 = handler.addQuest(quest1);
+        quest2 = handler.addQuest(quest2);
+        ArrayList<Quest> quests = handler.getQuestByRequirement(-1,-1);
+        assertTrue("Quests found: "+ quests.size(), quests.size()>0);
+        handler.deleteQuest(quest1);
+        handler.deleteQuest(quest2);
+        handler.close();
+    }
+
+    @Test
     public void deleteInventory(){
         // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
-        DatabaseHandler handler = null;
-        handler = DatabaseHandler.getInstance(appContext);
-        Quest quest1, quest2;
-        quest1 = handler.addQuest(new Quest("test", 20000, 2));
-        assertTrue("Quest not added.", quest1.getId()>-1);
+        DatabaseHandler handler = getHandler();
+        Character char1;
+        char1 = new Character("Bob");
 
-        int deleted = handler.deleteQuest(quest1);
+        char1 = handler.addCharacter(char1);
 
-        assertTrue("Quest not deleted.", deleted>0);
+        Inventory inv1;
+        inv1 = new Inventory(char1.getId());
+
+        inv1 = handler.addInventory(inv1);
+
+        int deleted = handler.deleteInventory(inv1);
+
+        assertTrue("Inventory not deleted.", deleted>0);
         assertTrue("too many quests deleted. Quests Deleted: "+deleted, deleted<2);
+
+        handler.deleteCharacter(char1);
 
         handler.close();
     }
 
     @Test
     public void addInventoryTest(){
-        Context appContext = InstrumentationRegistry.getTargetContext();
         Character char1;
         char1 = new Character("Bob");
 
-        DatabaseHandler handler = null;
-        handler = DatabaseHandler.getInstance(appContext);
+        DatabaseHandler handler = getHandler();
         char1 = handler.addCharacter(char1);
 
         Inventory inv2, inv1;
@@ -107,18 +118,18 @@ public class DatabaseHandlerTest {
         inv2 = handler.addInventory(inv1);
         System.out.print(inv2.getId());
         assertTrue(inv2.getId() > -1);
+        handler.deleteInventory(inv1);
+        handler.deleteCharacter(char1);
         handler.close();
     }
 
     @Test
     public void updateInventory(){
-        Context appContext = InstrumentationRegistry.getTargetContext();
         Character char1, char2;
         char1 = new Character("Bob");
         char2 = new Character("Alice");
 
-        DatabaseHandler handler = null;
-        handler = DatabaseHandler.getInstance(appContext);
+        DatabaseHandler handler = getHandler();
         char1 = handler.addCharacter(char1);
         char2 = handler.addCharacter(char2);
 
@@ -131,6 +142,10 @@ public class DatabaseHandlerTest {
 
         inv2 = handler.getInventoryByID(inv1.getId());
 
+        handler.deleteCharacter(char1);
+        handler.deleteCharacter(char2);
+        handler.deleteInventory(inv2);
+
         assertTrue(inv1.equals(inv2));
         handler.close();
     }
@@ -138,15 +153,17 @@ public class DatabaseHandlerTest {
     @Test
     public void getInventoryByIdTest(){
         // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
-        DatabaseHandler handler = null;
-        handler = DatabaseHandler.getInstance(appContext);
+        DatabaseHandler handler = getHandler();
         Character char1;
         char1 = new Character("Bob");
         char1 = handler.addCharacter(char1);
-        Inventory inv1;
+        Inventory inv1, inv2;
         inv1 = new Inventory(char1.getId());
         inv1 = handler.addInventory(inv1);
+
+        inv2 = handler.getInventoryByID(inv1.getId());
+
+        assertTrue(inv1.equals(inv2));
 
         int deleted = handler.deleteInventory(inv1);
 
@@ -160,11 +177,9 @@ public class DatabaseHandlerTest {
 
     @Test
     public void getQuestTest(){
-        Context appContext = InstrumentationRegistry.getTargetContext();
         Quest quest1 = new Quest("test", 55555, 3);
 
-        DatabaseHandler handler = null;
-        handler = DatabaseHandler.getInstance(appContext);
+        DatabaseHandler handler = getHandler();
 
         quest1 = handler.addQuest(quest1);
 
@@ -179,12 +194,10 @@ public class DatabaseHandlerTest {
 
     @Test
     public void updateQuestTest(){
-        Context appContext = InstrumentationRegistry.getTargetContext();
         Quest quest2, quest1;
         quest1 = new Quest("test", 666, 1);
 
-        DatabaseHandler handler = null;
-        handler = DatabaseHandler.getInstance(appContext);
+        DatabaseHandler handler = getHandler();
 
         quest2 = handler.addQuest(quest1);
         assertTrue(quest1.equals(quest2));
@@ -199,10 +212,8 @@ public class DatabaseHandlerTest {
 
     @Test
     public void updateCharacterTest(){
-        Context appContext = InstrumentationRegistry.getTargetContext();
 
-        DatabaseHandler handler = null;
-        handler = DatabaseHandler.getInstance(appContext);
+        DatabaseHandler handler = getHandler();
 
         Character char1, char2;
         char1 = new Character("Bob");
@@ -214,15 +225,14 @@ public class DatabaseHandlerTest {
         handler.updateCharacter(char1);
         char2 = handler.getCharacterByID(char1.getId());
         assertTrue(char2.getName().equals("alice"));
+        handler.deleteCharacter(char1);
         handler.close();
     }
 
     @Test
     public void cascadeDeleteTest(){
         // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
-        DatabaseHandler handler = null;
-        handler = DatabaseHandler.getInstance(appContext);
+        DatabaseHandler handler = getHandler();
         Character char1;
         char1 = new Character("Bob");
         char1 = handler.addCharacter(char1);
@@ -251,9 +261,7 @@ public class DatabaseHandlerTest {
     @Test
     public void deleteCharacterTest(){
         // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
-        DatabaseHandler handler = null;
-        handler = DatabaseHandler.getInstance(appContext);
+        DatabaseHandler handler = getHandler();
         Character char1;
         char1 = new Character("Bob", 12, 12);
         char1 = handler.addCharacter(char1);
@@ -269,23 +277,21 @@ public class DatabaseHandlerTest {
 
     @Test
     public void addCharacterTest(){
-        Context appContext = InstrumentationRegistry.getTargetContext();
         Character char1, char2;
         char1 = new Character("Bob", 12, 12);
-        DatabaseHandler handler = null;
-        handler = DatabaseHandler.getInstance(appContext);
+        DatabaseHandler handler = getHandler();
 
-        handler.addCharacter(char1);
-        assertTrue(handler.getCharacterByID(char1.getId()) != null);
+        char2 = handler.addCharacter(char1);
+        System.out.print(char2.getId());
+        assertTrue(char2.getId() > -1);
+        handler.deleteCharacter(char1);
         handler.close();
     }
 
     @Test
     public void getCharacterbyIdTest(){
-        Context appContext = InstrumentationRegistry.getTargetContext();
 
-        DatabaseHandler handler = null;
-        handler = DatabaseHandler.getInstance(appContext);
+        DatabaseHandler handler = getHandler();
 
         Character char1, char2;
         char1 = new Character("Bob");
@@ -296,41 +302,43 @@ public class DatabaseHandlerTest {
         handler.updateCharacter(char1);
         char2 = handler.getCharacterByID(char1.getId());
         assertTrue(char2.getName().equals("Bob"));
+        handler.deleteCharacter(char2);
         handler.close();
     }
 
     @Test
     public void getAllCharactersTest(){
-        Context appContext = InstrumentationRegistry.getTargetContext();
-        DatabaseHandler handler = null;
-        handler = DatabaseHandler.getInstance(appContext);
-
-        handler.addCharacter(new Character("Bob"));
-
+        DatabaseHandler handler = getHandler();
         ArrayList<Character> characters;
+        //characters = handler.getAllCharacters();
+        //assertTrue(characters.size() < 1);
+
+        Character char1 = handler.addCharacter(new Character("Bob"));
         characters = handler.getAllCharacters();
 
+        handler.deleteCharacter(char1);
+
         assertTrue(characters.size() > 0);
+        handler.close();
     }
 
     @Test
     public void getAllCharactersIDAndNameRowsTest(){
         Context appContext = InstrumentationRegistry.getTargetContext();
-        DatabaseHandler handler = null;
-        handler = DatabaseHandler.getInstance(appContext);
-        handler.addCharacter(new Character("Bob"));
+        DatabaseHandler handler = DatabaseHandler.getInstance(appContext);
+        Character char1 = handler.addCharacter(new Character("Bob"));
         IDandNameRow[] characters;
         characters = handler.getAllCharacterIDAndNameRow();
-
         assertTrue(characters.length > 0);
+        handler.deleteCharacter(char1);
+        handler.close();
     }
 
     @Test
     public void deleteItemTest(){
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
-        DatabaseHandler handler = null;
-        handler = DatabaseHandler.getInstance(appContext);
+        DatabaseHandler handler = DatabaseHandler.getInstance(appContext);
         Character char1;
         char1 = new Character("Bob");
         char1 = handler.addCharacter(char1);
@@ -346,6 +354,8 @@ public class DatabaseHandlerTest {
 
         assertTrue("Item not deleted.", deleted>0);
         assertTrue("too many Items deleted. Items Deleted: "+deleted, deleted<2);
+        handler.deleteInventory(inv1);
+        handler.deleteCharacter(char1);
 
         handler.close();
     }
@@ -365,6 +375,10 @@ public class DatabaseHandlerTest {
         item1 = handler.addItem(item1);
 
         assertTrue("ERROR: Item not added.",item1.getId()>-1);
+        handler.deleteCharacter(char1);
+        handler.deleteInventory(inv1);
+        handler.deleteItem(item1);
+        handler.close();
     }
 
     @Test
@@ -390,6 +404,10 @@ public class DatabaseHandlerTest {
         item2 = handler.getItemByID(item1.getId());
 
         assertTrue(item1.equals(item2));
+        handler.deleteCharacter(char1);
+        handler.deleteInventory(inv1);
+        handler.deleteItem(item1);
+        handler.close();
     }
 
     @Test
@@ -410,6 +428,9 @@ public class DatabaseHandlerTest {
         assertTrue("ERROR: Item not added.",item1.getId()>-1);
 
         item2 = handler.getItemByID(item1.getId());
+        handler.deleteInventory(inv1);
+        handler.deleteCharacter(char1);
+        handler.deleteItem(item1);
 
         assertTrue(item1.equals(item2));
     }
