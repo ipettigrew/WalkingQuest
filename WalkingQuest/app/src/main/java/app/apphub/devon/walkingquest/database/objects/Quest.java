@@ -88,7 +88,7 @@ public class Quest extends DatabaseObject<Quest> {
      * @return true if completed, false if not.
      */
     public boolean checkIfComplete() {
-        if (activeSteps > stepGoal) {
+        if (activeSteps >= stepGoal) {
             completed = true;
             return true;
         }

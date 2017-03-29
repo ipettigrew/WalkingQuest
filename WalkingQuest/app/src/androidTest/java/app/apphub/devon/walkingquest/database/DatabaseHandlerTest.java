@@ -275,9 +275,8 @@ public class DatabaseHandlerTest {
         DatabaseHandler handler = null;
         handler = DatabaseHandler.getInstance(appContext);
 
-        char2 = handler.addCharacter(char1);
-        System.out.print(char2.getId());
-        assertTrue(char2.getId() > -1);
+        handler.addCharacter(char1);
+        assertTrue(handler.getCharacterByID(char1.getId()) != null);
         handler.close();
     }
 

@@ -12,6 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
+import app.apphub.devon.walkingquest.database.DatabaseHandler;
+import app.apphub.devon.walkingquest.database.objects.Quest;
+
 /**
  * Created by Devon on 3/4/2017.
  *
@@ -54,7 +57,9 @@ public class CustomActivity extends AppCompatActivity {
             switch (msg.what){
                 case StepCounterSensorRegister.MSG_GET_SESSION_STEPS:
                     Log.i("STEPS FROM SERVICE", ""+msg.arg1);
-                    tv.setText(""+msg.arg1);
+                    globalSteps = msg.arg1;
+                    if(tv != null)
+                        tv.setText(msg.arg1+"/"+quest.getStepGoal());
                     break;
                 default:
                     super.handleMessage(msg);
@@ -135,9 +140,14 @@ public class CustomActivity extends AppCompatActivity {
     }
 
 
-    TextView tv;
+    int globalSteps;
     Context context;
     Intent intent;
+    TextView tv;
+
+    //TODO:remove this
+    DatabaseHandler databaseHandler = DatabaseHandler.getInstance(getBaseContext());
+    Quest quest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +157,8 @@ public class CustomActivity extends AppCompatActivity {
         context = getBaseContext();
         intent = new Intent(context, StepCounterSensorRegister.class);
 
+        quest = databaseHandler.getQuestByID(1);
+
         /*Check if the service is running
         * on first boot of the app the service doesn't automatically start
         * also if the phone crashes the */
@@ -155,20 +167,10 @@ public class CustomActivity extends AppCompatActivity {
             startService(intent);
         }
 
-        tv = (TextView) findViewById(R.id.steps);
 
         //Bind the step counter service
         doBindService();
 
-        //One second seems to be long enough?
-        /*
-        new Handler().postDelayed(new Runnable(){
-            @Override
-            public void run() {
-                getGlobalStepsFromService();
-            }
-        }, 1000);
-        */
     }
 
 
@@ -216,6 +218,5 @@ public class CustomActivity extends AppCompatActivity {
         }
         return false;
     }
-
 
 }

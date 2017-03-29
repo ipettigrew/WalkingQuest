@@ -283,7 +283,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(DESCRIPTION, quest.getDescription());
         values.put(KEY_ACTIVE_STEPS, quest.getActiveSteps());
         values.put(KEY_STEP_GOAL, quest.getStepGoal());
-        values.put(KEY_QUEST_COMPLETED, quest.getStepGoal());
+        values.put(KEY_QUEST_COMPLETED, quest.isCompleted());
         values.put(KEY_DIFFICULTY, quest.getDifficulty());
         values.put(KEY_LEVEL_REQUIREMENT, quest.getLevelRequirement());
 
@@ -613,7 +613,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             return null;
         }
 
-        cursor.moveToFirst();
         //remove "character = null", this is just temporary as I don't want to push a build with errors. - Adrian
         /**
          *  int id, String name, short level, int invId,
@@ -630,8 +629,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 character =  new Character(
                         cursor.getInt(0), cursor.getString(1), cursor.getShort(2), cursor.getInt(3),
                         inv, cursor.getInt(4), cursor.getInt(5), cursor.getShort(6),
-                        cursor.getShort(7), cursor.getLong(8), cursor.getLong(9), cursor.getInt(10),
-                        cursor.getInt(11)
+                        cursor.getShort(7), cursor.getLong(8), cursor.getLong(9), cursor.getInt(11),
+                        cursor.getInt(10)
                 );
                 cursor.close();
                 return character;
@@ -639,8 +638,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 character = new Character(
                         cursor.getInt(0), cursor.getString(1), cursor.getShort(2), cursor.getInt(3),
                         getInventoryByID(cursor.getInt(3)), cursor.getInt(4), cursor.getInt(5), cursor.getShort(6),
-                        cursor.getShort(7), cursor.getLong(8), cursor.getLong(9), cursor.getInt(10),
-                        cursor.getInt(11)
+                        cursor.getShort(7), cursor.getLong(8), cursor.getLong(9), cursor.getInt(11),
+                        cursor.getInt(10)
                 );
                 cursor.close();
                 return character;
