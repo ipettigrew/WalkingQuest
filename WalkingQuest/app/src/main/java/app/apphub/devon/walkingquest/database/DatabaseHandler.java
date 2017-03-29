@@ -191,8 +191,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     /**
      * Used for adding a new user to the database.
      *
-     * @param   user A {@link User} object to add to the database.
-     * @return  returns the {@link User} object with the id number assigned by the database.
+     * @param user A {@link User} object to add to the database.
+     * @return returns the {@link User} object with the id number assigned by the database.
      */
 
 
@@ -228,18 +228,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(
                 USER_TABLE,
-                new String[] {
+                new String[]{
                         KEY_ID, KEY_NAME, KEY_STEPS, KEY_QUESTS_COMPLETED
                 },
                 KEY_ID + "=?",
-                new String[] {
+                new String[]{
                         String.valueOf(id)
                 }, null, null, null
         );
-        if(cursor == null) {
+        if (cursor == null) {
             return null;
         }
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             return new User(
                     cursor.getInt(0), cursor.getString(1), cursor.getInt(2), cursor.getInt(3)
             );
@@ -299,7 +299,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 "id DESC", "1"
         );
 
-        if(cursor == null) {
+        if (cursor == null) {
             return null;
         }
 
@@ -309,10 +309,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return quest;
     }
 
-    public int deleteQuest(Quest quest){
+    public int deleteQuest(Quest quest) {
         SQLiteDatabase db = this.getWritableDatabase();
         int rowsDeleted;
-        rowsDeleted = db.delete(QUEST_TABLE, KEY_ID+"=?", new String[] { String.valueOf(quest.getId())});
+        rowsDeleted = db.delete(QUEST_TABLE, KEY_ID + "=?", new String[]{String.valueOf(quest.getId())});
         return rowsDeleted;
     }
 
@@ -339,10 +339,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 null, null, null
         );
         if (cursor == null) {
+            cursor.close();
+            db.close();
             return null;
         }
 
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             return new Quest(
                     cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getLong(3),
                     cursor.getLong(4), cursor.getInt(5) != 0, cursor.getInt(6), cursor.getShort(7)
@@ -374,6 +376,44 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.update(QUEST_TABLE, values, KEY_ID + "=?", new String[]{String.valueOf(quest.getId())});
     }
 
+    /**
+     * Returns all quests below specified level.
+     * For all quests reguardless of level use -1.
+     * <p>
+     * Quests are sorted by completed, then difficulty, then name.
+     *
+     * @param level the max level of quests returned.
+     * @return an Arraylist\<Quest\> of specified Quests.
+     */
+    public ArrayList<Quest> getQuestByRequirement(int level, int req) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Quest> quest = new ArrayList<Quest>();
+        Cursor cursor = null;
+        if (req < 0) req = Integer.MAX_VALUE;
+        if (level < 0) level = Integer.MAX_VALUE;
+        cursor = db.query(QUEST_TABLE,
+                new String[]{
+                        KEY_ID, KEY_NAME, DESCRIPTION, KEY_ACTIVE_STEPS, KEY_STEP_GOAL,
+                        KEY_QUEST_COMPLETED, KEY_DIFFICULTY, KEY_LEVEL_REQUIREMENT
+                }, KEY_LEVEL_REQUIREMENT + "<=? AND " + KEY_DIFFICULTY + "<=?",
+                new String[]{String.valueOf(level), String.valueOf(req)},
+                null, null, KEY_QUEST_COMPLETED + " ASC, " + KEY_DIFFICULTY + " ASC, " + KEY_NAME + " DESC");
+
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            quest.add(new Quest(
+                    cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getLong(3),
+                    cursor.getLong(4), cursor.getInt(5) != 0, cursor.getInt(6), cursor.getShort(7)
+            ));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+
+        return quest;
+    }
+
     public Item addItem(Item item) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -390,7 +430,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         db = this.getReadableDatabase();
         Cursor cursor = db.query(ITEM_TABLE, new String[]{KEY_ID}, null, null, null, null, "id DESC", "1");
-        if (cursor == null){
+        if (cursor == null) {
             return null;
         }
 
@@ -402,10 +442,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return item;
     }
 
-    public int deleteItem(Item item){
+    public int deleteItem(Item item) {
         SQLiteDatabase db = this.getWritableDatabase();
         int rowsDeleted;
-        rowsDeleted = db.delete(ITEM_TABLE, KEY_ID+"=?", new String[] { String.valueOf(item.getId())});
+        rowsDeleted = db.delete(ITEM_TABLE, KEY_ID + "=?", new String[]{String.valueOf(item.getId())});
         return rowsDeleted;
     }
 
@@ -415,7 +455,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(
                 ITEM_TABLE,
-                new String[] {
+                new String[]{
                         KEY_ID, ITEM_NAME, INV_ID, ITEM_ATTRIBUTES, ITEM_VALUE
                 },
                 KEY_ID + "=?",
@@ -428,7 +468,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
 
         Item item;
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             item = new Item(cursor.getInt(0), cursor.getString(1), cursor.getInt(2), cursor.getInt(4), cursor.getString(3));
             cursor.close();
             db.close();
@@ -485,17 +525,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         long id = db.insert(INV_TABLE, null, values);
         db.close();
 
-        inventory.setId((int)id);
+        inventory.setId((int) id);
         //cursor.close();
         db.close();
 
         return inventory;
     }
 
-    public int deleteInventory(Inventory inv){
+    public int deleteInventory(Inventory inv) {
         SQLiteDatabase db = this.getWritableDatabase();
         int rowsDeleted;
-        rowsDeleted = db.delete(INV_TABLE, KEY_ID+"=?", new String[] { String.valueOf(inv.getId())});
+        rowsDeleted = db.delete(INV_TABLE, KEY_ID + "=?", new String[]{String.valueOf(inv.getId())});
         return rowsDeleted;
     }
 
@@ -513,7 +553,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             return null;
         }
 
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             Inventory inventory = new Inventory(cursor.getInt(0), cursor.getInt(1));
 
             ArrayList<Item> items = getItemsByInventoryId(cursor.getInt(0));
@@ -543,7 +583,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.update(INV_TABLE, values, KEY_ID + "=?", new String[]{String.valueOf(inv.getId())});
         db.close();
     }
-    
+
     //// TODO: 3/28/2017 create a method that updates all items in inventory? 
 
     public Character addCharacter(Character character) {
@@ -574,16 +614,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         long id = db.insert(CHARACTER_TABLE, null, values);
         db.close();
 
-        character.setId((int)id);
+        character.setId((int) id);
         db.close();
 
         return character;
     }
 
-    public int deleteCharacter(Character char1){
+    public int deleteCharacter(Character char1) {
         SQLiteDatabase db = this.getWritableDatabase();
         int rowsDeleted;
-        rowsDeleted = db.delete(CHARACTER_TABLE, KEY_ID+"=?", new String[] { String.valueOf(char1.getId())});
+        rowsDeleted = db.delete(CHARACTER_TABLE, KEY_ID + "=?", new String[]{String.valueOf(char1.getId())});
         return rowsDeleted;
     }
 
@@ -623,11 +663,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
          *  */
 
         Character character;
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             //if character doesn't have an inventory it creates a new one and adds it to the db
             if (cursor.getInt(3) < 0) {
                 Inventory inv = addInventory(new Inventory(cursor.getInt(0)));
-                character =  new Character(
+                character = new Character(
                         cursor.getInt(0), cursor.getString(1), cursor.getShort(2), cursor.getInt(3),
                         inv, cursor.getInt(4), cursor.getInt(5), cursor.getShort(6),
                         cursor.getShort(7), cursor.getLong(8), cursor.getLong(9), cursor.getInt(10),
@@ -673,13 +713,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 CHARACTER_TABLE,
                 values,
                 KEY_ID + "=?",
-                new String[] {
+                new String[]{
                         String.valueOf(character.getId())
                 }
         );
     }
 
-    public IDandNameRow[] getAllCharacterIDAndNameRow(){
+    public IDandNameRow[] getAllCharacterIDAndNameRow() {
         SQLiteDatabase db = this.getReadableDatabase();
         IDandNameRow[] characters;
         Cursor cursor = db.query(CHARACTER_TABLE,
@@ -702,14 +742,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return characters;
     }
 
-    public ArrayList<Character> getAllCharacters(){
+    public ArrayList<Character> getAllCharacters() {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Character> characters = new ArrayList<Character>();
         Cursor cursor = db.query(CHARACTER_TABLE,
                 new String[]{
-                KEY_ID, KEY_NAME, KEY_LEVEL, KEY_INVENTORY_ID,
-                KEY_CURRENCY, KEY_SHOES_ID, KEY_SPEED_ID, KEY_LUCK_ID,
-                KEY_CHARACTER_EXP, KEY_REQUIRED_EXP, KEY_QUESTS_COMPLETED, KEY_ACTIVEQUEST
+                        KEY_ID, KEY_NAME, KEY_LEVEL, KEY_INVENTORY_ID,
+                        KEY_CURRENCY, KEY_SHOES_ID, KEY_SPEED_ID, KEY_LUCK_ID,
+                        KEY_CHARACTER_EXP, KEY_REQUIRED_EXP, KEY_QUESTS_COMPLETED, KEY_ACTIVEQUEST
                 }, null, null, null, null, KEY_NAME);
 
         cursor.moveToFirst();
@@ -736,15 +776,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         cursor.close();
 
         return characters;
-    }
-
-    //TODO: Get all the quests from the DB that are that same difficulty as the argument and less than or equal to the characterLevel argument
-    public ArrayList<Quest> getQuestByRequirement(int characterLevel, int difficulty) {
-
-        //Ian - "try sorting the data by difficulty and then completion status"
-
-
-        return null;
     }
 }
 
