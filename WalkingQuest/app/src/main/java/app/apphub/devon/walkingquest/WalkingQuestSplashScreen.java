@@ -56,7 +56,7 @@ public class WalkingQuestSplashScreen extends AppCompatActivity {
         if(character == null){
             character = new Character("Player_1");
             databaseHandler.addCharacter(character);
-            StepCounterSensorRegister.characterAultered();
+            StepCounterSensorRegister.characterAltered();
 
             Quest questEasy_1 = new Quest("Flour delivery", 50, 1);
             Quest questEasy_2 = new Quest("Escort: Grandma Across the Road", 20, 1);

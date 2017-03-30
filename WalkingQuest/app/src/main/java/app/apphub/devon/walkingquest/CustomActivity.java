@@ -57,7 +57,7 @@ public class CustomActivity extends AppCompatActivity {
             switch (msg.what){
                 case StepCounterSensorRegister.MSG_GET_SESSION_STEPS:
                     Log.i("STEPS FROM SERVICE", ""+msg.arg1);
-                    globalSteps = msg.arg1;
+                    activeSteps = msg.arg1;
                     if(tv != null)
                         tv.setText(msg.arg1);
                     break;
@@ -123,7 +123,7 @@ public class CustomActivity extends AppCompatActivity {
      * @since 2017-3-4
      * @return boolean The status of service connection false for no service connection established
      */
-    boolean getGlobalStepsFromService(){
+    boolean getactiveStepsFromService(){
 
         //If there is a connection then ask the service for the number of steps the sensor has registered
         if(mConnection != null){
@@ -140,7 +140,7 @@ public class CustomActivity extends AppCompatActivity {
     }
 
 
-    int globalSteps;
+    int activeSteps;
     Context context;
     Intent intent;
     TextView tv;

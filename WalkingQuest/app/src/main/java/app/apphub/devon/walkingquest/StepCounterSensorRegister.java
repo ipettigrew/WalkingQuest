@@ -78,7 +78,7 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
 
             switch (msg.what){
 
-                //Sets the activities messenger for sending the globalSteps back
+                //Sets the activities messenger for sending the activeSteps back
                 case StepCounterSensorRegister.MSG_REGISTER_CLIENT:
                     messenger = msg.replyTo;
                     Log.i("SERVICE", "Registered");
@@ -91,7 +91,7 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
                 case StepCounterSensorRegister.MSG_GET_SESSION_STEPS:
                     //Send a message back to the activity contining the number of steps recorded during the session
                     try {
-                        messenger.send(Message.obtain(null, MSG_GET_SESSION_STEPS, (int) globalSteps, 0));
+                        messenger.send(Message.obtain(null, MSG_GET_SESSION_STEPS, (int) activeSteps, 0));
                         Log.i("SERVICE", "Returning Steps");
                     }catch (RemoteException e){
                         Log.i("EXCEPTION", "Incoming handler exception " + e.getMessage());
@@ -112,8 +112,8 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
     SensorManager sensorManager;
     //Seneor for holding onto the sensor after finding it through the SensorManager
     Sensor sensor;
-    //The number of globalSteps, increases as new step events are registered by the sensor
-    private static long globalSteps, stepsForQuest;
+    //The number of activeSteps, increases as new step events are registered by the sensor
+    private static long activeSteps, stepGoal;
     //Do we need these?
     boolean flag = false;
     boolean isRunning;
@@ -193,13 +193,17 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        //If the event registered is a step event increase the globalSteps
+        //If the event registered is a step event increase the activeSteps
         if(event.sensor.getType() == Sensor.TYPE_STEP_COUNTER && quest != null){
-            globalSteps++;
+            activeSteps++;
 
-            Log.i("SERVICE", "global steps: " + globalSteps + " steps for quest: " + stepsForQuest + " quest completed " + quest.isCompleted());
+            Log.i("SERVICE", "global steps: " + activeSteps + " steps for quest: " + stepGoal + " quest completed " + quest.isCompleted());
 
-            if(globalSteps >= stepsForQuest && !quest.isCompleted()){
+            if(activeSteps % 10 == 0){
+                saveSteps();
+            }
+
+            if(activeSteps >= stepGoal && !quest.isCompleted()){
 
                 //build and summon the notification
                 Notification repliedNotification =
@@ -225,7 +229,7 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
                 if(messenger != null)
                     //Just return the number of global steps
                     //The 0 is a possible second argument
-                    mMessenger.send(Message.obtain(null, StepCounterSensorRegister.MSG_GET_SESSION_STEPS, (int) globalSteps, 0));
+                    mMessenger.send(Message.obtain(null, StepCounterSensorRegister.MSG_GET_SESSION_STEPS, (int) activeSteps, 0));
             }catch (RemoteException e){
                 Log.i("SERVICE","Message on sensor event failed");
             }
@@ -267,8 +271,8 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
 
     }
 
-    public long getGlobalSteps() {
-        return globalSteps;
+    public long getactiveSteps() {
+        return activeSteps;
     }
 
     public boolean isRegistered(){
@@ -304,8 +308,8 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
         int questID = character.getCurrentQuestId();
         quest = databaseHandler.getQuestByID(questID);
         if(quest != null){
-            globalSteps = quest.getActiveSteps();
-            stepsForQuest = quest.getStepGoal();
+            activeSteps = quest.getActiveSteps();
+            stepGoal = quest.getStepGoal();
         }else{
             quest = null;
             Log.i("SERVICE", "Failed to get quest information " + questID);
@@ -324,7 +328,7 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
             if (character != null) {
                 //Save Steps to the database here once merged and database database is clearly defined to us
                 if (quest != null) {
-                    quest.setActiveSteps(globalSteps);
+                    quest.setActiveSteps(activeSteps);
                     databaseHandler.updateQuest(quest);
                 }
             }
@@ -339,12 +343,12 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
     private void endQuest(){
         if(quest != null){
             quest.setCompleted(true);
-            quest.setActiveSteps(globalSteps);
+            quest.setActiveSteps(activeSteps);
             character.setCurrentQuestId(0);
             databaseHandler.updateQuest(quest);
             databaseHandler.updateCharacter(character);
             quest = null;
-            globalSteps = 0;
+            activeSteps = 0;
         }
     }
 
@@ -357,7 +361,7 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
     private void saveSteps(){
         //Save Steps to the database here once merged and database database is clearly defined to us
         if(quest != null){
-            quest.setActiveSteps(globalSteps);
+            quest.setActiveSteps(activeSteps);
             databaseHandler.updateQuest(quest);
         }
     }
@@ -369,7 +373,7 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
     * Author: Devon Rimmington
     **/
 
-    public static void characterAultered(){
+    public static void characterAltered(){
 
         if(databaseHandler != null) {
             character = databaseHandler.getCharacterByID(1);
@@ -377,9 +381,9 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
             quest = databaseHandler.getQuestByID(character.getCurrentQuestId());
 
             if(quest != null){
-                globalSteps = 0;
-                stepsForQuest = quest.getStepGoal();
-                Log.i("SERVICE", "quest chnaged and selected " + quest.getId());
+                activeSteps = 0;
+                stepGoal = quest.getStepGoal();
+                Log.i("SERVICE", "quest changed and selected " + quest.getId());
             }
 
         }

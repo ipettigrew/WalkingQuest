@@ -61,7 +61,7 @@ public class QuestActualizer {
             currentQuest = databaseHandler.getQuestByID(i);
             character.setCurrentQuestId(currentQuest.getId());
             databaseHandler.updateCharacter(character);
-            StepCounterSensorRegister.characterAultered();
+            StepCounterSensorRegister.characterAltered();
         }
     }
 
@@ -80,6 +80,7 @@ public class QuestActualizer {
 
     public ArrayList<Quest> getQuests() {
         quests = databaseHandler.getQuestByRequirement(character.getLevel(), difficulty);
+
         //return only quests that are not finished
         for(int i = 0; i < quests.size(); i++){
             if(quests.get(i).isCompleted()){

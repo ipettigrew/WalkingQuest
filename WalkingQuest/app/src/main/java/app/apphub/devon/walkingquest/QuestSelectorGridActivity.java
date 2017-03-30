@@ -44,12 +44,7 @@ public class QuestSelectorGridActivity extends AppCompatActivity {
 
         questGrid = (GridView) this.findViewById(R.id.quest_selector_grid_view);
 
-        //convert the quests arraylist into a string arraylist
-        //ArrayList<String> questID =
-
-        Quest[] _quests = quests.toArray(new Quest[quests.size()]);
-
-        final QuestSelectorGridAdapter questAdapter = new QuestSelectorGridAdapter(QuestSelectorGridActivity.this, _quests);
+        final QuestSelectorGridAdapter questAdapter = new QuestSelectorGridAdapter(QuestSelectorGridActivity.this, quests);
         questGrid.setAdapter(questAdapter);
 
 
@@ -80,7 +75,7 @@ public class QuestSelectorGridActivity extends AppCompatActivity {
         databaseHandler = DatabaseHandler.getInstance(getApplicationContext());
         character = databaseHandler.getCharacterByID(1);
         Quest quest = databaseHandler.getQuestByID(character.getCurrentQuestId());
-        difficulty = getIntent().getIntExtra(Quest.QUEST_DIFFICULTY, 0);
+        difficulty = getIntent().getIntExtra(Quest.QUEST_DIFFICULTY, 1);
 
         questActualizer = new QuestActualizer(character, difficulty, getApplicationContext());
         quests = questActualizer.getQuests();
