@@ -9,23 +9,22 @@ import java.util.Collections;
 
 public class Reward extends DatabaseObject {
     private long currencyReward;
-    private Item[] equipmentRewards;
     private long expReward;
+    private Item[] equipmentRewards;
 
     /** Not sure if we'll need this right now but I'm putting it in just in case. I'm using it as a
      *  temporary reward constructor in Quest.java  */
-    public Reward() {
-        super((int)(Math.random()*99999));
-        currencyReward = 0;
-        equipmentRewards = null;
-        expReward = 0;
+    public Reward(long currencyReward, long expReward, Item[] equipmentRewards) {
+        this.currencyReward = currencyReward;
+        this.expReward = expReward;
+        this.equipmentRewards = equipmentRewards;
     }
 
-    public Reward(int id, long currencyReward, Item[] equipmentRewards, long expReward) {
+    public Reward(int id, long currencyReward, long expReward, Item[] equipmentRewards) {
         super(id);
         this.currencyReward = currencyReward;
-        this.equipmentRewards = equipmentRewards;
         this.expReward = expReward;
+        this.equipmentRewards = equipmentRewards;
     }
 
     public long getCurrencyReward() {
