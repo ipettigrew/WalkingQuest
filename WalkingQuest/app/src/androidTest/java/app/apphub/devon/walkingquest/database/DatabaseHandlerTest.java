@@ -285,6 +285,7 @@ public class DatabaseHandlerTest {
         System.out.print(char2.getId());
         assertTrue(char2.getId() > -1);
         handler.deleteCharacter(char1);
+
         handler.close();
     }
 

@@ -391,19 +391,24 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ArrayList<Quest> quests = new ArrayList<Quest>();
         Cursor cursor = null;
         if (diff < 0) diff = Integer.MAX_VALUE;
+
         if (level < 0) level = Integer.MAX_VALUE;
         cursor = db.query(QUEST_TABLE,
                 new String[]{
                         KEY_ID, KEY_NAME, DESCRIPTION, KEY_ACTIVE_STEPS, KEY_STEP_GOAL,
                         KEY_QUEST_COMPLETED, KEY_DIFFICULTY, KEY_LEVEL_REQUIREMENT
+
                 }, KEY_LEVEL_REQUIREMENT + "<=? AND " + KEY_DIFFICULTY + "=?",
                 new String[]{String.valueOf(level), String.valueOf(diff)},
+
                 null, null, KEY_QUEST_COMPLETED + " ASC, " + KEY_DIFFICULTY + " ASC, " + KEY_NAME + " DESC");
 
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
+
             quests.add(new Quest(
+
                     cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getLong(3),
                     cursor.getLong(4), cursor.getInt(5) != 0, cursor.getInt(6), cursor.getShort(7)
             ));
@@ -411,6 +416,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
+
 
         return quests;
     }
