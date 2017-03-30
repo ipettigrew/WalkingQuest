@@ -13,12 +13,19 @@
     tools:context="app.apphub.devon.walkingquest.QuestSelectorGridActivity"
     tools:showIn="@layout/activity_quest_selector_grid">
 
-    <GridView
-        android:text=""
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/currentQuest"
+        android:layout_centerHorizontal="true"/>
+
+    <GridView
+        android:layout_below="@+id/currentQuest"
+        android:text=""
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/quest_selector_grid_view"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:numColumns="2"/>
 

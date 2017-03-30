@@ -10,6 +10,10 @@ package app.apphub.devon.walkingquest.database.objects;
 
 public class Quest extends DatabaseObject<Quest> {
 
+    public static final String QUEST_ID = "questID";
+    public static final String QUEST_DIFFICULTY = "questDifficulty";
+
+
     private String name;
     private String description;
     private long activeSteps;
@@ -88,7 +92,7 @@ public class Quest extends DatabaseObject<Quest> {
      * @return true if completed, false if not.
      */
     public boolean checkIfComplete() {
-        if (activeSteps >= stepGoal) {
+        if (activeSteps > stepGoal) {
             completed = true;
             return true;
         }

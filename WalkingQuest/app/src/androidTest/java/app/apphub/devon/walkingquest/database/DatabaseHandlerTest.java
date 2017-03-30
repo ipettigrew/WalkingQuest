@@ -280,6 +280,12 @@ public class DatabaseHandlerTest {
         Character char1, char2;
         char1 = new Character("Bob", 12, 12);
         DatabaseHandler handler = getHandler();
+
+        char2 = handler.addCharacter(char1);
+        System.out.print(char2.getId());
+        assertTrue(char2.getId() > -1);
+        handler.deleteCharacter(char1);
+
         handler.close();
     }
 

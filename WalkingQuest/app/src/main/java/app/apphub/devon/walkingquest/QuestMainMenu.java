@@ -24,9 +24,6 @@ public class QuestMainMenu extends CustomActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //TODO:remove this
-        tv = (TextView) findViewById(R.id.step_count);
-
         easy = (Button)findViewById(R.id.beginner_quests_button);
         medium = (Button)findViewById(R.id.intermediate_quests_button);
         hard = (Button)findViewById(R.id.hard_quests_button);
@@ -42,21 +39,21 @@ public class QuestMainMenu extends CustomActivity {
         easy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToQuestSelectorGrid();
+                goToQuestSelectorGrid(1);
             }
         });
 
         medium.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToQuestSelectorGrid();
+                goToQuestSelectorGrid(2);
             }
         });
 
         hard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToQuestSelectorGrid();
+                goToQuestSelectorGrid(3);
             }
         });
     }
@@ -65,8 +62,10 @@ public class QuestMainMenu extends CustomActivity {
      *  Simply sends the user to the next menu. In the future we need to implement this such that
      *  the function calls the hub to fetch a set of intermediate quests from the database
      * */
-    private void goToQuestSelectorGrid() {
-        this.startActivity(new Intent(QuestMainMenu.this, QuestSelectorGridActivity.class));
+    private void goToQuestSelectorGrid(int diff) {
+        Intent intent = new Intent(QuestMainMenu.this, QuestSelectorGridActivity.class);
+        intent.putExtra(Quest.QUEST_DIFFICULTY, diff);
+        this.startActivity(intent);
     }
 
 }
