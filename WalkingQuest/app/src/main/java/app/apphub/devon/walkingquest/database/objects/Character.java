@@ -26,6 +26,7 @@ public class Character extends DatabaseObject<Character>{
     private long requiredExpForNextLevel; // Remaining EXP the character needs to level up.
     private int currentQuestId;           // The ID denoting the quest the current quest.
     private int questsCompleted;          // The number of quests the character has completed.
+    private short numRewards;             //TODO: add this change to database handler
 
     public Character(String name, int invId, int shoesId) {
         super();
@@ -48,6 +49,7 @@ public class Character extends DatabaseObject<Character>{
          *  Set the current quest ID to be nothing
          *  */
         this.currentQuestId = -1;
+        this.numRewards = 0;
     }
 
     public Character(String name) {
@@ -71,11 +73,12 @@ public class Character extends DatabaseObject<Character>{
          *  Set the current quest ID to be nothing
          *  */
         this.currentQuestId = -1;
+        this.numRewards = 0;
     }
 
     public Character(int id, String name, short level, int invId, Inventory inv, long currency,
                      int shoesId, short baseSpeed, short baseLuck, long exp,
-                     long requiredExpForNextLevel, int currentQuestId, int questsCompleted
+                     long requiredExpForNextLevel, int currentQuestId, int questsCompleted, short numRewards
     ) {
         super(id);
 
@@ -94,6 +97,7 @@ public class Character extends DatabaseObject<Character>{
 
         this.currentQuestId = currentQuestId;
         this.questsCompleted = questsCompleted;
+        this.numRewards = numRewards;
     }
 
     //TODO: make this actually do something.
@@ -145,6 +149,7 @@ public class Character extends DatabaseObject<Character>{
     public int getShoesId() {
         return shoesId;
     }
+    public void setShoesId(int shoesId){ this.shoesId = shoesId; }
 
     public short getSpeed() {
         return baseSpeed;
@@ -165,6 +170,9 @@ public class Character extends DatabaseObject<Character>{
     public int getCurrentQuestId() {
         return currentQuestId;
     }
+
+    public short getNumRewards(){ return numRewards; }
+    public void setNumRewards(short numRewards){ this.numRewards = numRewards; }
 
     public void addExperience(long exp) {
         this.exp += exp;
@@ -187,5 +195,9 @@ public class Character extends DatabaseObject<Character>{
         }
         addExperience(r.getExpReward());
         addCurrency(r.getCurrencyReward());
+    }
+
+    public void addItemToInventory(Item item){
+        inv.addItem(item);
     }
 }

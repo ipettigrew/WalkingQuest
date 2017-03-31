@@ -68,6 +68,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_REQUIRED_EXP = "reqExp";
     private static final String KEY_SPEED_ID = "speed";
     private static final String KEY_LUCK_ID = "luck";
+    private static final String KEY_NUM_REWARDS = "numRewards";
 
     private static DatabaseHandler sInstance;
 
@@ -143,7 +144,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_ACTIVEQUEST + " INTEGER,"
                 + KEY_QUESTS_COMPLETED + " INTEGER,"
                 + KEY_CHARACTER_EXP + " INTEGER,"
-                + KEY_REQUIRED_EXP + " INTEGER)";
+                + KEY_REQUIRED_EXP + " INTEGER,"
+                + KEY_NUM_REWARDS + " INTEGER)";
         db.execSQL(CREATE_CHARACTER_TABLE);
     }
 
@@ -606,6 +608,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_QUESTS_COMPLETED, character.getQuestsCompleted());
         values.put(KEY_ACTIVEQUEST, character.getCurrentQuestId());
 
+        /** Characters number of quests character has not claimed */
+        values.put(KEY_NUM_REWARDS, character.getNumRewards());
+
         //insert
         long id = db.insert(CHARACTER_TABLE, null, values);
         db.close();
@@ -636,7 +641,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                          *  */
                         KEY_ID, KEY_NAME, KEY_LEVEL, KEY_INVENTORY_ID,
                         KEY_CURRENCY, KEY_SHOES_ID, KEY_SPEED_ID, KEY_LUCK_ID,
-                        KEY_CHARACTER_EXP, KEY_REQUIRED_EXP, KEY_QUESTS_COMPLETED, KEY_ACTIVEQUEST
+                        KEY_CHARACTER_EXP, KEY_REQUIRED_EXP, KEY_ACTIVEQUEST, KEY_QUESTS_COMPLETED, KEY_NUM_REWARDS
                 },
                 KEY_ID + "=?",
                 new String[]{
@@ -665,8 +670,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 character = new Character(
                         cursor.getInt(0), cursor.getString(1), cursor.getShort(2), cursor.getInt(3),
                         inv, cursor.getInt(4), cursor.getInt(5), cursor.getShort(6),
-                        cursor.getShort(7), cursor.getLong(8), cursor.getLong(9), cursor.getInt(11),
-                        cursor.getInt(10)
+                        cursor.getShort(7), cursor.getLong(8), cursor.getLong(9), cursor.getInt(10),
+                        cursor.getInt(11), cursor.getShort(12)
                 );
                 cursor.close();
                 return character;
@@ -674,8 +679,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 character = new Character(
                         cursor.getInt(0), cursor.getString(1), cursor.getShort(2), cursor.getInt(3),
                         getInventoryByID(cursor.getInt(3)), cursor.getInt(4), cursor.getInt(5), cursor.getShort(6),
-                        cursor.getShort(7), cursor.getLong(8), cursor.getLong(9), cursor.getInt(11),
-                        cursor.getInt(10)
+                        cursor.getShort(7), cursor.getLong(8), cursor.getLong(9), cursor.getInt(10),
+                        cursor.getInt(11), cursor.getShort(12)
                 );
                 cursor.close();
                 return character;
@@ -703,6 +708,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         values.put(KEY_QUESTS_COMPLETED, character.getQuestsCompleted());
         values.put(KEY_ACTIVEQUEST, character.getCurrentQuestId());
+        values.put(KEY_NUM_REWARDS, character.getNumRewards());
 
         db.update(
                 CHARACTER_TABLE,
@@ -744,7 +750,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 new String[]{
                         KEY_ID, KEY_NAME, KEY_LEVEL, KEY_INVENTORY_ID,
                         KEY_CURRENCY, KEY_SHOES_ID, KEY_SPEED_ID, KEY_LUCK_ID,
-                        KEY_CHARACTER_EXP, KEY_REQUIRED_EXP, KEY_QUESTS_COMPLETED, KEY_ACTIVEQUEST
+                        KEY_CHARACTER_EXP, KEY_REQUIRED_EXP, KEY_ACTIVEQUEST, KEY_QUESTS_COMPLETED, KEY_NUM_REWARDS
                 }, null, null, null, null, KEY_NAME);
 
         cursor.moveToFirst();
@@ -756,14 +762,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         cursor.getInt(0), cursor.getString(1), cursor.getShort(2), cursor.getInt(3),
                         inv, cursor.getInt(4), cursor.getInt(5), cursor.getShort(6),
                         cursor.getShort(7), cursor.getLong(8), cursor.getLong(9), cursor.getInt(10),
-                        cursor.getInt(11)
+                        cursor.getInt(11), cursor.getShort(12)
                 ));
             } else {
                 characters.add(new Character(
                         cursor.getInt(0), cursor.getString(1), cursor.getShort(2), cursor.getInt(3),
                         getInventoryByID(cursor.getInt(3)), cursor.getInt(4), cursor.getInt(5), cursor.getShort(6),
                         cursor.getShort(7), cursor.getLong(8), cursor.getLong(9), cursor.getInt(10),
-                        cursor.getInt(11)
+                        cursor.getInt(11), cursor.getShort(12)
                 ));
             }
             cursor.moveToNext();
