@@ -62,6 +62,14 @@ public class Reward extends DatabaseObject {
 
     @Override
     public String toString() {
-        return getCurrencyReward() + " currency\t" + getExpReward() + " experience";
+        String message = getCurrencyReward() + " currency\n" + getExpReward() + " experience\n";
+
+        message += "Items:\n";
+
+        for (Item i: equipmentRewards) {
+            message += "\t" + i +"\n";
+        }
+
+        return message;
     }
 }

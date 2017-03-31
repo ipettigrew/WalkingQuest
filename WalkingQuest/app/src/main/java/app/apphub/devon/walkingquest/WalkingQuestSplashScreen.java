@@ -55,6 +55,7 @@ public class WalkingQuestSplashScreen extends AppCompatActivity {
         //if the charcter is null add the things we need to play a demo
         if(character == null){
             character = new Character("Player_1");
+            character.setNumRewards((short)3);
             databaseHandler.addCharacter(character);
             StepCounterSensorRegister.characterAltered();
 

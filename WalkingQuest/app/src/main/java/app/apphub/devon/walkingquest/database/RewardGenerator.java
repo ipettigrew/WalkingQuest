@@ -45,7 +45,6 @@ public class RewardGenerator {
          *  NOTE    -   Reward List Details
          *                  The list is persisted as a short in the Character class
          *                      short numRewards
-         *                      TODO: Refactor the database to include this value
          *
          *  NOTE
          *      When quest reward is collected, set Character's currentQuestId to 0
