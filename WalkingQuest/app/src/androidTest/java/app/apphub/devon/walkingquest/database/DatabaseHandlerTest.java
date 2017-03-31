@@ -58,7 +58,7 @@ public class DatabaseHandlerTest {
         DatabaseHandler handler = getHandler();
 
         quest1 = handler.addQuest(quest2);
-        assertTrue(quest1.getName().equals(quest2.getName()));
+        assertTrue(quest1.getId()>0);
         handler.deleteQuest(quest1);
         handler.close();
     }
@@ -73,7 +73,7 @@ public class DatabaseHandlerTest {
 
         quest1 = handler.addQuest(quest1);
         quest2 = handler.addQuest(quest2);
-        ArrayList<Quest> quests = handler.getQuestByRequirement(-1,-1);
+        ArrayList<Quest> quests = handler.getQuestByRequirement(-1,2);
         assertTrue("Quests found: "+ quests.size(), quests.size()>0);
         handler.deleteQuest(quest1);
         handler.deleteQuest(quest2);
@@ -375,7 +375,7 @@ public class DatabaseHandlerTest {
         Item item1 = new Item("test item", 300, inv1.getId());
         item1 = handler.addItem(item1);
 
-        assertTrue("ERROR: Item not added.",item1.getId()>-1);
+        assertTrue("ERROR: Item not added. "+item1.getId(),item1.getId()>-1);
         handler.deleteCharacter(char1);
         handler.deleteInventory(inv1);
         handler.deleteItem(item1);

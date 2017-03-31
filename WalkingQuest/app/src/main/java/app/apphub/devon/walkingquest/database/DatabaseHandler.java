@@ -390,7 +390,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Quest> quests = new ArrayList<Quest>();
         Cursor cursor = null;
-        if (diff < 0) diff = Integer.MAX_VALUE;
+        //if (diff < 0) diff = Integer.MAX_VALUE;
 
         if (level < 0) level = Integer.MAX_VALUE;
         cursor = db.query(QUEST_TABLE,
@@ -435,16 +435,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         long id = db.insert(ITEM_TABLE, null, values);
         db.close();
 
-        db = this.getReadableDatabase();
-        Cursor cursor = db.query(ITEM_TABLE, new String[]{KEY_ID}, null, null, null, null, "id DESC", "1");
-        if (cursor == null) {
-            return null;
-        }
-
-        cursor.moveToFirst();
-        item.setId(cursor.getInt(0));
-        cursor.close();
-        db.close();
+        item.setId((int)id);
 
         return item;
     }
@@ -533,8 +524,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
 
         inventory.setId((int) id);
-        //cursor.close();
-        db.close();
 
         return inventory;
     }

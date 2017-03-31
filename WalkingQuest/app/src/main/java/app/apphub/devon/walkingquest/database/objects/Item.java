@@ -61,6 +61,13 @@ public class Item extends DatabaseObject<Item> {
         }
     }
 
+    public Item(String name, int value, int invID) {
+        this.name = name;
+        this.value = value;
+        this.invID = invID;
+        attributes = new JSONObject();
+    }
+
     /**
      * Accessor method for name.
      *

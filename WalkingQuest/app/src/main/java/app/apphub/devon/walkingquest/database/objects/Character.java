@@ -51,7 +51,7 @@ public class Character extends DatabaseObject<Character>{
     }
 
     public Character(String name) {
-        super();
+        //super();
 
         this.name = name;
         this.level = 1;
