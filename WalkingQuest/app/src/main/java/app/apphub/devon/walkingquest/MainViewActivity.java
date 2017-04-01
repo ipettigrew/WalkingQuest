@@ -2,6 +2,7 @@ package app.apphub.devon.walkingquest;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ListView;
 
 public class MainViewActivity extends AppCompatActivity {
 
@@ -9,5 +10,10 @@ public class MainViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_view);
+
+        //ListView listView = (ListView) findViewById(R.id.equipment_list);
+        
     }
+
+
 }
