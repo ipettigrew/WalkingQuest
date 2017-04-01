@@ -17,4 +17,10 @@
     <string name="title_activity_quest_main_menu">QuestMainMenu</string>
     <string name="title_activity_quest_main_meny">QuestMainMeny</string>
     <string name="title_activity_quest_details">QuestDetailsActivity</string>
+    <string-array name="test_array">
+        <item>Shuttle Badminton</item>
+        <item>Tennis</item>
+        <item>FootBall</item>
+    </string-array>
 </resources>
+
