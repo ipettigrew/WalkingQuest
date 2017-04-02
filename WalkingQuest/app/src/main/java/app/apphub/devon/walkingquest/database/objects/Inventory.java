@@ -21,6 +21,7 @@ public class Inventory extends DatabaseObject<Inventory> {
 
     public Inventory(int characterId){
         this.characterId = characterId;
+        inventory = new ArrayList<>();
     }
 
     public int getCharacterId() {
@@ -36,6 +37,8 @@ public class Inventory extends DatabaseObject<Inventory> {
     }
 
     public void addItem(Item item){
+        //setting the inventory id to the item before adding it
+        item.setInvID(id);
         inventory.add(item);
     }
 

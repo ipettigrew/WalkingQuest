@@ -55,7 +55,8 @@ public class QuestActualizer {
 
     public void setCurrentQuest(int i) {
         if (currentQuest != null) {
-            killQuest();
+            //killQuest();
+            currentQuest = null;
         }
         if (i != -1) {
             currentQuest = databaseHandler.getQuestByID(i);

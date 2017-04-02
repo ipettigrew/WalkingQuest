@@ -26,7 +26,9 @@ public class Character extends DatabaseObject<Character>{
     private long requiredExpForNextLevel; // Remaining EXP the character needs to level up.
     private int currentQuestId;           // The ID denoting the quest the current quest.
     private int questsCompleted;          // The number of quests the character has completed.
-    private short numRewards;             //TODO: add this change to database handler
+    private String rewardIds;             //TODO: change this to a varchar in data base handler // A CSV of questIDs of completed quests for the purpose of collecting quest rewards
+
+    public static final int GAME_WORLD = 1, MAIN_PLAYER = 2;
 
     public Character(String name, int invId, int shoesId) {
         super();
@@ -35,6 +37,7 @@ public class Character extends DatabaseObject<Character>{
         this.level = 1;
 
         this.invId = invId;
+        this.inv = null;
         this.currency = 0;
 
         this.exp = 0;
@@ -49,7 +52,7 @@ public class Character extends DatabaseObject<Character>{
          *  Set the current quest ID to be nothing
          *  */
         this.currentQuestId = -1;
-        this.numRewards = 0;
+        this.rewardIds = "";
     }
 
     public Character(String name) {
@@ -59,6 +62,7 @@ public class Character extends DatabaseObject<Character>{
         this.level = 1;
 
         this.invId = -1;
+        this.inv = null;
         this.currency = 0;
 
         this.exp = 0;
@@ -73,12 +77,12 @@ public class Character extends DatabaseObject<Character>{
          *  Set the current quest ID to be nothing
          *  */
         this.currentQuestId = -1;
-        this.numRewards = 0;
+        this.rewardIds = "";
     }
 
     public Character(int id, String name, short level, int invId, Inventory inv, long currency,
                      int shoesId, short baseSpeed, short baseLuck, long exp,
-                     long requiredExpForNextLevel, int currentQuestId, int questsCompleted, short numRewards
+                     long requiredExpForNextLevel, int currentQuestId, int questsCompleted, String rewardIds
     ) {
         super(id);
 
@@ -97,7 +101,7 @@ public class Character extends DatabaseObject<Character>{
 
         this.currentQuestId = currentQuestId;
         this.questsCompleted = questsCompleted;
-        this.numRewards = numRewards;
+        this.rewardIds = rewardIds;
     }
 
     //TODO: make this actually do something.
@@ -171,8 +175,8 @@ public class Character extends DatabaseObject<Character>{
         return currentQuestId;
     }
 
-    public short getNumRewards(){ return numRewards; }
-    public void setNumRewards(short numRewards){ this.numRewards = numRewards; }
+    public String getRewardIds(){ return rewardIds; }
+    public void setRewardIds(String rewardIds){ this.rewardIds = rewardIds; }
 
     public void addExperience(long exp) {
         this.exp += exp;

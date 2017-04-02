@@ -1,5 +1,8 @@
 package app.apphub.devon.walkingquest.database;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Random;
 
 import app.apphub.devon.walkingquest.database.objects.Character;
@@ -12,20 +15,31 @@ import app.apphub.devon.walkingquest.database.objects.Reward;
  */
 
 public class RewardGenerator {
-    public static Reward generateReward(DatabaseHandler databaseHandler, Quest quest, Character character) {
+
+
+    public static Reward generateReward(DatabaseHandler databaseHandler, Quest quest, Character character) throws JSONException {
+
         long goldReward = generateGold(quest.getDifficulty());
+
         long expReward = generateExp(quest.getDifficulty(), quest.getStepGoal());
-        Item[] itemReward = generateItems(quest.getDifficulty(), character.getLevel());
+
+        Item[] itemReward = generateItems(databaseHandler, quest.getDifficulty(), character.getLevel(),
+                character.getInvId());
 
         return new Reward(goldReward, expReward, itemReward);
     }
 
-    private static Item[] generateItems(int difficulty, short level) {
+    private static Item[] generateItems(DatabaseHandler databaseHandler, int difficulty, short level,
+                                        int charInvId) throws JSONException {
+
         int rand = (int)(Math.random()*3);
         Item[] rewards = new Item[rand];
-        for(int i = 0; i < rand*getLevelModifier(level); i++) {
-            rewards[i] = new Item();
-            rewards[i].setName("Item " + i);
+
+        for(int i = 0; i < rand; i++) {
+            // get an item that exists in the database
+            rewards[i] = databaseHandler.getItemByID(i+1);
+            rewards[i].setInvID(charInvId);
+
         }
         /**
          *  TODO    -   When adding Items to character inventory, make sure to set the invId of each

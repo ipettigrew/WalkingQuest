@@ -70,7 +70,7 @@ public class QuestDetailsActivity extends AppCompatActivity {
         databaseHandler = DatabaseHandler.getInstance(getApplicationContext());
 
         //set the character object
-        character = databaseHandler.getCharacterByID(1);
+        character = databaseHandler.getCharacterByID(Character.MAIN_PLAYER);
 
         //get the current intent
         Intent intent = getIntent();
