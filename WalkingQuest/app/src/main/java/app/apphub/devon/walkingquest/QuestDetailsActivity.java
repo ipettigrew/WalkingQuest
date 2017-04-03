@@ -53,7 +53,7 @@ public class QuestDetailsActivity extends AppCompatActivity {
 
                     //prepare the intent to take the user to the main page
                     //TODO: change this to the correct activity (main menu)
-                    Intent home = new Intent(QuestDetailsActivity.this, QuestMainMenu.class);
+                    Intent home = new Intent(QuestDetailsActivity.this, MainViewActivity.class);
                     startActivity(home);
                 }
             }

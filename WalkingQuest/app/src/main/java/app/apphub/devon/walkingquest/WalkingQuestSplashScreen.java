@@ -32,7 +32,7 @@ public class WalkingQuestSplashScreen extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        startActivity(new Intent(WalkingQuestSplashScreen.this, LoginActivity.class));
+        startActivity(new Intent(WalkingQuestSplashScreen.this, MainViewActivity.class));
     }
 
 
