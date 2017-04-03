@@ -69,4 +69,38 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"/>
 
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rewards_frame"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" >
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rewards_button" />
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/rewards"
+            android:layout_gravity="center"
+            android:elevation="12dp"/>
+
+        <TextView
+            android:layout_width="15dp"
+            android:id="@+id/rewards_button_number"
+            android:text="0"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:elevation="13dp"
+            android:background="@drawable/reward_alert"
+            android:visibility="visible"
+            android:layout_height="15dp"
+            android:layout_gravity="top|end"
+            android:textAlignment="center"/>
+
+    </FrameLayout>
+
 </RelativeLayout>

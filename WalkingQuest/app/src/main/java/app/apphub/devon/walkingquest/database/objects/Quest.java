@@ -78,7 +78,7 @@ public class Quest extends DatabaseObject<Quest> {
      */
     public boolean equals(Quest quest) {
         return  this.id == quest.getId() &&
-                this.name.equals(name) &&
+                this.name.equals(quest.getName()) &&
                 this.activeSteps == quest.getActiveSteps() &&
                 this.stepGoal == quest.getStepGoal() &&
                 this.completed == quest.isCompleted() &&

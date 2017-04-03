@@ -18,6 +18,9 @@ public class Item extends DatabaseObject<Item> {
     private String name;           // The name of the item.
     private JSONObject attributes; // The modifiers the item grants when equipped.
 
+    public static final String ITEM_TYPE = "item_type", ITEM_TYPE_SHOES = "shoes", ITEM_TYPE_WALKMAN = "walkman", ITEM_TYPE_OUTFIT = "outfit",
+        ATTR_LUCK = "luck", ATTR_SPEED = "speed", ATTR_STRENGTH = "strength", ATTR_DEFENCE = "defence";
+
     /**
      * Default constructor.
      */
@@ -59,6 +62,13 @@ public class Item extends DatabaseObject<Item> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public Item(String name, int value, int invID) {
+        this.name = name;
+        this.value = value;
+        this.invID = invID;
+        attributes = new JSONObject();
     }
 
     /**
@@ -172,4 +182,48 @@ public class Item extends DatabaseObject<Item> {
 
         return result;
     }
+
+    public String toString(){
+        String returnString = "";
+
+        returnString += name.toUpperCase()+"\n";
+        returnString += "$"+value+"\n";
+
+        // parse the json object for all of it's attributes
+        try {
+            if(attributes.getString(ITEM_TYPE).equals(ITEM_TYPE_SHOES)){
+
+                returnString += "SPEED " + attributes.getInt(ATTR_SPEED) + "\n";
+                returnString += "LUCK " + attributes.getInt(ATTR_LUCK);
+
+            }else if(attributes.getString(ITEM_TYPE).equals(ITEM_TYPE_WALKMAN)){
+
+                returnString += "SPEED " + attributes.getInt(ATTR_SPEED) + "\n";
+                returnString += "STRENGTH " + attributes.getInt(ATTR_STRENGTH) + "\n";
+                returnString += "DEFENCE " + attributes.getInt(ATTR_DEFENCE) + "\n";
+                returnString += "LUCK " + attributes.getInt(ATTR_LUCK);
+
+            }else if(attributes.getString(ITEM_TYPE).equals(ITEM_TYPE_OUTFIT)){
+
+                returnString += "SPEED " + attributes.getInt(ATTR_SPEED) + "\n";
+                returnString += "STRENGTH " + attributes.getInt(ATTR_STRENGTH) + "\n";
+                returnString += "DEFENCE " + attributes.getInt(ATTR_DEFENCE) + "\n";
+                returnString += "LUCK " + attributes.getInt(ATTR_LUCK);
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return returnString;
+    }
+
+    public void setExplicitEquiptment(int strength, int defence, int speed, int luck) throws JSONException {
+        attributes.put(ATTR_STRENGTH, strength);
+        attributes.put(ATTR_DEFENCE, defence);
+        attributes.put(ATTR_SPEED, speed);
+        attributes.put(ATTR_LUCK, luck);
+    }
+
 }

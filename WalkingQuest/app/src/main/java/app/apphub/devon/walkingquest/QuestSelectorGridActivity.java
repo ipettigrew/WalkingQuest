@@ -73,7 +73,7 @@ public class QuestSelectorGridActivity extends AppCompatActivity {
         currentlySelectedQuest = (TextView) findViewById(R.id.currentQuest);
 
         databaseHandler = DatabaseHandler.getInstance(getApplicationContext());
-        character = databaseHandler.getCharacterByID(1);
+        character = databaseHandler.getCharacterByID(Character.MAIN_PLAYER);
         Quest quest = databaseHandler.getQuestByID(character.getCurrentQuestId());
         difficulty = getIntent().getIntExtra(Quest.QUEST_DIFFICULTY, 1);
 

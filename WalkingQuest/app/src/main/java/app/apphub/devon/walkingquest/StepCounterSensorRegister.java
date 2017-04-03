@@ -20,6 +20,7 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import app.apphub.devon.walkingquest.Helper.StringUtils;
 import app.apphub.devon.walkingquest.database.DatabaseHandler;
 import app.apphub.devon.walkingquest.database.objects.Character;
 import app.apphub.devon.walkingquest.database.objects.Quest;
@@ -162,8 +163,9 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
         super.onDestroy();
 
         saveSteps();
-
+        notifyFromService();
         unregister();
+
         Log.i("SERVICE", "service destroyed steps save");
     }
 
@@ -172,6 +174,8 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
         super.onTaskRemoved(rootIntent);
 
         saveSteps();
+        notifyFromService();
+        unregister();
 
         Log.i("SERVICE", "task removed steps save");
     }
@@ -181,6 +185,8 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
         super.onLowMemory();
         saveSteps();
         Log.i("SERVICE", "low memory steps save");
+        notifyFromService();
+        unregister();
     }
 
     @Nullable
@@ -303,7 +309,7 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
 
     private void initCharacter(){
         databaseHandler = DatabaseHandler.getInstance(getBaseContext());
-        character = databaseHandler.getCharacterByID(1);
+        character = databaseHandler.getCharacterByID(Character.MAIN_PLAYER);
 
         int questID = character.getCurrentQuestId();
         quest = databaseHandler.getQuestByID(questID);
@@ -344,6 +350,7 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
         if(quest != null){
             quest.setCompleted(true);
             quest.setActiveSteps(activeSteps);
+            character.setRewardIds(StringUtils.addCompletedQuestToCharacter(character.getRewardIds(), quest.getId()));
             character.setCurrentQuestId(0);
             databaseHandler.updateQuest(quest);
             databaseHandler.updateCharacter(character);
@@ -376,7 +383,7 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
     public static void characterAltered(){
 
         if(databaseHandler != null) {
-            character = databaseHandler.getCharacterByID(1);
+            character = databaseHandler.getCharacterByID(Character.MAIN_PLAYER);
 
             quest = databaseHandler.getQuestByID(character.getCurrentQuestId());
 
@@ -385,9 +392,25 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
                 stepGoal = quest.getStepGoal();
                 Log.i("SERVICE", "quest changed and selected " + quest.getId());
             }
-
         }
+    }
 
+    /*
+    * Notify the user if the service closes
+    **/
+
+    private void notifyFromService(){
+        //build and summon the notification
+        Notification repliedNotification =
+                new Notification.Builder(getBaseContext())
+                        .setSmallIcon(R.drawable.temp_image)
+                        .setContentTitle("SERVICE")
+                        .setContentText("SERVICE FAILED TO CONTINUE TO RUN")
+                        .build();
+
+        //initalizes the notification manager and posts the notification to the user
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getBaseContext());
+        notificationManager.notify(0, repliedNotification);
     }
 }
 
