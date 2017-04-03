@@ -10,7 +10,7 @@ import app.apphub.devon.walkingquest.database.objects.Character;
 import app.apphub.devon.walkingquest.database.objects.Inventory;
 import app.apphub.devon.walkingquest.database.objects.Item;
 
-public class MainViewActivity extends AppCompatActivity {
+public class MainViewActivity extends CustomActivity {
 
     private DatabaseHandler databaseHandler;
     private Inventory inventory;

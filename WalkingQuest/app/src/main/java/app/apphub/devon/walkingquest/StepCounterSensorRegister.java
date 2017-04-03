@@ -163,8 +163,9 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
         super.onDestroy();
 
         saveSteps();
-
+        notifyFromService();
         unregister();
+
         Log.i("SERVICE", "service destroyed steps save");
     }
 
@@ -173,6 +174,8 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
         super.onTaskRemoved(rootIntent);
 
         saveSteps();
+        notifyFromService();
+        unregister();
 
         Log.i("SERVICE", "task removed steps save");
     }
@@ -182,6 +185,8 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
         super.onLowMemory();
         saveSteps();
         Log.i("SERVICE", "low memory steps save");
+        notifyFromService();
+        unregister();
     }
 
     @Nullable
@@ -387,9 +392,25 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
                 stepGoal = quest.getStepGoal();
                 Log.i("SERVICE", "quest changed and selected " + quest.getId());
             }
-
         }
+    }
 
+    /*
+    * Notify the user if the service closes
+    **/
+
+    private void notifyFromService(){
+        //build and summon the notification
+        Notification repliedNotification =
+                new Notification.Builder(getBaseContext())
+                        .setSmallIcon(R.drawable.temp_image)
+                        .setContentTitle("SERVICE")
+                        .setContentText("SERVICE FAILED TO CONTINUE TO RUN")
+                        .build();
+
+        //initalizes the notification manager and posts the notification to the user
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getBaseContext());
+        notificationManager.notify(0, repliedNotification);
     }
 }
 

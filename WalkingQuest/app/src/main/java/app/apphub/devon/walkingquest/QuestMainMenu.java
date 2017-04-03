@@ -54,8 +54,6 @@ public class QuestMainMenu extends CustomActivity {
         medium = (Button)findViewById(R.id.intermediate_quests_button);
         hard = (Button)findViewById(R.id.hard_quests_button);
 
-        //rewardsButton = (FloatingActionButton) findViewById(R.id.rewards_button);
-
         /** TODO:   Make the tutorial, random, and daily quest buttons initialize the relevant quests
          * */
         tutorialQuest = (Button)findViewById(R.id.tutorial_button);
@@ -98,6 +96,7 @@ public class QuestMainMenu extends CustomActivity {
             Intent intent = new Intent(QuestMainMenu.this, QuestSelectorGridActivity.class);
             intent.putExtra(Quest.QUEST_DIFFICULTY, diff);
             this.startActivity(intent);
+
         }else{
             Toast.makeText(getApplicationContext(), TOO_MANY_QUESTS, Toast.LENGTH_LONG).show();
         }
