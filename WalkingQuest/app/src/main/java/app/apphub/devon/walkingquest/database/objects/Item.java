@@ -174,7 +174,7 @@ public class Item extends DatabaseObject<Item> {
     public boolean equals(Item item) {
         boolean result;
 
-        if(this.name.equals(item.getName()) && this.value == item.getValue() && this.invID == item.getInvID()) {
+        if(this.name.equals(item.getName()) && this.value == item.getValue() && this.invID == item.getInvID() && id == item.id) {
             result = true;
         } else {
             result = false;

@@ -65,7 +65,7 @@ public class WalkingQuestSplashScreen extends AppCompatActivity {
 
             // create the character
             character = new Character("Player_1");
-            character.setRewardIds("1,2");
+            character.setRewardIds("1");
             character = databaseHandler.addCharacter(character);
             character = databaseHandler.getCharacterByID(Character.MAIN_PLAYER);
 
@@ -99,7 +99,7 @@ public class WalkingQuestSplashScreen extends AppCompatActivity {
             Quest questEasy_1 = new Quest("Flour delivery", 50, 1);
             questEasy_1.setCompleted(true);
             Quest questEasy_2 = new Quest("Escort: Grandma Across the Road", 20, 1);
-            questEasy_2.setCompleted(true);
+            //questEasy_2.setCompleted(true);
             Quest questEasy_3 = new Quest("Escort: Younger Sister to School", 50, 1);
             //questEasy_3.setCompleted(true);
 

@@ -52,7 +52,7 @@ public class StringUtils {
     **/
 
     public static String addCompletedQuestToCharacter(String csv, int newlyCompletedQuest){
-        if(getNumberOfQuestRewards(csv) != 0) {
+        if(!csv.equals("")) {
             csv += "," + newlyCompletedQuest;
         }else{
             csv += newlyCompletedQuest;

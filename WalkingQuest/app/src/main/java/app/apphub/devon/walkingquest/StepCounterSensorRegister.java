@@ -400,7 +400,8 @@ public class StepCounterSensorRegister extends Service implements SensorEventLis
     **/
 
     private void notifyFromService(){
-        //build and summon the notification
+
+        // build and summon the notification
         Notification repliedNotification =
                 new Notification.Builder(getBaseContext())
                         .setSmallIcon(R.drawable.temp_image)

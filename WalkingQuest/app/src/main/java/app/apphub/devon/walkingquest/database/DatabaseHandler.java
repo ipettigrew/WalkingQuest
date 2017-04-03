@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import app.apphub.devon.walkingquest.database.objects.*;
 
@@ -602,11 +603,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.update(INV_TABLE, values, KEY_ID + "=?", new String[]{String.valueOf(inv.getId())});
         db.close();
 
+        /*
         // update the items in the inventory
         ArrayList<Item> items = inv.getInventory();
         if(items.size() > 0)
             for(int i = 0; i < items.size(); i++)
                 addItem(items.get(i));
+        */
     }
 
     //// TODO: 3/28/2017 create a method that updates all items in inventory? 
@@ -725,6 +728,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void updateCharacter(Character character) {
+
+
+        // get the character that is currently in the database for comparing the current with the new inventory
+        Character _character = getCharacterByID(character.getId());
+
+
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -756,10 +765,66 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         db.close();
 
-        //update the characters inventory if it exists
-        Inventory inventory = character.getInv();
-        if(inventory != null)
-            updateInventory(inventory);
+
+        // update the characters inventory if it exists
+        Inventory inventory = character.getInv(), _inventory = _character.getInv();
+
+        if(inventory != null) {
+            if (inventory.getInventory().size() != _inventory.getInventory().size()) {
+
+                // inventory size has increased so we much add items
+                if(inventory.getInventory().size() > _inventory.getInventory().size()){
+
+                    // todo make this more efficient
+                    // iterated through the new inventory and add items that don't already exist
+                    for(int i = 0; i < inventory.getInventory().size(); i++){
+                        for(int j = 0; j < _inventory.getInventory().size(); j++){
+                            if(_inventory.getInventory().get(j).equals(inventory.getInventory().get(i))){
+                                inventory.getInventory().remove(i);
+                                if(i!=0) {
+                                    i--;
+                                }else{
+                                    i = 0;
+                                }
+                            }
+                        }
+                    }
+
+                    // add whatever doesn't exist in the old inventory
+                    for(int i = 0; i < inventory.getInventory().size(); i++){
+                        Log.i("DBHANDELER", "ITEM ADDED");
+                        addItem(inventory.getInventory().get(i));
+                    }
+
+                }else{ // inventory is smaller remove items that no longer exist
+
+                    // todo make this more efficient
+                    // iterated through the new inventory and add items that don't already exist
+                    for(int i = 0; i < inventory.getInventory().size(); i++){
+                        for(int j = 0; j < _inventory.getInventory().size(); j++){
+                            if(_inventory.getInventory().get(j).equals(inventory.getInventory().get(i))){
+                                _inventory.getInventory().remove(j);
+                                if(j!=0) {
+                                    j--;
+                                }else{
+                                    j = 0;
+                                }
+                            }
+                        }
+                    }
+
+                    // add whatever doesn't exist in the old inventory
+                    for(int i = 0; i < _inventory.getInventory().size(); i++){
+                        Log.i("DBHANDLER", "DELETED ITEM");
+                        deleteItem(_inventory.getInventory().get(i));
+                    }
+
+                }
+
+
+                updateInventory(inventory);
+            }
+        }
 
     }
 
