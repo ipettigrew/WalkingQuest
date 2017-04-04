@@ -4,14 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import app.apphub.devon.walkingquest.GridAdapters.QuestSelectorGridAdapter;
 import app.apphub.devon.walkingquest.database.DatabaseHandler;
@@ -42,7 +40,7 @@ public class QuestSelectorGridActivity extends AppCompatActivity {
 
         init();
 
-        questGrid = (GridView) this.findViewById(R.id.quest_selector_grid_view);
+        questGrid = (GridView) this.findViewById(R.id.quest_selector_activity_quests_grid_view);
 
         final QuestSelectorGridAdapter questAdapter = new QuestSelectorGridAdapter(QuestSelectorGridActivity.this, quests);
         questGrid.setAdapter(questAdapter);
@@ -70,7 +68,7 @@ public class QuestSelectorGridActivity extends AppCompatActivity {
     **/
     private void init(){
 
-        currentlySelectedQuest = (TextView) findViewById(R.id.currentQuest);
+        currentlySelectedQuest = (TextView) findViewById(R.id.quest_selector_activity_current_quest_text);
 
         databaseHandler = DatabaseHandler.getInstance(getApplicationContext());
         character = databaseHandler.getCharacterByID(Character.MAIN_PLAYER);

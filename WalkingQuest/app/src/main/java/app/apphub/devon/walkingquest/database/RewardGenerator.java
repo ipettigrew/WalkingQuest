@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import java.util.Random;
 
 import app.apphub.devon.walkingquest.database.objects.Character;
+import app.apphub.devon.walkingquest.database.objects.Inventory;
 import app.apphub.devon.walkingquest.database.objects.Item;
 import app.apphub.devon.walkingquest.database.objects.Quest;
 import app.apphub.devon.walkingquest.database.objects.Reward;
@@ -35,9 +36,11 @@ public class RewardGenerator {
         int rand = (int)(Math.random()*3);
         Item[] rewards = new Item[rand];
 
+        Inventory worldItems = databaseHandler.getCharacterByID(Character.GAME_WORLD).getInv();
+
         for(int i = 0; i < rand; i++) {
             // get an item that exists in the database
-            rewards[i] = databaseHandler.getItemByID(i+1);
+            rewards[i] = worldItems.getInventory().get(i+1);
             rewards[i].setInvID(charInvId);
 
         }

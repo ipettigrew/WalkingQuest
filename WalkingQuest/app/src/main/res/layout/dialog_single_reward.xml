@@ -9,18 +9,19 @@
 
 
     <TextView
-        android:id="@+id/reward_text_single"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:id="@+id/dialog_single_reward_summary_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp" />
 
     <Button
-        android:id="@+id/dialog_button_ok_single_button"
-        android:layout_width="100px"
+        android:id="@+id/dialog_single_reward_confirm_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=" Ok "
         android:layout_marginTop="5dp"
         android:layout_marginRight="5dp"
-        android:layout_below="@+id/reward_text_single"
-        />
+        android:layout_below="@+id/dialog_single_reward_summary_text"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

@@ -41,6 +41,7 @@ public class MainViewActivity extends CustomActivity {
     }
 
     public void populateCharacter() {
+
         TextView characterName = (TextView) findViewById(R.id.character_name);
         TextView characterLevel = (TextView) findViewById(R.id.character_level);
         ProgressBar characterProgressBar = (ProgressBar) findViewById(R.id.mainview_activity_level_progress_bar);
@@ -53,18 +54,25 @@ public class MainViewActivity extends CustomActivity {
     }
 
     public void populateEquipment() {
-        ArrayList<Item> invItems = databaseHandler.getItemsByInventoryId(character.getInv().getId());
+
+        ArrayList<Item> invItems = new ArrayList<>(); //databaseHandler.getItemsByInventoryId(character.getInv().getId());
+
+        // add the items that the character has equip
+        invItems.add(databaseHandler.getItemByID(character.getShoesId()));
+        // get the other item types that will be added to the charcter
+
         ArrayList<String> invStrings = new ArrayList<String>();
         int length = invItems.size();
+
         for(int i = 0; i < length; i++){
-            invStrings.add(invItems.get(i).getName());
+            invStrings.add(invItems.get(i).toString());
         }
         //frees memory used by invItems.
         invItems = null;
 
         ListView listView = (ListView) findViewById(R.id.equipment_list);
-        ArrayAdapter<Item> adapter =
-                new ArrayAdapter<Item>(this, android.R.layout.simple_list_item_1, databaseHandler.getItemsByInventoryId(character.getInv().getId()));
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, invStrings);
         listView.setAdapter(adapter);
 
         LinearLayout equipment = (LinearLayout) findViewById(R.id.mainview_activity_item_details_linear_layout);
@@ -107,9 +115,9 @@ public class MainViewActivity extends CustomActivity {
     }
     @Override
     public void onResume() {
-        Log.i("BACK BUTTON PRESS","ON RESUME WAS CALLED");
         super.onResume();
         character = databaseHandler.getCharacterByID(Character.MAIN_PLAYER);
+        Log.i("BACK BUTTON PRESS","ON RESUME WAS CALLED " + character.getName() + " " + character);
         this.populateCharacter();
         this.populateQuest();
         this.populateEquipment();

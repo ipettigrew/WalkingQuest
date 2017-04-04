@@ -21,6 +21,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="38dp"
         android:id="@+id/linearLayout">
+
+        <!--
+
         <Button
             android:text="T"
             android:id="@+id/tutorial_button"
@@ -36,6 +39,9 @@
             android:id="@+id/daily_quest_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+        -->
+
     </LinearLayout>
 
     <LinearLayout
