@@ -4,29 +4,29 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     android:layout_marginBottom="5dp"
-    android:layout_marginRight="5dp"
-    android:layout_marginLeft="10dp">
+    android:layout_marginEnd="5dp"
+    android:layout_marginStart="10dp"
+    android:isScrollContainer="true" >
 
-    <ScrollView
+
+    <ListView
+        android:id="@+id/dialog_multi_reward_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/reward_scroll_view">
-
-        <ListView
-            android:id="@+id/reward_text_multi"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#FFF" />
-    </ScrollView>
+        android:layout_marginBottom="45dp"
+        android:textColor="#FFF" />
 
     <Button
-        android:id="@+id/dialog_button_ok_multi_button"
+        android:id="@+id/dialog_mulit_confirm_button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:text=" Ok "
         android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_below="@+id/reward_scroll_view"
+        android:layout_marginEnd="5dp"
+        android:layout_alignParentBottom="true"
+
         android:layout_centerHorizontal="true" />
+
+
 
 </RelativeLayout>

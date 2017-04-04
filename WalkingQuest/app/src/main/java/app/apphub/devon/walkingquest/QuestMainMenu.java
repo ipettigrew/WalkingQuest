@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -16,13 +15,10 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 
-import java.util.ArrayList;
-
 import app.apphub.devon.walkingquest.Helper.StringUtils;
 import app.apphub.devon.walkingquest.database.DatabaseHandler;
 import app.apphub.devon.walkingquest.database.RewardGenerator;
 import app.apphub.devon.walkingquest.database.objects.Character;
-import app.apphub.devon.walkingquest.database.objects.Item;
 import app.apphub.devon.walkingquest.database.objects.Quest;
 import app.apphub.devon.walkingquest.database.objects.Reward;
 
@@ -55,12 +51,12 @@ public class QuestMainMenu extends CustomActivity {
         hard = (Button)findViewById(R.id.hard_quests_button);
 
         /** TODO:   Make the tutorial, random, and daily quest buttons initialize the relevant quests
-         * */
+
         tutorialQuest = (Button)findViewById(R.id.tutorial_button);
         randomQuest = (Button)findViewById(R.id.random_quest_button);
         dailyQuest = (Button)findViewById(R.id.daily_quest_button);
 
-        /** TODO: Make Username and Character Name clickable and link to appropriate menus
+         TODO: Make Username and Character Name clickable and link to appropriate menus
          * */
         easy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,10 +188,10 @@ public class QuestMainMenu extends CustomActivity {
         dialog.setTitle("Collect your reward");
         dialog.setContentView(R.layout.dialog_single_reward);
 
-        TextView rewardSummary = (TextView) dialog.findViewById(R.id.reward_text_single);
+        TextView rewardSummary = (TextView) dialog.findViewById(R.id.dialog_single_reward_summary_text);
         rewardSummary.setText(rewards[0].toString());
 
-        Button confirmButton = (Button) dialog.findViewById(R.id.dialog_button_ok_single_button);
+        Button confirmButton = (Button) dialog.findViewById(R.id.dialog_single_reward_confirm_button);
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,10 +236,10 @@ public class QuestMainMenu extends CustomActivity {
 
         // add the toStrings of each reward to an array adapter for being displayed
         ArrayAdapter<String> rewardAdapter = new ArrayAdapter<String>(QuestMainMenu.this, R.layout.generic_list_cell, R.id.generic_list_cell_text, rewardsArray);
-        ListView listView = (ListView) dialog.findViewById(R.id.reward_text_multi);
+        ListView listView = (ListView) dialog.findViewById(R.id.dialog_multi_reward_list);
         listView.setAdapter(rewardAdapter);
 
-        Button confirmButton = (Button) dialog.findViewById(R.id.dialog_button_ok_multi_button);
+        Button confirmButton = (Button) dialog.findViewById(R.id.dialog_mulit_confirm_button);
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override

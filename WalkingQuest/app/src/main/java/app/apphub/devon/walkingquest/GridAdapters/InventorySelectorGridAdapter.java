@@ -53,6 +53,7 @@ public class InventorySelectorGridAdapter extends BaseAdapter {
 
         TextView tv = (TextView) view.findViewById(R.id.grid_item);
         tv.setText(items.get(position).toString());
+        tv.setTextAlignment(TextView.TEXT_ALIGNMENT_TEXT_START);
 
         return view;
 

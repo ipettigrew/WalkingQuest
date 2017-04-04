@@ -69,12 +69,33 @@ public class WalkingQuestSplashScreen extends AppCompatActivity {
 
             // create the character
             character = new Character("Player_1");
-            character.setRewardIds("1,2");
+            character.setRewardIds("1,2,3,4,5,6,7,8,9,10");
             character = databaseHandler.addCharacter(character);
+
+            // charcter has no inventory object until the character is returned form the database object
             character = databaseHandler.getCharacterByID(Character.MAIN_PLAYER);
 
+            // add the shoe item to the character
+            Item shoe = new Item();
+            shoe.setName("Smelly Ol' Shoes");
+            shoe.setValue(5);
+            shoe.defineEquipment(Item.ITEM_TYPE_SHOES, 0, 0, 0, 1);
 
-            databaseHandler.getItemsByInventoryId(character.getInvId());
+            // add the item to the inventory
+            character.addItemToInventory(shoe);
+            // add the item to the database to get the item's id
+            //shoe = databaseHandler.addItem(shoe);
+            // update the inventory
+            databaseHandler.updateInventory(character.getInv());
+            // set the characters shoe id to the id of the new item
+            character.setShoesId(1);
+
+            // update the character
+            databaseHandler.updateCharacter(character);
+            // get the newly updated character
+            character = databaseHandler.getCharacterByID(Character.MAIN_PLAYER);
+
+            //databaseHandler.getItemsByInventoryId(character.getInvId());
 
 
             // create some items to give the user
@@ -91,13 +112,14 @@ public class WalkingQuestSplashScreen extends AppCompatActivity {
                 item.setValue(12);
                 item.defineEquipment(Item.ITEM_TYPE_SHOES, (int)Math.random()*5, (int)Math.random()*5, (int)Math.random()*5, (int)Math.random()*5);
                 item.setInvID(gameWorld.getInvId());
+                gameWorld.addItemToInventory(item);
                 //item.setAttributes(attr);
-                databaseHandler.addItem(item);
+                //databaseHandler.addItem(item);
             }
 
-            Log.i("SPLASHSCREEN", character.getInv() +"");
+            databaseHandler.updateCharacter(gameWorld);
 
-            databaseHandler.updateCharacter(character);
+            Log.i("SPLASHSCREEN", character.getInv() +"");
 
             StepCounterSensorRegister.characterAltered();
 
@@ -106,23 +128,23 @@ public class WalkingQuestSplashScreen extends AppCompatActivity {
             Quest questEasy_2 = new Quest("Escort: Grandma Across the Road", 20, 1);
             questEasy_2.setCompleted(true);
             Quest questEasy_3 = new Quest("Escort: Younger Sister to School", 50, 1);
-            //questEasy_3.setCompleted(true);
+            questEasy_3.setCompleted(true);
 
             Quest questMed_1 = new Quest("Delivery: Out of State", 3250, 2);
-            //questMed_1.setCompleted(true);
+            questMed_1.setCompleted(true);
             Quest questMed_2 = new Quest("Charity Fun Run", 2750, 2);
-            //questMed_2.setCompleted(true);
+            questMed_2.setCompleted(true);
             Quest questMed_3 = new Quest("Delivery: Medicine for Child", 4200, 2);
-            //questMed_3.setCompleted(true);
+            questMed_3.setCompleted(true);
 
             Quest questHard_1 = new Quest("Slay Pumpkin Monster", 9500, 3);
-            //questHard_1.setCompleted(true);
+            questHard_1.setCompleted(true);
             Quest questHard_2 = new Quest("Treasure: Irish Gold", 12000, 3);
-            //questHard_2.setCompleted(true);
+            questHard_2.setCompleted(true);
             Quest questHard_3 = new Quest("Slay Ice Dragon", 15000, 3);
-            //questHard_3.setCompleted(true);
+            questHard_3.setCompleted(true);
             Quest questHard_4 = new Quest("Slay Ice Dragon: Part 2", 15000, 3);
-            //questHard_4.setCompleted(true);
+            questHard_4.setCompleted(true);
 
             databaseHandler.addQuest(questEasy_1);
             databaseHandler.addQuest(questEasy_2);
