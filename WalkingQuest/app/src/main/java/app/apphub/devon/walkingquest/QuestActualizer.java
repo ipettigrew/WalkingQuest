@@ -22,6 +22,8 @@ public class QuestActualizer {
     Quest currentQuest;
     DatabaseHandler databaseHandler;
 
+    private int difficulty;
+
     /**
      * Takes in character object and the difficulty selected and gets a list of possible quests
      * that a character of that level can accept (level minimum for quests). The difficulty determines the difficulty.
@@ -41,6 +43,9 @@ public class QuestActualizer {
         } else {
             currentQuest = null;
         }
+
+        this.difficulty = difficulty;
+
     }
 
     /**
@@ -50,11 +55,14 @@ public class QuestActualizer {
 
     public void setCurrentQuest(int i) {
         if (currentQuest != null) {
-            killQuest();
+            //killQuest();
+            currentQuest = null;
         }
         if (i != -1) {
             currentQuest = databaseHandler.getQuestByID(i);
             character.setCurrentQuestId(currentQuest.getId());
+            databaseHandler.updateCharacter(character);
+            StepCounterSensorRegister.characterAltered();
         }
     }
 
@@ -72,6 +80,16 @@ public class QuestActualizer {
     }
 
     public ArrayList<Quest> getQuests() {
+        quests = databaseHandler.getQuestByRequirement(character.getLevel(), difficulty);
+
+        //return only quests that are not finished
+        for(int i = 0; i < quests.size(); i++){
+            if(quests.get(i).isCompleted()){
+                quests.remove(i);
+                //because the list gets shorter the indices change, i needs to be adjusted for every quest removed
+                i--;
+            }
+        }
         return quests;
     }
 

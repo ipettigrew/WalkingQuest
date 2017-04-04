@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginLeft="10dp">
+
+
+    <TextView
+        android:id="@+id/dialog_single_reward_summary_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp" />
+
+    <Button
+        android:id="@+id/dialog_single_reward_confirm_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" Ok "
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_below="@+id/dialog_single_reward_summary_text"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

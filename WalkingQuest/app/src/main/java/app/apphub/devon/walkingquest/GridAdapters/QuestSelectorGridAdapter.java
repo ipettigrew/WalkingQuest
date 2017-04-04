@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 /** TODO:   Figure out what the fuck is wrong with this R bullshit
  * */
+import java.util.ArrayList;
+
 import app.apphub.devon.walkingquest.R;
 import app.apphub.devon.walkingquest.database.objects.Quest;
 
@@ -18,10 +20,10 @@ import app.apphub.devon.walkingquest.database.objects.Quest;
 
 public class QuestSelectorGridAdapter extends BaseAdapter {
     private Context context;
-    private Quest[] quests;    /*  TODO:   change this into an array of Quest objects (or some other acceptable object)*/
+    private ArrayList<Quest> quests;    /*  TODO:   change this into an arraylist of Quest objects (or some other acceptable object)*/
     LayoutInflater inflater;
 
-    public QuestSelectorGridAdapter(Context context, Quest[] quests) {
+    public QuestSelectorGridAdapter(Context context, ArrayList<Quest> quests) {
         this.context = context;
         this.quests = quests;
         inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -29,12 +31,12 @@ public class QuestSelectorGridAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return quests.length;
+        return quests.size();
     }
 
     @Override
     public Quest getItem(int position) {
-        return quests[position];
+        return quests.get(position);
     }
 
     @Override
@@ -45,16 +47,11 @@ public class QuestSelectorGridAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView == null) {
-            convertView = inflater.inflate(R.layout.quest_selector_grid_cell, null);
+            convertView = inflater.inflate(R.layout.selector_grid_cell, null);
         }
         TextView t = (TextView) convertView.findViewById(R.id.grid_item);
-        t.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        t.setText(quests[position].getQuestHeader());
+        t.setText(quests.get(position).getQuestHeader());
         return convertView;
     }
+
 }

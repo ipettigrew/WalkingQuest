@@ -1,37 +1,43 @@
 package app.apphub.devon.walkingquest.database.objects;
 
 /**
- * Created by Cole DeMan on 3/3/2017.
+ *  Class for the Character database object.
+ *
+ *  @author  Cole DeMan
+ *  @author  Devon Rimmington
+ *  @author  Ian Pettigrew
+ *  @author  Adrian Metzler
+ *  @author  Jonathan McDevitt
+ *  @version 1.9
+ *  @see     app.apphub.devon.walkingquest.database.DatabaseHandler
+ *  @see     app.apphub.devon.walkingquest.database.objects.DatabaseObject
+ *  @since   2017-03-03
  */
-
 public class Character extends DatabaseObject<Character>{
+    private String name;                  // The name of the character.
+    private short level;                  // The current level of the character.
+    private short baseSpeed;              // The character's Speed, without any modifiers.
+    private short baseLuck;               // The character's Luck, without any modifiers.
+    private int invId;                    // TODO: Merge Inventory with Character.
+    private Inventory inv;                // TODO: Merge Inventory with Character.
+    private int shoesId;                  // The ID denoting the shoes currently equipped.
+    private long currency;                // The amount of currency the character has available.
+    private long exp;                     // Total EXP the character has accumulated.
+    private long requiredExpForNextLevel; // Remaining EXP the character needs to level up.
+    private int currentQuestId;           // The ID denoting the quest the current quest.
+    private int questsCompleted;          // The number of quests the character has completed.
+    private String rewardIds;             //TODO: change this to a varchar in data base handler // A CSV of questIDs of completed quests for the purpose of collecting quest rewards
 
-    //TODO:Camelcase plz
-
-    private String name;
-    private short level;
-    private short baseSpeed;
-    private short baseLuck;
-    private int invId;
-    private Inventory inv;
-    private int shoesId;
-    private long currency;
-    //Assumed to be total exp from beginning of time
-
-    private long exp;
-    private long requiredExpForNextLevel;
-
-    //TODO: add quest to character
-    private int currentQuestId;
-    private int questsCompleted;
+    public static final int GAME_WORLD = 1, MAIN_PLAYER = 2;
 
     public Character(String name, int invId, int shoesId) {
         super();
 
         this.name = name;
-        this.level = 0;
+        this.level = 1;
 
         this.invId = invId;
+        this.inv = null;
         this.currency = 0;
 
         this.exp = 0;
@@ -46,11 +52,37 @@ public class Character extends DatabaseObject<Character>{
          *  Set the current quest ID to be nothing
          *  */
         this.currentQuestId = -1;
+        this.rewardIds = "";
+    }
+
+    public Character(String name) {
+        //super();
+
+        this.name = name;
+        this.level = 1;
+
+        this.invId = -1;
+        this.inv = null;
+        this.currency = 0;
+
+        this.exp = 0;
+        this.questsCompleted = 0;
+
+        this.shoesId = 0;
+
+        this.baseLuck = 0;
+        this.baseSpeed = 10;
+
+        /**
+         *  Set the current quest ID to be nothing
+         *  */
+        this.currentQuestId = -1;
+        this.rewardIds = "";
     }
 
     public Character(int id, String name, short level, int invId, Inventory inv, long currency,
                      int shoesId, short baseSpeed, short baseLuck, long exp,
-                     long requiredExpForNextLevel, int currentQuestId, int questsCompleted
+                     long requiredExpForNextLevel, int currentQuestId, int questsCompleted, String rewardIds
     ) {
         super(id);
 
@@ -69,6 +101,7 @@ public class Character extends DatabaseObject<Character>{
 
         this.currentQuestId = currentQuestId;
         this.questsCompleted = questsCompleted;
+        this.rewardIds = rewardIds;
     }
 
     //TODO: make this actually do something.
@@ -104,9 +137,23 @@ public class Character extends DatabaseObject<Character>{
         return invId;
     }
 
+    public void setInvId(int id){
+        invId = id;
+    }
+
+    public Inventory getInv() {
+        return inv;
+    }
+
+    public void setInv(Inventory inv) {
+        this.inv = inv;
+        setInvId(inv.getId());
+    }
+
     public int getShoesId() {
         return shoesId;
     }
+    public void setShoesId(int shoesId){ this.shoesId = shoesId; }
 
     public short getSpeed() {
         return baseSpeed;
@@ -127,6 +174,9 @@ public class Character extends DatabaseObject<Character>{
     public int getCurrentQuestId() {
         return currentQuestId;
     }
+
+    public String getRewardIds(){ return rewardIds; }
+    public void setRewardIds(String rewardIds){ this.rewardIds = rewardIds; }
 
     public void addExperience(long exp) {
         this.exp += exp;
@@ -149,5 +199,9 @@ public class Character extends DatabaseObject<Character>{
         }
         addExperience(r.getExpReward());
         addCurrency(r.getCurrencyReward());
+    }
+
+    public void addItemToInventory(Item item){
+        inv.addItem(item);
     }
 }

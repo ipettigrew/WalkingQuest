@@ -10,6 +10,10 @@ package app.apphub.devon.walkingquest.database.objects;
 
 public class Quest extends DatabaseObject<Quest> {
 
+    public static final String QUEST_ID = "questID";
+    public static final String QUEST_DIFFICULTY = "questDifficulty";
+
+
     private String name;
     private String description;
     private long activeSteps;
@@ -73,13 +77,13 @@ public class Quest extends DatabaseObject<Quest> {
      * @return true if the objects are equal false otherwise.
      */
     public boolean equals(Quest quest) {
-        return  this.id != quest.getId() &&
-                !this.name.equals(name) &&
-                this.activeSteps != quest.getActiveSteps() &&
-                this.stepGoal != quest.getStepGoal() &&
-                this.completed != quest.isCompleted() &&
-                this.difficulty != quest.getDifficulty() &&
-                this.levelRequirement != quest.getLevelRequirement();
+        return  this.id == quest.getId() &&
+                this.name.equals(quest.getName()) &&
+                this.activeSteps == quest.getActiveSteps() &&
+                this.stepGoal == quest.getStepGoal() &&
+                this.completed == quest.isCompleted() &&
+                this.difficulty == quest.getDifficulty() &&
+                this.levelRequirement == quest.getLevelRequirement();
     }
 
     /**

@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">WalkingQuest</string>
     <string name="title_activity_login">Sign in</string>
-
+    <!-- Strings for MainView-->
+    <string name="equipment_header">Equipment</string>
+    <string name="quest_header">Quest</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
@@ -17,4 +19,10 @@
     <string name="title_activity_quest_main_menu">QuestMainMenu</string>
     <string name="title_activity_quest_main_meny">QuestMainMeny</string>
     <string name="title_activity_quest_details">QuestDetailsActivity</string>
+    <string-array name="test_array">
+        <item>Shuttle Badminton</item>
+        <item>Tennis</item>
+        <item>FootBall</item>
+    </string-array>
 </resources>
+
