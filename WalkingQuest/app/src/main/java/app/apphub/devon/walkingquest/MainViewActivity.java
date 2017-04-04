@@ -63,9 +63,18 @@ public class MainViewActivity extends CustomActivity {
         invItems = null;
 
         ListView listView = (ListView) findViewById(R.id.equipment_list);
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, invStrings);
+        ArrayAdapter<Item> adapter =
+                new ArrayAdapter<Item>(this, android.R.layout.simple_list_item_1, databaseHandler.getItemsByInventoryId(character.getInv().getId()));
         listView.setAdapter(adapter);
+
+        LinearLayout equipment = (LinearLayout) findViewById(R.id.mainview_activity_item_details_linear_layout);
+        equipment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainViewActivity.this.startActivity(new Intent(MainViewActivity.this, InventoryActivity.class));
+            }
+        });
+
     }
 
     public void populateQuest() {

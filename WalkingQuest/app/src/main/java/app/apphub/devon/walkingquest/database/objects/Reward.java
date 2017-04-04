@@ -64,10 +64,10 @@ public class Reward extends DatabaseObject {
     public String toString() {
         String message = getCurrencyReward() + " currency\n" + getExpReward() + " experience\n";
 
-        message += "Items:\n";
+        message += "Items:\n\n";
 
         for (Item i: equipmentRewards) {
-            message += "\t" + i +"\n";
+            message += i +"\n";
         }
 
         return message;
