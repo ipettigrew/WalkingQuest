@@ -219,7 +219,12 @@ public class Item extends DatabaseObject<Item> {
         return returnString;
     }
 
-    public void setExplicitEquiptment(int strength, int defence, int speed, int luck) throws JSONException {
+    public void defineEquipment(String type, int strength, int defence, int speed, int luck) throws JSONException {
+
+        if(attributes == null)
+            attributes = new JSONObject();
+
+        attributes.put(ITEM_TYPE, type);
         attributes.put(ATTR_STRENGTH, strength);
         attributes.put(ATTR_DEFENCE, defence);
         attributes.put(ATTR_SPEED, speed);

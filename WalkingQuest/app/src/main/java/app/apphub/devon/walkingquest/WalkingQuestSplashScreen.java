@@ -22,7 +22,11 @@ public class WalkingQuestSplashScreen extends AppCompatActivity {
         setContentView(R.layout.activity_walking_quest_splash_screen);
 
         //TODO: remove this when real data is implimented
-        populateDatabase();
+        try {
+            populateDatabase();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
         /** Test code to be removed later, simply tests that the splash screen will move to the
@@ -51,7 +55,7 @@ public class WalkingQuestSplashScreen extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void populateDatabase(){
+    private void populateDatabase() throws JSONException {
         DatabaseHandler databaseHandler = DatabaseHandler.getInstance(getApplicationContext());
         Character character = databaseHandler.getCharacterByID(Character.MAIN_PLAYER);
 
@@ -65,7 +69,7 @@ public class WalkingQuestSplashScreen extends AppCompatActivity {
 
             // create the character
             character = new Character("Player_1");
-            character.setRewardIds("1");
+            character.setRewardIds("1,2");
             character = databaseHandler.addCharacter(character);
             character = databaseHandler.getCharacterByID(Character.MAIN_PLAYER);
 
@@ -85,8 +89,9 @@ public class WalkingQuestSplashScreen extends AppCompatActivity {
                 Item item = new Item();
                 item.setName("Item " + i);
                 item.setValue(12);
+                item.defineEquipment(Item.ITEM_TYPE_SHOES, (int)Math.random()*5, (int)Math.random()*5, (int)Math.random()*5, (int)Math.random()*5);
                 item.setInvID(gameWorld.getInvId());
-                item.setAttributes(attr);
+                //item.setAttributes(attr);
                 databaseHandler.addItem(item);
             }
 
@@ -99,7 +104,7 @@ public class WalkingQuestSplashScreen extends AppCompatActivity {
             Quest questEasy_1 = new Quest("Flour delivery", 50, 1);
             questEasy_1.setCompleted(true);
             Quest questEasy_2 = new Quest("Escort: Grandma Across the Road", 20, 1);
-            //questEasy_2.setCompleted(true);
+            questEasy_2.setCompleted(true);
             Quest questEasy_3 = new Quest("Escort: Younger Sister to School", 50, 1);
             //questEasy_3.setCompleted(true);
 
